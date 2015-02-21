@@ -1,0 +1,125 @@
+
+Vous êtes le maire de la ville Ece-City
+
+Vous avez le pouvoir de construire des
+* infrastructures (routes, lignes électriques, canalisation d’eau potable)
+* bâtiments (châteaux d’eau, centrales électriques, caserne de pompiers, ...)
+* Bonus : Education + distractions (écoles, collèges, lycées, universités, écoles d’ingénieurs, bibliothèques, des parcs, des stades, ...)
+
+L’objectif pour le joueur est de favoriser le développement automatique de sa population :
+population -> habitation
+habitation -> réseau routier + eau + électricité
+électricité + eau -> centrales électriques et des châteaux d’eau
+
+Les habitants payent automatiquement des impôts à la banque centrale.
+
+La banque dispose au départ de 500 000 Ece-Flouz
+
+Dépenses :
+La construction de bâtiment a un coût :
+Centrale électrique : 100 000
+Château d’eau : 100 000
+Route : 10
+Terrain vague : 1000
+
+Impot :
+Chaque habitant verse 10 ECE-flouz à chaque fin de cycle de l’habitation qu’il occupe.
+
+------
+
+Les constructions évoluent individuellement : 1 cycle = 30 secondes en jeu = 1 mois de la vie réelle
+
+Le terrain est une grille de 45 colonnes sur 35 lignes.
+Résolution fixe d’écran de 1024x768. Chaque case de la grille a donc une résolution de 20x20 pixels
+
+-> 3 niveaux de profondeur
+
+* Niveau 0 = sol. C’est là que le joueur construit avec la souris ou le clavier le réseau de routes, les habitations, les bâtiments particuliers comme les centrales électriques, les châteaux d’eau et les casernes de pompiers…
+    * Elément de route, canalisation, ligne électrique : 1case
+    * Elément de construction d’habitation : 3x3 cases
+    * Elément de bâtiments prédéfinis (usines, château d’eau, caserne…) : 4x6 cases
+
+Les cases du terrain où vous déposerez ces éléments pourront être sélectionnés à la souris ou au clavier (en fonction de vos compétences de programmeur). Un seul élément par case, certains éléments s’étendant sur plusieurs cases.
+Pour qu’une construction soit « viable », elle doit être obligatoirement connectée au réseau routier, alimentée en eau et en électricité.
+Pour qu’un réseau de canalisation ou d’électricité soit alimenté, il doit être connecté à un château d’eau ou une centrale électrique.
+
+-----
+
+Une zone spécifique du niveau 0, dite « boîte à outils » permet au joueur de sélectionner avec la souris ou le raccourci clavier plusieurs types d’objets, chacun étant représenté par une icône (image) : route, terrain vague et tous les types de bâtiments (caserne, château d’eau et centrale électrique…).
+Cette zone outils permet aussi de changer le niveau de visualisation.
+
+Via la boîte à outils présente à côté de la grille, le joueur peut basculer sur les niveaux -1 et -2.
+Le niveau -1 correspond au niveau des canalisations d’eau douce. Le réseau de canalisations de ce niveau est construit automatiquement : il correspond en totalité au réseau routier défini au niveau 0, construit à l’étape précédente.
+Le niveau -2 correspond au réseau des lignes électriques sous-terraines. Comme précédemment, ce réseau est construit automatiquement à la création du réseau routier du niveau 0 et lui correspond en totalité.
+
+*Aucune action n’est possible sur ces 2 sous-niveaux, réservés à l’observation.*
+
+----
+
+Alimentation en eau – Niveau -1
+Ce niveau met en évidence la distribution de l’eau des châteaux d’eau vers les habitants. Cette distribution se fait sur le mode « au plus proche » et respecte les règles suivantes :
+La capacité totale d’un château d’eau permet d’alimenter en permanence 1000 habitants.
+Les habitants les plus « proches » du château d’eau sont servis les premiers. La proximité est calculée en comptant le nombre de cases de la grille correspondant à la route entre le château d’eau et la construction +1 pour le château d’eau +1 pour la construction (voir illustrations).
+
+Lors de l’évolution de la ville, si un château d’eau ne peut plus alimenter toutes les constructions ou si un château d’eau est déplacé ou ajouté, la règle de re-répartition de l’eau doit minimiser la perte d’habitants.
+-> pas de communisme, capitaliste a fond
+
+Le niveau -1 permet de visualiser le réseau de canalisation, les châteaux d’eau, les constructions alimentées avec leur taux d’approvisionnement en eau  ainsi que la(les) source(s) d’approvisionnement (par exemple, pour une habitation de 1000 habitants -  château 1 : 100/1000, château 2 : 800/1000 (avec un code couleur si possible)).
+Il met en évidence les constructions en carence d’eau.
+
+------
+
+Réseau électrique – Niveau -2
+Ce niveau met en évidence la distribution de l’électricité vers les habitants. Cette distribution se fait sur le mode « en tout ou rien » et respecte les règles suivantes :
+La capacité totale de la centrale permet d’alimenter en permanence 1000 habitants.
+
+Si le nombre d’habitants total sur le jeu est inférieur à la capacité d’une centrale, l’électricité en surplus n’est tout simplement pas distribuée.
+Une centrale alimente une construction si sa capacité lui permet d’alimenter « tous » les habitants de la construction. Dans le cas contraire, la centrale n’alimente pas du tout la construction.
+Les capacités des différentes centrales présentent sur le jeu sont additionnées et alimentent indifféremment une construction ou une autre.
+Le niveau -2 permet de visualiser le réseau électrique, les centrales, les constructions alimentées et met en évidence les constructions en carence d’électricité.
+
+----
+
+Quel que soit le niveau affiché à l’écran, le joueur dispose d’informations complémentaires permanentes :
+Un compteur temporel temps réel à la seconde apparait à l’écran et tourne jusqu’à la fin de la partie.
+Un compteur « monnaie » affiche la somme initiale en jeu : 500 000 ECEflouz. Cette somme sera décrémentée par les achats et incrémentée par les impôts.
+Un compteur « habitants » indique la somme totale d’habitant dans la ville.
+Un compteur « capacité électrique » et « capacité en eau » indiquent la somme des capacités de chaque ressource.
+Un objet posé sur la grille et qui respecte les conditions de viabilité (connexion au réseau routier, eau, électricité pour ses habitants) est immédiatement opérationnel :
+Les châteaux d’eau et les centrales alimentent non-stop les réseaux.
+Les terrains vagues commencent leurs cycles de vie de 15 secondes par état (voir ci-dessous)
+
+------
+
+Le terme de construction représente 2 types de bâtiments dans le jeu :
+Des bâtiments « clef en main » comme les usines, les centrales, les casernes…
+Des terrains vagues dont le joueur définit l’emplacement, et qui vont ensuite se construire tout seul en changeant d’état (on parle de « stade » de construction) toutes les 15 secondes (1 cycle de vie) si les conditions idéales sont réunies.
+Le joueur qui sélectionne via la boîte à outils la construction d’un terrain vague et qui le positionne sur la grille, déclenche immédiatement le « compteur temporel de vie » de la construction qui va la faire évoluer automatiquement à chaque cycle de 30 secondes de la vie du bâtiment.
+Si les conditions le permettent, une construction va évoluer, à la fin de chacun de ses cycles, selon les stades suivants :
+Terrain vague (0 habitant) ou Ruine en cas de régression (0 habitant)
+Cabane (10 habitants)
+Maison (50 habitants)
+Immeuble (100 habitants)
+Gratte-ciel (1000 habitants)
+
+Les usines, centrales, casernes et autres bâtiment que vous êtes susceptibles d’intégrer au jeu sont des lieux de travail et ne comptent aucun habitant. Ils sont opérationnels dès leur positionnement sur le terrain (sous réserve des règles d’activation) et n’évoluent pas durant toute la partie.
+En 1 minute une construction a donc atteint son stade ultime, si tout va bien.
+Un terrain vague dont les conditions d’évolution (connexion au réseau routier, eau, électricité pour ses habitants) ne sont pas remplies ne démarre pas ses cycles d’évolution.
+
+En cas de simultanéité temporelle, la régression automatique de stade pour des constructions n’ayant plus les conditions pour se maintenir ou évoluer doit se faire de manière à réduire au minimum le nombre global d’habitants dans la ville.
+
+-----
+
+Le mode communiste
+Dans ce mode, une construction n’évolue pas si les ressources (eau + électricité) nécessaires à sa croissance ne sont pas disponibles. La construction va donc :
+Evoluer à chaque cycle si les conditions eau + électricité du jeu le permettent.
+Conserver son stade actuel tant que les conditions eau + électricité le permettent, et qu’elle n’a pas pu évoluer.
+Régresser au stade précédent si les conditions ne lui permettent plus de se maintenir ou d’évoluer (une cabane régresse au stade de ruine avant d'évoluer de nouveau).
+
+Le mode capitaliste
+Dans ce mode, une construction passe systématiquement au stade supérieur, que les ressources (eau + électricité) soient disponibles ou pas. L’évolution de l’ensemble des constructions s’en trouve alors bouleversé, toujours dans le respect des règles de régression qui maximisent le nombre d’habitants total de la ville.
+
+Le mode communiste ou capitaliste sera choisi au démarrage du jeu.
+
+-> commencer par mode communiste
+

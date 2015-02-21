@@ -1,0 +1,94 @@
+===============================================================================
+CDC RESUME
+===============================================================================
+
+# Init
+La banque dispose au départ de 500 000 Ece-Flouz
+
+# A chaque tour
+Les habitants payent automatiquement des impôts à la banque centrale.
+Chaque habitant verse 10 ECE-flouz à chaque fin de cycle de l’habitation qu’il occupe.
+
+# Affichage
+* compteur temporel temps réel à la seconde
+* compteur argent(somme initiale en jeu : 500 000 EceFlouz)
+* compteur habitants
+* compteur capacité électrique + capacité en eau
+
+
+# Data
+La construction de bâtiment a un coût :
+Centrale électrique : 100 000
+Château d’eau : 100 000
+Route : 10
+Terrain vague : 1000
+
+Les constructions évoluent individuellement : 1 cycle = 30 secondes en jeu = 1 mois de la vie réelle
+
+Le terrain est une grille de 45 colonnes sur 35 lignes.
+Résolution fixe d’écran de 1024x768. Chaque case de la grille a donc une résolution de 20x20 pixels
+
+Une contruction doit etre reliee au réseau routier, alimentée en eau et en électricité
+Pour qu’un réseau de canalisation ou d’électricité soit alimenté, il doit être connecté à un château d’eau ou une centrale électrique.
+
+Le niveau -1 correspond au niveau des canalisations d’eau douce. Le réseau de canalisations de ce niveau est construit automatiquement : il correspond en totalité au réseau routier défini au niveau 0, construit à l’étape précédente.
+Le niveau -2 correspond au réseau des lignes électriques sous-terraines. Comme précédemment, ce réseau est construit automatiquement à la création du réseau routier du niveau 0 et lui correspond en totalité.
+
+*Aucune action n’est possible sur ces 2 sous-niveaux, réservés à l’observation.*
+
+-> 3 niveaux de profondeur
+* Niveau 0 = sol
+    * Elément de route, canalisation, ligne électrique : 1case
+    * Elément de construction d’habitation : 3x3 cases
+    * Elément de bâtiments prédéfinis (usines, château d’eau, caserne ...) : 4x6 cases
+* Niveau -1 = eau
+    La distribution d'eau se fait sur le mode « au plus proche » et respecte les règles suivantes :
+    La capacité totale d’un château d’eau permet d’alimenter en permanence 1000 habitants.
+    Les habitants les plus « proches » du château d’eau sont servis les premiers.
+    Lors de l’évolution de la ville, si un château d’eau ne peut plus alimenter toutes les constructions ou si un château d’eau est déplacé ou ajouté, la règle de re-répartition de l’eau doit minimiser la perte d’habitants -> pas de communisme, capitaliste a fond
+    Le niveau -1 permet de visualiser le réseau de canalisation, les châteaux d’eau, les constructions alimentées avec leur taux d’approvisionnement en eau  ainsi que la(les) source(s) d’approvisionnement (par exemple, pour une habitation de 1000 habitants -  château 1 : 100/1000, château 2 : 800/1000 (avec un code couleur si possible)).
+    Il met en évidence les constructions en carence d’eau.
+* Niveau -2 = Réseau électrique
+    La distribution se fait sur le mode « en tout ou rien » et respecte les règles suivantes :
+    La capacité totale de la centrale permet d’alimenter en permanence 1000 habitants.
+    Une centrale alimente une construction si sa capacité lui permet d’alimenter « tous » les habitants de la construction. Dans le cas contraire, la centrale n’alimente pas du tout la construction.
+    Les capacités des différentes centrales présentent sur le jeu sont additionnées et alimentent indifféremment une construction ou une autre.
+    Le niveau -2 permet de visualiser le réseau électrique, les centrales, les constructions alimentées et met en évidence les constructions en carence d’électricité.
+
+Un objet posé sur la grille et qui respecte les conditions de viabilité (connexion au réseau routier, eau, électricité pour ses habitants) est immédiatement opérationnel :
+Les châteaux d’eau et les centrales alimentent non-stop les réseaux.
+Les terrains vagues commencent leurs cycles de vie de 30 secondes par état (voir ci-dessous)
+
+Construction =
+* Bâtiments « clef en main » comme les usines, les centrales, les casernes ...
+* Terrains vagues dont le joueur définit l’emplacement, et qui vont ensuite se construire tout seul en changeant d’état (on parle de « stade » de construction) toutes les 30 secondes (1 cycle de vie) si les conditions idéales sont réunies.
+
+Terrain vague (0 habitant) ou Ruine en cas de régression (0 habitant)
+Cabane (10 habitants)
+Maison (50 habitants)
+Immeuble (100 habitants)
+Gratte-ciel (1000 habitants)
+
+Les usines, centrales, casernes et autres bâtiment que vous êtes susceptibles d’intégrer au jeu sont des lieux de travail et ne comptent aucun habitant. Ils sont opérationnels dès leur positionnement sur le terrain (sous réserve des règles d’activation) et n'évoluent pas durant toute la partie.
+
+===============================================================================
+TODO CODE
+===============================================================================
+
+# Struct
+
+* infrastructures (routes, lignes électriques, canalisation d’eau potable)
+* bâtiments (châteaux d’eau, centrales électriques, caserne de pompiers, ...) + maison ?
+* Bonus : Education + distractions (écoles, collèges, lycées, universités, écoles d’ingénieurs, bibliothèques, des parcs, des stades, ...)
+
+* game
+* building (bat + bonus ?) (base + custom -> heritage)
+* button ?
+
+# Modules
+
+* allegro (init, free, update event)
+* building
+* game (render)
+
+* button + menu ?
