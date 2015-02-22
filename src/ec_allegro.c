@@ -28,7 +28,6 @@ void ec_allegro_init(void)
 
     install_keyboard();
     install_mouse();
-    show_mouse(screen);
 
     window.screen = create_bitmap(WINDOW_WIDTH, WINDOW_HEIGHT);
     if (!window.screen)
@@ -39,4 +38,41 @@ void ec_allegro_init(void)
     window.mouseRel.x = 0;
     window.mouseRel.y = 0;
     window.mouseButtonLeft = 0;
+}
+
+void ec_allegro_update_event(void)
+{
+    /* old state */
+    static int mouseButtonLeft_old = 0;
+    static int key_old[KEY_MAX];
+    int i;
+
+    /* mouse pos */
+    window.mousePos.x = mouse_x;
+    window.mousePos.y = mouse_y;
+
+    get_mouse_mickeys(&window.mouseRel.x, &window.mouseRel.y);
+
+    /* mouse button left */
+    if ((mouse_b & 1) && !mouseButtonLeft_old)
+        window.mouseButtonLeft = 1, mouseButtonLeft_old = 1;
+    if (!(mouse_b & 1) && mouseButtonLeft_old)
+        window.mouseButtonLeft = 0, mouseButtonLeft_old = 0;
+
+    /* key */
+    for (i = 0; i < KEY_MAX; ++i)
+    {
+        if (key[i] && !key_old[i])
+            window.key[i] = 1, key_old[i] = 1;
+        if (!key[i] && key_old[i])
+            window.key[i] = 0, key_old[i] = 0;
+    }
+}
+
+void ec_allegro_free(void)
+{
+    show_mouse(NULL);
+    destroy_bitmap(window.screen);
+
+    allegro_exit();
 }
