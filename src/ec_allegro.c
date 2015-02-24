@@ -18,6 +18,11 @@ void _ec_abort(char *error, char *file, int line)
     exit(EXIT_FAILURE);
 }
 
+void _ec_allegro_close_button_callback(void)
+{
+    window.quit = 1;
+}
+
 void ec_allegro_init(void)
 {
     int i;
@@ -26,11 +31,14 @@ void ec_allegro_init(void)
     allegro_init();
 
     set_color_depth(desktop_color_depth());
+    set_window_title("EceCity");
     if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0) != 0)
         ec_abort("set_gfx_mode()");
 
     install_keyboard();
     install_mouse();
+
+    set_close_button_callback(_ec_allegro_close_button_callback);
 
     /* struct */
     window.screen = create_bitmap(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -78,27 +86,27 @@ void ec_allegro_update_event(void)
     /* zoom */
     if (window.key[KEY_P])
     {
-        window.zoom += window.zoom * 0.02;
-        window.offset.x -= BOARD_WIDTH/100 / window.zoom;
-        window.offset.y -= BOARD_HEIGHT/100 / window.zoom;
+        window.zoom += window.zoom * BOARD_ZOOM_FACTOR;
+        window.offset.x -= BOARD_WIDTH / (100 * window.zoom);
+        window.offset.y -= BOARD_HEIGHT / (100 * window.zoom);
     }
     if (window.key[KEY_M])
     {
-        window.zoom -= window.zoom * 0.02;
-        window.offset.x += BOARD_WIDTH/100 / window.zoom;
-        window.offset.y += BOARD_HEIGHT/100 / window.zoom;
+        window.zoom -= window.zoom * BOARD_ZOOM_FACTOR;
+        window.offset.x += BOARD_WIDTH / (100 * window.zoom);
+        window.offset.y += BOARD_HEIGHT / (100 * window.zoom);
     }
 
     /* move */
     if (window.key[KEY_UP])
-        window.offset.y += 4 / window.zoom;
+        window.offset.y += BOARD_MOVE_SPEED / window.zoom;
     if (window.key[KEY_DOWN])
-        window.offset.y -= 4 / window.zoom;
+        window.offset.y -= BOARD_MOVE_SPEED / window.zoom;
 
     if (window.key[KEY_RIGHT])
-        window.offset.x -= 4 / window.zoom;
+        window.offset.x -= BOARD_MOVE_SPEED / window.zoom;
     if (window.key[KEY_LEFT])
-        window.offset.x += 4 / window.zoom;
+        window.offset.x += BOARD_MOVE_SPEED / window.zoom;
 }
 
 void ec_allegro_free(void)
@@ -108,36 +116,3 @@ void ec_allegro_free(void)
 
     allegro_exit();
 }
-
-/******************************************************************************/
-
-int _ec_allegro_scale(int window_max, double window_offset, int val)
-{
-    double coord_min = 0 - window_offset;
-    double coord_max = window_max/window.zoom - window_offset;
-    int pxl_min = 0;
-    int pxl_max = window_max;
-
-    return pxl_min + (val-coord_min) * (pxl_max-pxl_min) / (coord_max-coord_min);
-}
-
-int ec_allegro_scale_x_coord_to_pxl(int val)
-{
-    return _ec_allegro_scale(WINDOW_WIDTH, window.offset.x, val);
-}
-
-int ec_allegro_scale_y_coord_to_pxl(int val)
-{
-    return _ec_allegro_scale(WINDOW_HEIGHT, window.offset.y, val);
-}
-
-void ec_allegro_line(BITMAP *screen, int x1, int y1, int x2, int y2, int c)
-{
-    x1 = ec_allegro_scale_x_coord_to_pxl(x1);
-    y1 = ec_allegro_scale_y_coord_to_pxl(y1);
-    x2 = ec_allegro_scale_x_coord_to_pxl(x2);
-    y2 = ec_allegro_scale_y_coord_to_pxl(y2);
-
-    line(screen, x1, y1, x2, y2, c);
-}
-
