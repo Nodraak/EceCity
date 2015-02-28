@@ -22,7 +22,6 @@ typedef struct  _s_game
 }               s_game;
 
 extern s_game game;
-extern s_building buildings_data[BUILDING_LAST];
 void ec_game_init(void);
 void ec_game_on_button_left(void);
 void ec_board_render(BITMAP *s);

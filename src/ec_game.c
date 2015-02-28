@@ -4,6 +4,7 @@
 
 #include "ec_game.h"
 #include "ec_allegro_graphic.h"
+#include "ec_building.h"
 
 s_game game;
 
@@ -52,16 +53,10 @@ void ec_game_on_button_left(void)
     /* board ok */
     /* building + game ok */
     if (ec_allegro_graphic_is_in_board(pxl_x, pxl_y) && game.board[board_y][board_x].building == BUILDING_NONE
-        && game.building_selected != BUILDING_NONE && game.money >= buildings_data[game.building_selected].price)
+        && game.building_selected != BUILDING_NONE && game.money >= building_data[game.building_selected].price)
     {
-        memcpy(
-            &game.board[board_y][board_x],
-            &buildings_data[game.building_selected],
-            sizeof(s_building)
-        );
-
-        game.money -= buildings_data[game.building_selected].price;
-        game.people += buildings_data[game.building_selected].people;
+        ec_building_new(&game.board[board_y][board_x], &building_data[game.building_selected]);
+        /* TODO : update elec + water distribution */
     }
 
     window.mouseButtonLeft = 0;

@@ -23,6 +23,14 @@ typedef enum        _e_building
     BUILDING_LAST
 }                   e_building;
 
+typedef struct      _s_ressource
+{
+    int             required;       /* does this building needs it for working */
+    int             used;           /* units of ressource used : for houses */
+    int             produced;       /* units of ressource produced : for building_supply_* */
+    int             is_connected;   /* is connected to the network */
+}                   s_ressource;
+
 typedef struct      _s_building
 {
     e_building      building;
@@ -31,15 +39,14 @@ typedef struct      _s_building
     int             price;
     int             people;
 
-    int             elec_collected;
-    int             elec_is_connected;
-    int             water_collected;
-    int             water_is_connected;
+    s_ressource     elec;
+    s_ressource     water;
 }                   s_building;
 
-extern s_building buildings_data[BUILDING_LAST];
+extern s_building building_data[BUILDING_LAST];
 void ec_building_init(void);
 void ec_building_free(void);
 void ec_building_render(s_building *building, int coord_x, int coord_y);
+void ec_building_new(s_building *dest, s_building *template);
 
 #endif
