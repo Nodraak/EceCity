@@ -4,7 +4,7 @@
 
 #include <allegro.h>
 
-#include <ec_allegro.h>
+#include "ec_allegro.h"
 
 s_window window;
 
@@ -53,8 +53,8 @@ void ec_allegro_init(void)
         window.key[i] = 0;
 
     window.zoom = 1;
-    window.offset.x = 0;
-    window.offset.y = 0;
+    window.offset.x = 100;
+    window.offset.y = 20;
 }
 
 void ec_allegro_update_event(void)

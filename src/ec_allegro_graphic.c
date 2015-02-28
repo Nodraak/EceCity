@@ -1,8 +1,8 @@
 
 #include <allegro.h>
 
-#include <ec_allegro.h>
-#include <ec_allegro_graphic.h>
+#include "ec_allegro.h"
+#include "ec_allegro_graphic.h"
 
 void _scale_and_call(void(*f)(BITMAP*, int, int, int, int, int), BITMAP* s, int x1, int y1, int x2, int y2, int c)
 {

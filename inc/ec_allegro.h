@@ -1,6 +1,8 @@
 #ifndef EC_ALLEGRO_H
 #define EC_ALLEGRO_H
 
+#include <allegro.h>
+
 /*
     define
 */
