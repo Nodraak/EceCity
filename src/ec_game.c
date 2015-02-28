@@ -42,7 +42,6 @@ char *building_enum_to_str[BUILDING_LAST] = {
 
 void ec_game_on_button_left(void)
 {
-
     int pxl_x, pxl_y, board_x, board_y;
 
     pxl_x = ec_allegro_graphic_scale_x_pxl_to_coord(window.mousePos.x);
@@ -74,26 +73,21 @@ void ec_board_render(BITMAP *s)
     int i, j, coord_x, coord_y;
 
     /* board */
-    for (i = 0; i < BOARD_LINE+1; ++i)
-        ec_allegro_graphic_line(s, 0, i*BOARD_SIZE, BOARD_WIDTH, i*BOARD_SIZE, makecol(128, 128, 128));
-    for (i = 0; i < BOARD_COL+1; ++i)
-        ec_allegro_graphic_line(s, i*BOARD_SIZE, 0, i*BOARD_SIZE, BOARD_HEIGHT, makecol(128, 128, 128));
-
     for (j = 0; j < BOARD_LINE; ++j)
     {
         for (i = 0; i < BOARD_COL; ++i)
         {
             if (game.board[j][i].building != BUILDING_NONE)
             {
+                int sprite_id = game.board[j][i].building;
+
                 coord_x = (i*BOARD_SIZE);
                 coord_y = (j*BOARD_SIZE);
 
-                int x = ec_allegro_graphic_scale_x_coord_to_pxl(coord_x);
-                int y = ec_allegro_graphic_scale_y_coord_to_pxl(coord_y);
-                int w = ec_allegro_graphic_scale_x_coord_to_pxl(coord_x+BOARD_SIZE) - x;
-                int h = ec_allegro_graphic_scale_y_coord_to_pxl(coord_y+BOARD_SIZE) - y;
-                int sprite_id = game.board[j][i].building;
-                stretch_sprite(window.screen, buildings_data[sprite_id].sprite, x, y, w, h);
+                ec_allegro_graphic_stretch_sprite(
+                    window.screen, buildings_data[sprite_id].sprite,
+                    coord_x, coord_y, coord_x+BOARD_SIZE, coord_y+BOARD_SIZE
+                );
             }
         }
     }
@@ -107,8 +101,13 @@ void ec_board_render(BITMAP *s)
         coord_x = coord_x/BOARD_SIZE*BOARD_SIZE;
         coord_y = coord_y/BOARD_SIZE*BOARD_SIZE;
 
-        ec_allegro_graphic_rect(s, coord_x, coord_y, coord_x+BOARD_SIZE, coord_y+BOARD_SIZE, makecol(64, 64, 64));
+        ec_allegro_graphic_rectfill(s, coord_x, coord_y, coord_x+BOARD_SIZE, coord_y+BOARD_SIZE, makecol(64, 64, 64));
     }
+
+    for (i = 0; i < BOARD_LINE+1; ++i)
+        ec_allegro_graphic_line(s, 0, i*BOARD_SIZE, BOARD_WIDTH, i*BOARD_SIZE, makecol(128, 128, 128));
+    for (i = 0; i < BOARD_COL+1; ++i)
+        ec_allegro_graphic_line(s, i*BOARD_SIZE, 0, i*BOARD_SIZE, BOARD_HEIGHT, makecol(128, 128, 128));
 }
 
 void ec_game_render(BITMAP *s)
