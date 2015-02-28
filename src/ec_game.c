@@ -78,17 +78,7 @@ void ec_board_render(BITMAP *s)
         for (i = 0; i < BOARD_COL; ++i)
         {
             if (game.board[j][i].building != BUILDING_NONE)
-            {
-                int sprite_id = game.board[j][i].building;
-
-                coord_x = (i*BOARD_SIZE);
-                coord_y = (j*BOARD_SIZE);
-
-                ec_allegro_graphic_stretch_sprite(
-                    window.screen, buildings_data[sprite_id].sprite,
-                    coord_x, coord_y, coord_x+BOARD_SIZE, coord_y+BOARD_SIZE
-                );
-            }
+                ec_building_render(&game.board[j][i], i*BOARD_SIZE, j*BOARD_SIZE);
         }
     }
 

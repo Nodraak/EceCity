@@ -22,12 +22,13 @@
 #include <stdio.h>
 
 #include "ec_allegro.h"
+#include "ec_allegro_graphic.h"
 #include "ec_building.h"
 
 #define BIG_NUM  (1000*1000*1000)
 
 s_building buildings_data[BUILDING_LAST] = {
-/*  building                sprite  price       people      elec_created    elec_linked     water_created   water_linked */
+/*  building                sprite  price       people     elec_collected elec_is_connected water_collected water_is_connected */
     {BUILDING_NONE,         NULL,   -1,         -1,         -1,             -1,             -1,             -1},
     {BUILDING_INFRA_ROAD,   NULL,   10,         0,          0,              0,              0,              0},
     {BUILDING_INFRA_ELEC,   NULL,   10,         0,          0,              0,              0,              0},
@@ -89,3 +90,17 @@ void ec_building_free(void)
         destroy_bitmap(buildings_data[i].sprite);
 }
 
+void ec_building_render(s_building *building, int coord_x, int coord_y)
+{
+    int sprite_id = building->building;
+
+    /* sprite */
+    ec_allegro_graphic_stretch_sprite(
+        window.screen, buildings_data[sprite_id].sprite,
+        coord_x, coord_y, coord_x+BOARD_SIZE, coord_y+BOARD_SIZE
+    );
+
+    /* if not connected to water or elec, show sign */
+    if (!building->elec_is_connected || !building->water_is_connected)
+        ec_allegro_graphic_rectfill(window.screen, coord_x+BOARD_SIZE-10, coord_y, coord_x+BOARD_SIZE, coord_y+10, makecol(128, 0, 0));
+}
