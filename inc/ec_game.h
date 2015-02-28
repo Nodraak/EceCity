@@ -16,6 +16,8 @@ typedef struct  _s_game
     int         water_capacity;
     int         water_used;
 
+    e_building  building_selected;
+
     s_building  board[BOARD_LINE][BOARD_COL];
 }               s_game;
 

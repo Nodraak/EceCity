@@ -54,6 +54,7 @@ void ec_allegro_free(void);
     hidden hacks and heavily optimized things
 */
 
+void _ec_abort(char *error, char *file, int line);
 #define ec_abort(error) _ec_abort(error, __FILE__, __LINE__)
 
 #endif

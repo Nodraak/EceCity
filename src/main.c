@@ -9,11 +9,22 @@
 #include "ec_allegro_graphic.h"
 #include "ec_game.h"
 
+/*
+
+KEY_ESC : exit
+ARROWS : move the board
+KEY_P / KEY_M : zoom
+KEY_N : next building
+
+*/
 
 void ec_main_handle_event(void)
 {
     if (window.key[KEY_ESC])
         window.quit = 1;
+
+    if (window.key[KEY_N])
+        game.building_selected = (game.building_selected+1) % BUILDING_LAST, window.key[KEY_N] = 0;
 
     if (window.mouseButtonLeft)
         ec_game_on_button_left();
@@ -37,6 +48,7 @@ int main(void)
 {
     ec_allegro_init();
     ec_game_init();
+    ec_building_init();
 
     while (!window.quit)
     {
@@ -47,6 +59,7 @@ int main(void)
         rest(1000/WINDOW_FPS);
     }
 
+    ec_building_free();
     ec_allegro_free();
 
     return EXIT_SUCCESS;
