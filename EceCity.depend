@@ -1,0 +1,44 @@
+# depslib dependency file v1.0
+1425465878 source:c:\users\edouard\documents\github\ececity\src\ec_allegro.c
+	<stdlib.h>
+	<stdio.h>
+	<allegro.h>
+	"ec_allegro.h"
+
+1425465878 c:\users\edouard\documents\github\ececity\inc\ec_allegro.h
+	<allegro.h>
+
+1425465878 source:c:\users\edouard\documents\github\ececity\src\ec_allegro_graphic.c
+	<allegro.h>
+	"ec_allegro.h"
+	"ec_allegro_graphic.h"
+
+1425465878 c:\users\edouard\documents\github\ececity\inc\ec_allegro_graphic.h
+
+1425465878 source:c:\users\edouard\documents\github\ececity\src\ec_building.c
+	"ec_building.h"
+
+1425465878 c:\users\edouard\documents\github\ececity\inc\ec_building.h
+
+1425465878 source:c:\users\edouard\documents\github\ececity\src\ec_game.c
+	"stdlib.h"
+	"ec_game.h"
+	"ec_allegro_graphic.h"
+
+1425465878 c:\users\edouard\documents\github\ececity\inc\ec_game.h
+	"ec_allegro.h"
+	"ec_building.h"
+
+1425465878 source:c:\users\edouard\documents\github\ececity\src\ec_menu.c
+
+1425465878 source:c:\users\edouard\documents\github\ececity\src\ec_save.c
+
+1425465878 source:c:\users\edouard\documents\github\ececity\src\main.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<allegro.h>
+	"ec_allegro.h"
+	"ec_allegro_graphic.h"
+	"ec_game.h"
+
