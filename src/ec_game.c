@@ -4,7 +4,7 @@
 #include <string.h>
 
 #include "ec_game.h"
-#include "ec_allegro_graphic.h"
+#include "ec_graphic.h"
 #include "ec_building.h"
 
 s_game game;
@@ -38,12 +38,12 @@ void ec_game_on_button_left(void)
 {
     int pxl_x, pxl_y, board_x, board_y;
 
-    pxl_x = ec_allegro_graphic_scale_x_pxl_to_coord(window.mousePos.x);
-    pxl_y = ec_allegro_graphic_scale_y_pxl_to_coord(window.mousePos.y);
+    pxl_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos.x);
+    pxl_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos.y);
     board_x = pxl_x/BOARD_SIZE;
     board_y = pxl_y/BOARD_SIZE;
 
-    if (ec_allegro_graphic_is_in_board(pxl_x, pxl_y)
+    if (ec_graphic_is_in_board(pxl_x, pxl_y)
         && ec_building_have_space(board_y, board_x, building_data[game.building_selected].size)
         && game.building_selected != BUILDING_NONE
         && game.money >= building_data[game.building_selected].price)
@@ -82,18 +82,18 @@ void ec_board_render(BITMAP *s)
     /* hover */
     if (game.building_selected != BUILDING_NONE)
     {
-        int coord_x = ec_allegro_graphic_scale_x_pxl_to_coord(window.mousePos.x);
-        int coord_y = ec_allegro_graphic_scale_y_pxl_to_coord(window.mousePos.y);
+        int coord_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos.x);
+        int coord_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos.y);
         int size_x = building_data[game.building_selected].size.x * BOARD_SIZE;
         int size_y = building_data[game.building_selected].size.y * BOARD_SIZE;
 
-        if (ec_allegro_graphic_is_in_board(coord_x, coord_y))
+        if (ec_graphic_is_in_board(coord_x, coord_y))
         {
             coord_x = coord_x/BOARD_SIZE*BOARD_SIZE;
             coord_y = coord_y/BOARD_SIZE*BOARD_SIZE;
 
-            ec_allegro_graphic_rectfill(s, coord_x, coord_y, coord_x+size_x, coord_y+size_y, makecol(64, 64, 64));
-            ec_allegro_graphic_stretch_sprite(
+            ec_graphic_rectfill(s, coord_x, coord_y, coord_x+size_x, coord_y+size_y, makecol(64, 64, 64));
+            ec_graphic_stretch_sprite(
                 s, building_data[game.building_selected].sprite,
                 coord_x, coord_y,
                 coord_x+size_x, coord_y+size_y
@@ -103,9 +103,9 @@ void ec_board_render(BITMAP *s)
 
     /* lines */
     for (i = 0; i < BOARD_LINE+1; ++i)
-        ec_allegro_graphic_line(s, 0, i*BOARD_SIZE, BOARD_WIDTH, i*BOARD_SIZE, makecol(128, 128, 128));
+        ec_graphic_line(s, 0, i*BOARD_SIZE, BOARD_WIDTH, i*BOARD_SIZE, makecol(128, 128, 128));
     for (i = 0; i < BOARD_COL+1; ++i)
-        ec_allegro_graphic_line(s, i*BOARD_SIZE, 0, i*BOARD_SIZE, BOARD_HEIGHT, makecol(128, 128, 128));
+        ec_graphic_line(s, i*BOARD_SIZE, 0, i*BOARD_SIZE, BOARD_HEIGHT, makecol(128, 128, 128));
 }
 
 void ec_game_render(BITMAP *s)

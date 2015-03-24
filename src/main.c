@@ -6,7 +6,7 @@
 #include <allegro.h>
 
 #include "ec_allegro.h"
-#include "ec_allegro_graphic.h"
+#include "ec_graphic.h"
 #include "ec_game.h"
 
 /*

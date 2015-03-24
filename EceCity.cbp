@@ -36,7 +36,7 @@
 			<Add library="alleg" />
 		</Linker>
 		<Unit filename="inc/ec_allegro.h" />
-		<Unit filename="inc/ec_allegro_graphic.h" />
+		<Unit filename="inc/ec_graphic.h" />
 		<Unit filename="inc/ec_building.h" />
 		<Unit filename="inc/ec_game.h" />
 		<Unit filename="inc/ec_menu.h" />
@@ -44,7 +44,7 @@
 		<Unit filename="src/ec_allegro.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/ec_allegro_graphic.c">
+		<Unit filename="src/ec_graphic.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/ec_building.c">

@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 #include "ec_allegro.h"
-#include "ec_allegro_graphic.h"
+#include "ec_graphic.h"
 #include "ec_game.h"
 #include "ec_building.h"
 
@@ -96,7 +96,7 @@ void ec_building_free(void)
 void ec_building_render(s_building *cur, int coord_x, int coord_y)
 {
     /* sprite */
-    ec_allegro_graphic_stretch_sprite(
+    ec_graphic_stretch_sprite(
         window.screen, cur->sprite,
         coord_x, coord_y,
         coord_x+BOARD_SIZE*cur->size.x, coord_y+BOARD_SIZE*cur->size.y
@@ -105,7 +105,7 @@ void ec_building_render(s_building *cur, int coord_x, int coord_y)
     /* if not connected to water or elec, show sign */
     if (cur->is_working)
     {
-        ec_allegro_graphic_rectfill(window.screen, coord_x+BOARD_SIZE-10, coord_y, coord_x+BOARD_SIZE, coord_y+10, makecol(128, 0, 0));
+        ec_graphic_rectfill(window.screen, coord_x+BOARD_SIZE-10, coord_y, coord_x+BOARD_SIZE, coord_y+10, makecol(128, 0, 0));
     }
 }
 
