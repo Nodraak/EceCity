@@ -25,8 +25,6 @@ void ec_game_init(void)
 char *building_enum_to_str[BUILDING_LAST] = {
     "NONE",
     "INFRA_ROAD",
-    "INFRA_ELEC",
-    "INFRA_WATER",
     "HOUSE_NONE",
     "HOUSE_SMALL",
     "HOUSE_MEDIUM",

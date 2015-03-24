@@ -17,20 +17,6 @@ infra_road.bmp
 0 0 0
 1 1
 
-BUILDING_INFRA_ELEC
-infra_elec.bmp
-10 0
-0 0 0
-0 0 0
-1 1
-
-BUILDING_INFRA_WATER
-infra_water.bmp
-10 0
-0 0 0
-0 0 0
-1 1
-
 BUILDING_HOUSE_NONE
 house_none.bmp
 1000 0
