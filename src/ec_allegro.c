@@ -34,6 +34,8 @@ void ec_allegro_init(void)
     set_window_title("EceCity");
     if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0) != 0)
         ec_abort("set_gfx_mode()");
+    if (set_display_switch_mode(SWITCH_BACKGROUND) != 0)
+        ec_abort("set_display_switch_mode()");
 
     install_keyboard();
     install_mouse();

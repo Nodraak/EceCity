@@ -58,14 +58,19 @@ void ec_game_on_button_left(void)
                 game.board[board_y+y][board_x+x] = new;
             }
         }
-        /* TODO : update elec + water distribution */
     }
 
     window.mouseButtonLeft = 0;
 }
 
 
-void ec_board_render(BITMAP *s)
+void ec_game_on_building_new(void)
+{
+
+}
+
+
+void ec_game_render_board(BITMAP *s)
 {
     int i, j;
 
@@ -92,7 +97,6 @@ void ec_board_render(BITMAP *s)
             coord_x = coord_x/BOARD_SIZE*BOARD_SIZE;
             coord_y = coord_y/BOARD_SIZE*BOARD_SIZE;
 
-            ec_graphic_rectfill(s, coord_x, coord_y, coord_x+size_x, coord_y+size_y, makecol(64, 64, 64));
             ec_graphic_stretch_sprite(
                 s, building_data[game.building_selected].sprite,
                 coord_x, coord_y,
@@ -108,12 +112,12 @@ void ec_board_render(BITMAP *s)
         ec_graphic_line(s, i*BOARD_SIZE, 0, i*BOARD_SIZE, BOARD_HEIGHT, makecol(128, 128, 128));
 }
 
-void ec_game_render(BITMAP *s)
+void ec_game_render_menu(BITMAP *s)
 {
     int i;
 
     /* menu */
-    rectfill(s, 0, 0, 150, WINDOW_HEIGHT, makecol(200, 200, 200));
+    rectfill(s, 0, 0, 150, WINDOW_HEIGHT-1, makecol(200, 200, 200));
 
     textprintf_ex(s, font, 10, 20, makecol(0, 0, 0), -1, "timer : %d - %d", game.time, game.time/30);
     textprintf_ex(s, font, 10, 40, makecol(0, 0, 0), -1, "%d EceFlouz", game.money);

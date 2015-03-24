@@ -25,7 +25,8 @@ extern s_game game;
 
 void ec_game_init(void);
 void ec_game_on_button_left(void);
-void ec_board_render(BITMAP *s);
-void ec_game_render(BITMAP *s);
+void ec_game_on_building_new();
+void ec_game_render_board(BITMAP *s);
+void ec_game_render_menu(BITMAP *s);
 
 #endif

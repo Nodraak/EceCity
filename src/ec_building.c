@@ -25,7 +25,7 @@ s_building building_data[BUILDING_LAST];
         écoles d’ingénieurs, bibliothèques, des parcs, des stades, ...)
 */
 
-BITMAP *ec_building_load_sprite(char *file) /* TODO : prepend _ for func name ? */
+BITMAP *_ec_building_load_sprite(char *file)
 {
     BITMAP *ret = NULL;
     char tmp1[1024], tmp2[1024];
@@ -68,7 +68,7 @@ void ec_building_init(void)
 
         fgets(tmp, 1024-1, f);
         tmp[strlen(tmp)-1] = '\0';
-        cur->sprite = ec_building_load_sprite(tmp);
+        cur->sprite = _ec_building_load_sprite(tmp);
 
         fscanf(f, "%d %d", &cur->price, &cur->people);
         fscanf(f, "%d %d %d", &cur->elec.required, &cur->elec.used, &cur->elec.produced);
@@ -103,7 +103,7 @@ void ec_building_render(s_building *cur, int coord_x, int coord_y)
     );
 
     /* if not connected to water or elec, show sign */
-    if (cur->is_working)
+    if (!cur->is_working)
     {
         ec_graphic_rectfill(window.screen, coord_x+BOARD_SIZE-10, coord_y, coord_x+BOARD_SIZE, coord_y+10, makecol(128, 0, 0));
     }
@@ -120,23 +120,12 @@ s_building *ec_building_new(s_building *template, int y, int x)
     game.money -= template->price;
     game.people += template->people;
 
-    /* house */
-    if (template->building == BUILDING_HOUSE_NONE) /* TODO : or house_medium or ... */
+    if (template->building == BUILDING_INFRA_ROAD)
     {
-        game.water_used += template->water.used;
+        ret->is_working = 1;
     }
 
-    /* supply */
-    if (template->building == BUILDING_SUPPLY_ELEC)
-    {
-        ret->is_working = 1;
-        game.elec_capacity += template->elec.produced;
-    }
-    if (template->building == BUILDING_SUPPLY_WATER)
-    {
-        ret->is_working = 1;
-        game.water_capacity += template->water.produced;
-    }
+    ec_game_on_building_new();
 
     return ret;
 }

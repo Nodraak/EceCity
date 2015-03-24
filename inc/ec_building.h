@@ -45,6 +45,7 @@ typedef struct      _s_building
 
 extern s_building building_data[BUILDING_LAST];
 
+BITMAP *_ec_building_load_sprite(char *file);
 void ec_building_init(void);
 void ec_building_free(void);
 void ec_building_render(s_building *cur, int coord_x, int coord_y);

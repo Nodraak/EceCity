@@ -36,8 +36,8 @@ void ec_main_render(void)
     clear_to_color(window.screen, makecol(255, 255, 255));
 
     /* draw */
-    ec_board_render(window.screen);
-    ec_game_render(window.screen);
+    ec_game_render_board(window.screen);
+    ec_game_render_menu(window.screen);
 
     /* flip */
     show_mouse(window.screen);
