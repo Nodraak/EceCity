@@ -38,8 +38,8 @@ void ec_game_on_button_left(void)
 {
     int pxl_x, pxl_y, board_x, board_y;
 
-    pxl_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos.x);
-    pxl_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos.y);
+    pxl_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
+    pxl_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
     board_x = pxl_x/BOARD_SIZE;
     board_y = pxl_y/BOARD_SIZE;
 
@@ -87,21 +87,15 @@ void ec_game_render_board(BITMAP *s)
     /* hover */
     if (game.building_selected != BUILDING_NONE)
     {
-        int coord_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos.x);
-        int coord_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos.y);
-        int size_x = building_data[game.building_selected].size.x * BOARD_SIZE;
-        int size_y = building_data[game.building_selected].size.y * BOARD_SIZE;
+        int coord_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
+        int coord_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
 
         if (ec_graphic_is_in_board(coord_x, coord_y))
         {
             coord_x = coord_x/BOARD_SIZE*BOARD_SIZE;
             coord_y = coord_y/BOARD_SIZE*BOARD_SIZE;
 
-            ec_graphic_stretch_sprite(
-                s, building_data[game.building_selected].sprite,
-                coord_x, coord_y,
-                coord_x+size_x, coord_y+size_y
-            );
+            ec_graphic_stretch_sprite(s, building_data[game.building_selected].sprite, coord_x, coord_y, building_data[game.building_selected].size.y);
         }
     }
 

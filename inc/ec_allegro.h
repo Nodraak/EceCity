@@ -16,8 +16,8 @@
 #define BOARD_WIDTH     (BOARD_COL*BOARD_SIZE)
 #define BOARD_HEIGHT    (BOARD_LINE*BOARD_SIZE)
 
-#define BOARD_MOVE_SPEED    4
-#define BOARD_ZOOM_FACTOR   0.02
+#define BOARD_MOVE_SPEED    10
+#define BOARD_ZOOM_FACTOR   0.01
 
 /*
     struct

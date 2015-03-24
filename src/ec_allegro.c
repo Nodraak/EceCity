@@ -56,7 +56,7 @@ void ec_allegro_init(void)
 
     window.zoom = 1;
     window.offset.x = 100;
-    window.offset.y = 20;
+    window.offset.y = -400;
 }
 
 void ec_allegro_update_event(void)

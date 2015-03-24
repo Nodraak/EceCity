@@ -96,11 +96,7 @@ void ec_building_free(void)
 void ec_building_render(s_building *cur, int coord_x, int coord_y)
 {
     /* sprite */
-    ec_graphic_stretch_sprite(
-        window.screen, cur->sprite,
-        coord_x, coord_y,
-        coord_x+BOARD_SIZE*cur->size.x, coord_y+BOARD_SIZE*cur->size.y
-    );
+    ec_graphic_stretch_sprite(window.screen, cur->sprite, coord_x, coord_y, cur->size.y);
 
     /* if not connected to water or elec, show sign */
     if (!cur->is_working)
