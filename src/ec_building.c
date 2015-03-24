@@ -3,19 +3,8 @@
 
     todo
 
-    for each building, implement
-        build : add current building on the board
-        destroy
-        on build : update current building when other buildings are built
-        on destroy
-        on click / selected ?
-        on clock_tick
-
-    water
-    elec
-    house
-
-    -> to handle water / elec supply for house when the map is changed
+    -> on clock_tick -> for houses
+    -> update water / elec supply for house when the map is changed
 
 */
 
@@ -36,18 +25,18 @@ s_building building_data[BUILDING_LAST];
         écoles d’ingénieurs, bibliothèques, des parcs, des stades, ...)
 */
 
-BITMAP *ec_building_load_sprite(char *file)
+BITMAP *ec_building_load_sprite(char *file) /* TODO : prepend _ for func name ? */
 {
     BITMAP *ret = NULL;
-    char tmp[1024];
+    char tmp1[1024], tmp2[1024];
 
-    sprintf(tmp, "res/%s", file);
+    sprintf(tmp1, "res/%s", file);
 
-    ret = load_bmp(tmp, NULL);
+    ret = load_bmp(tmp1, NULL);
     if (ret == NULL)
     {
-        sprintf(tmp, "load_bitmap() - %s", tmp);
-        ec_abort(tmp);
+        sprintf(tmp2, "load_bitmap() - %s", tmp1);
+        ec_abort(tmp2);
     }
 
     return ret;
@@ -69,6 +58,7 @@ void ec_building_init(void)
     fgets(tmp, 1024-1, f);
     fgets(tmp, 1024-1, f);
     fgets(tmp, 1024-1, f);
+    fgets(tmp, 1024-1, f);
 
     for (i = 0; i < BUILDING_LAST; ++i)
     {
@@ -83,10 +73,10 @@ void ec_building_init(void)
         fscanf(f, "%d %d", &cur->price, &cur->people);
         fscanf(f, "%d %d %d", &cur->elec.required, &cur->elec.used, &cur->elec.produced);
         fscanf(f, "%d %d %d", &cur->water.required, &cur->water.used, &cur->water.produced);
+        fscanf(f, "%lf %lf", &cur->size.x, &cur->size.y);
 
         cur->building = i;
-        cur->elec.is_connected = 0;
-        cur->water.is_connected = 0;
+        cur->is_working = 0;
 
         fgets(tmp, 1024-1, f);
         fgets(tmp, 1024-1, f);
@@ -103,28 +93,29 @@ void ec_building_free(void)
         destroy_bitmap(building_data[i].sprite);
 }
 
-void ec_building_render(s_building *building, int coord_x, int coord_y)
+void ec_building_render(s_building *cur, int coord_x, int coord_y)
 {
-    int sprite_id = building->building;
-
     /* sprite */
     ec_allegro_graphic_stretch_sprite(
-        window.screen, building_data[sprite_id].sprite,
-        coord_x, coord_y, coord_x+BOARD_SIZE, coord_y+BOARD_SIZE
+        window.screen, cur->sprite,
+        coord_x, coord_y,
+        coord_x+BOARD_SIZE*cur->size.x, coord_y+BOARD_SIZE*cur->size.y
     );
 
     /* if not connected to water or elec, show sign */
-    if ((building->elec.required && !building->elec.is_connected)
-        || (building->water.required && !building->water.is_connected)
-    )
+    if (cur->is_working)
     {
         ec_allegro_graphic_rectfill(window.screen, coord_x+BOARD_SIZE-10, coord_y, coord_x+BOARD_SIZE, coord_y+10, makecol(128, 0, 0));
     }
 }
 
-void ec_building_new(s_building *dest, s_building *template)
+s_building *ec_building_new(s_building *template, int y, int x)
 {
-    memcpy(dest, template, sizeof(s_building));
+    s_building *ret = malloc(sizeof(s_building)); /* TODO check error */
+
+    memcpy(ret, template, sizeof(s_building));
+    ret->pos.x = x;
+    ret->pos.y = y;
 
     game.money -= template->price;
     game.people += template->people;
@@ -138,12 +129,30 @@ void ec_building_new(s_building *dest, s_building *template)
     /* supply */
     if (template->building == BUILDING_SUPPLY_ELEC)
     {
-        dest->elec.is_connected = 1;
+        ret->is_working = 1;
         game.elec_capacity += template->elec.produced;
     }
     if (template->building == BUILDING_SUPPLY_WATER)
     {
-        dest->elec.is_connected = 1;
+        ret->is_working = 1;
         game.water_capacity += template->water.produced;
     }
+
+    return ret;
+}
+
+int ec_building_have_space(int board_y, int board_x, s_vector size)
+{
+    int x, y;
+
+    for (y = 0; y < size.y; ++y)
+    {
+        for (x = 0; x < size.x; ++x)
+        {
+            if (game.board[board_y+y][board_x+x] != NULL)
+                return 0;
+        }
+    }
+
+    return 1;
 }

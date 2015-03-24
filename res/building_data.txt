@@ -1,69 +1,81 @@
 price people
 elec.required elec.used elec.produced
 water.required water.used water.produced
+size.x size.y
 
 BUILDING_NONE
 none.bmp
 -1 -1
 -1 -1 -1
 -1 -1 -1
+-1 -1
 
 BUILDING_INFRA_ROAD
 infra_road.bmp
 10 0
 0 0 0
 0 0 0
+1 1
 
 BUILDING_INFRA_ELEC
 infra_elec.bmp
 10 0
 0 0 0
 0 0 0
+1 1
 
 BUILDING_INFRA_WATER
 infra_water.bmp
 10 0
 0 0 0
 0 0 0
+1 1
 
 BUILDING_HOUSE_NONE
 house_none.bmp
 1000 0
 1 1000 0
 1 1000 0
+3 3
 
 BUILDING_HOUSE_SMALL
 house_small.bmp
 1000000000 10
 1 10 0
 1 10 0
+3 3
 
 BUILDING_HOUSE_MEDIUM
 house_medium.bmp
 1000000000 50
 1 50 0
 1 50 0
+3 3
 
 BUILDING_HOUSE_LARGE
 house_large.bmp
 1000000000 100
 1 100 0
 1 100 0
+3 3
 
 BUILDING_HOUSE_XL
 house_xl.bmp
 1000000000 1000
 1 1000 0
 1 1000 0
+3 3
 
 BUILDING_SUPPLY_ELEC
 supply_elec.bmp
 100000 0
 0 0 1000
 0 0 0
+4 6
 
 BUILDING_SUPPLY_WATER
 supply_water.bmp
 100000 0
 0 0 0
 0 0 1000
+4 6
