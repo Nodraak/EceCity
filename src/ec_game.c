@@ -95,7 +95,7 @@ void ec_game_render_board(BITMAP *s)
             coord_x = coord_x/BOARD_SIZE*BOARD_SIZE;
             coord_y = coord_y/BOARD_SIZE*BOARD_SIZE;
 
-            ec_graphic_stretch_sprite(s, building_data[game.building_selected].sprite, coord_x, coord_y, building_data[game.building_selected].size.y);
+            ec_graphic_stretch_sprite(s, building_data[game.building_selected].sprite, coord_x, coord_y);
         }
     }
 

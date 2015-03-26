@@ -1,1 +1,9 @@
+# linux
 EceCity
+
+# win
+*.o
+*.exe
+*.depend
+*.layout
+
