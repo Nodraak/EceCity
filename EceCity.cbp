@@ -41,6 +41,7 @@
 		<Unit filename="inc/ec_game.h" />
 		<Unit filename="inc/ec_menu.h" />
 		<Unit filename="inc/ec_save.h" />
+		<Unit filename="inc/ec_list.h" />
 		<Unit filename="src/ec_allegro.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -57,6 +58,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/ec_save.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/ec_list.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/main.c">
