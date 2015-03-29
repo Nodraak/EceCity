@@ -75,7 +75,7 @@ void ec_building_init(void)
         fscanf(f, "%d %d %d", &cur->water.required, &cur->water.used, &cur->water.produced);
         fscanf(f, "%lf %lf", &cur->size.x, &cur->size.y);
 
-        cur->building = i;
+        cur->type = i;
         cur->is_working = 0;
 
         fgets(tmp, 1024-1, f);
@@ -116,7 +116,7 @@ s_building *ec_building_new(s_building *template, int y, int x)
     game.money -= template->price;
     game.people += template->people;
 
-    if (template->building == BUILDING_INFRA_ROAD)
+    if (template->type == BUILDING_INFRA_ROAD)
     {
         ret->is_working = 1;
     }
@@ -140,4 +140,12 @@ int ec_building_have_space(int board_y, int board_x, s_vector size)
     }
 
     return 1;
+}
+
+
+int ec_building_is_house(e_building type)
+{
+    return ((type == BUILDING_HOUSE_NONE) || (type == BUILDING_HOUSE_SMALL)
+        || (type == BUILDING_HOUSE_MEDIUM) || (type == BUILDING_HOUSE_LARGE)
+        || (type == BUILDING_HOUSE_XL));
 }

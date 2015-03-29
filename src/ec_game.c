@@ -74,8 +74,14 @@ void ec_game_render_board(BITMAP *s)
 {
     int i, j;
 
-    /* board */
-    for (j = 0; j < BOARD_LINE; ++j)
+    /* lines */
+    for (i = 0; i < BOARD_LINE+1; ++i)
+        ec_graphic_line(s, 0, i*BOARD_SIZE, BOARD_WIDTH, i*BOARD_SIZE, makecol(128, 128, 128));
+    for (i = 0; i < BOARD_COL+1; ++i)
+        ec_graphic_line(s, i*BOARD_SIZE, 0, i*BOARD_SIZE, BOARD_HEIGHT, makecol(128, 128, 128));
+
+    /* board (buildings) */
+    for (j = BOARD_LINE-1; j >= 0; --j)
     {
         for (i = 0; i < BOARD_COL; ++i)
         {
@@ -98,12 +104,6 @@ void ec_game_render_board(BITMAP *s)
             ec_graphic_stretch_sprite(s, building_data[game.building_selected].sprite, coord_x, coord_y);
         }
     }
-
-    /* lines */
-    for (i = 0; i < BOARD_LINE+1; ++i)
-        ec_graphic_line(s, 0, i*BOARD_SIZE, BOARD_WIDTH, i*BOARD_SIZE, makecol(128, 128, 128));
-    for (i = 0; i < BOARD_COL+1; ++i)
-        ec_graphic_line(s, i*BOARD_SIZE, 0, i*BOARD_SIZE, BOARD_HEIGHT, makecol(128, 128, 128));
 }
 
 void ec_game_render_menu(BITMAP *s)

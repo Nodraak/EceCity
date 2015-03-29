@@ -44,7 +44,10 @@ typedef struct  _s_window
 /*
     global struct + func
 */
+
 extern s_window window;
+
+s_vector ec_allegro_make_vector(double x, double y);
 void ec_abort(char *error);
 void ec_allegro_init(void);
 void ec_allegro_update_event(void);

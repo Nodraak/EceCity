@@ -30,7 +30,7 @@ typedef struct      _s_ressource
 
 typedef struct      _s_building
 {
-    e_building      building;
+    e_building      type;
     BITMAP          *sprite;
 
     s_vector        pos;
@@ -51,5 +51,6 @@ void ec_building_free(void);
 void ec_building_render(s_building *cur, int coord_x, int coord_y);
 s_building *ec_building_new(s_building *template, int y, int x);
 int ec_building_have_space(int board_y, int board_x, s_vector size);
+int ec_building_is_house(e_building type);
 
 #endif
