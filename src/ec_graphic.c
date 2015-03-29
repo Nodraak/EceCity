@@ -46,17 +46,17 @@ void _scale_and_call(void(*f)(BITMAP*, int, int, int, int, int), BITMAP* s, s_ve
     int x2_scaled = ec_graphic_scale_x_coord_to_pxl(c2);
     int y2_scaled = ec_graphic_scale_y_coord_to_pxl(c2);
 
-    f(s, x1_scaled, y1_scaled, x2_scaled-1, y2_scaled-1, c);
+    f(s, x1_scaled, y1_scaled, x2_scaled, y2_scaled, c);
 }
 
 void ec_graphic_line(BITMAP *s, int x1, int y1, int x2, int y2, int c)
 {
-    _scale_and_call(line, s, (s_vector){x1, y1}, (s_vector){x2, y2}, c);
+    _scale_and_call(line, s, ec_allegro_make_vector(x1, y1), ec_allegro_make_vector(x2, y2), c);
 }
 
 void ec_graphic_rectfill(BITMAP *s, int x1, int y1, int x2, int y2, int c)
 {
-    _scale_and_call(rectfill, s, (s_vector){x1, y1}, (s_vector){x2, y2}, c);
+    _scale_and_call(rectfill, s, ec_allegro_make_vector(x1, y1), ec_allegro_make_vector(x2, y2), c);
 }
 
 void ec_graphic_stretch_sprite(BITMAP *dest, BITMAP *src, int x1, int y1)
@@ -65,8 +65,8 @@ void ec_graphic_stretch_sprite(BITMAP *dest, BITMAP *src, int x1, int y1)
     fixed scale = ftofix(window.zoom/10);
     double vfix = -(src->h/20/10)*(BOARD_SIZE/2*window.zoom);
 
-    int x1_scaled = ec_graphic_scale_x_coord_to_pxl((s_vector){x1, y1});
-    int y1_scaled = ec_graphic_scale_y_coord_to_pxl((s_vector){x1, y1});
+    int x1_scaled = ec_graphic_scale_x_coord_to_pxl(ec_allegro_make_vector(x1, y1));
+    int y1_scaled = ec_graphic_scale_y_coord_to_pxl(ec_allegro_make_vector(x1, y1));
 
     rotate_scaled_sprite(dest, src, x1_scaled, y1_scaled+vfix, angle, scale);
 }
