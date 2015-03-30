@@ -1,11 +1,13 @@
 
 
-#include "stdlib.h"
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "ec_game.h"
 #include "ec_graphic.h"
 #include "ec_building.h"
+#include "ec_graph.h"
 
 s_game game;
 
@@ -66,7 +68,42 @@ void ec_game_on_button_left(void)
 
 void ec_game_on_building_new(void)
 {
+    int i, j;
 
+    printf("Update\n");
+
+    /* reset */
+    for (j = 0; j < BOARD_LINE; ++j)
+    {
+        for (i = 0; i < BOARD_COL; ++i)
+        {
+            s_building *b = game.board[j][i];
+
+            if (b != NULL && b->type != BUILDING_INFRA_ROAD)
+            {
+                b->is_working = 0;
+                b->elec.used = 0;
+                b->water.used = 0;
+            }
+        }
+    }
+
+    /* update */
+    for (j = 0; j < BOARD_LINE; ++j)
+    {
+        for (i = 0; i < BOARD_COL; ++i)
+        {
+            s_building *b = game.board[j][i];
+
+            if (b != NULL)
+            {
+                if (b->type == BUILDING_SUPPLY_WATER || b->type == BUILDING_SUPPLY_ELEC)
+                {
+                    ec_graph_supply_serve(i, j);
+                }
+            }
+        }
+    }
 }
 
 
