@@ -101,7 +101,16 @@ void ec_building_render(s_building *cur, int coord_x, int coord_y)
     /* if not connected to water or elec, show sign */
     if (!cur->is_working)
     {
-        ec_graphic_rectfill(window.screen, coord_x+BOARD_SIZE-10, coord_y, coord_x+BOARD_SIZE, coord_y+10, makecol(128, 0, 0));
+        double i;
+
+        for (i = 0; i < 3; i+=0.1)
+        {
+            int coord_x2 = coord_x + cur->size.x*BOARD_SIZE;
+            int coord_y2 = coord_y + cur->size.y*BOARD_SIZE;
+
+            ec_graphic_line(window.screen, coord_x, coord_y+i, coord_x2, coord_y+i, makecol(128, 0, 0));
+            ec_graphic_line(window.screen, coord_x2-i, coord_y, coord_x2-i, coord_y2, makecol(128, 0, 0));
+        }
     }
 }
 

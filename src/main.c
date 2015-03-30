@@ -16,6 +16,10 @@ ARROWS : move the board
 KEY_P / KEY_M : zoom
 KEY_N : next building
 
+img :
+    rotate = 45
+    x*y = 346*200
+
 */
 
 void ec_main_handle_event(void)

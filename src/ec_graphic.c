@@ -49,7 +49,7 @@ void _scale_and_call(void(*f)(BITMAP*, int, int, int, int, int), BITMAP* s, s_ve
     f(s, x1_scaled, y1_scaled, x2_scaled, y2_scaled, c);
 }
 
-void ec_graphic_line(BITMAP *s, int x1, int y1, int x2, int y2, int c)
+void ec_graphic_line(BITMAP *s, double x1, double y1, double x2, double y2, int c)
 {
     _scale_and_call(line, s, ec_allegro_make_vector(x1, y1), ec_allegro_make_vector(x2, y2), c);
 }
