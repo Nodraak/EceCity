@@ -36,16 +36,15 @@
 			<Add library="alleg" />
 		</Linker>
 		<Unit filename="inc/ec_allegro.h" />
-		<Unit filename="inc/ec_graphic.h" />
 		<Unit filename="inc/ec_building.h" />
 		<Unit filename="inc/ec_game.h" />
+		<Unit filename="inc/ec_graph.h" />
+		<Unit filename="inc/ec_graphic.h" />
+		<Unit filename="inc/ec_list.h" />
 		<Unit filename="inc/ec_menu.h" />
 		<Unit filename="inc/ec_save.h" />
-		<Unit filename="inc/ec_list.h" />
+		<Unit filename="inc/ec_utils.h" />
 		<Unit filename="src/ec_allegro.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/ec_graphic.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/ec_building.c">
@@ -54,13 +53,22 @@
 		<Unit filename="src/ec_game.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/ec_graph.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/ec_graphic.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/ec_list.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/ec_menu.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/ec_save.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/ec_list.c">
+		<Unit filename="src/ec_utils.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/main.c">
