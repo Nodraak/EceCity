@@ -4,8 +4,6 @@
     todo
 
     -> on clock_tick -> for houses
-    -> update water / elec supply for house when the map is changed
-
 */
 
 #include <stdio.h>
@@ -42,7 +40,7 @@ BITMAP *_ec_building_load_sprite(char *file)
     return ret;
 }
 
-void ec_building_init(void)
+void ec_building_init_all(void)
 {
     int i;
     char tmp[1024];
@@ -114,7 +112,7 @@ void ec_building_render(s_building *cur, int coord_x, int coord_y)
     }
 }
 
-s_building *ec_building_new(s_building *template, int y, int x)
+s_building *ec_building_alloc(s_building *template, int y, int x)
 {
     s_building *ret = ec_utils_malloc(sizeof(s_building));
 
@@ -129,6 +127,24 @@ s_building *ec_building_new(s_building *template, int y, int x)
         ret->is_working = 1;
 
     return ret;
+}
+
+void ec_building_new(int board_y, int board_x)
+{
+    int i, j;
+    s_building *new = NULL;
+
+    new = ec_building_alloc(&building_data[game.building_selected], board_y, board_x);
+
+    for (j = 0; j < new->size.y; ++j)
+    {
+        for (i = 0; i < new->size.x; ++i)
+        {
+            game.board[board_y+j][board_x+i] = new;
+        }
+    }
+
+    ec_game_on_building_new();
 }
 
 int ec_building_have_space(int board_y, int board_x, s_vector size)

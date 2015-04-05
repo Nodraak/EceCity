@@ -52,7 +52,7 @@ int main(void)
 {
     ec_allegro_init();
     ec_game_init();
-    ec_building_init();
+    ec_building_init_all();
 
     while (!window.quit)
     {

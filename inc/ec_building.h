@@ -47,10 +47,11 @@ typedef struct      _s_building
 extern s_building building_data[BUILDING_LAST];
 
 BITMAP *_ec_building_load_sprite(char *file);
-void ec_building_init(void);
+void ec_building_init_all(void);
 void ec_building_free(void);
 void ec_building_render(s_building *cur, int coord_x, int coord_y);
-s_building *ec_building_new(s_building *template, int y, int x);
+s_building *ec_building_alloc(s_building *template, int y, int x);
+void ec_building_new(int board_y, int board_x);
 
 int ec_building_have_space(int board_y, int board_x, s_vector size);
 int ec_building_is_house(e_building type);

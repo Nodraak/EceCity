@@ -50,18 +50,7 @@ void ec_game_on_button_left(void)
         && game.building_selected != BUILDING_NONE
         && game.money >= building_data[game.building_selected].price)
     {
-        int x, y;
-        s_building *new = ec_building_new(&building_data[game.building_selected], board_y, board_x);
-
-        for (y = 0; y < new->size.y; ++y)
-        {
-            for (x = 0; x < new->size.x; ++x)
-            {
-                game.board[board_y+y][board_x+x] = new;
-            }
-        }
-
-        ec_game_on_building_new();
+        ec_building_new(board_y, board_x);
     }
 
     window.mouseButtonLeft = 0;
