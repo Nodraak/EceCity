@@ -158,3 +158,13 @@ int ec_building_is_house(e_building type)
         || (type == BUILDING_HOUSE_MEDIUM) || (type == BUILDING_HOUSE_LARGE)
         || (type == BUILDING_HOUSE_XL));
 }
+
+s_ressource *ec_building_resrc_get_water(s_building *b)
+{
+    return &b->water;
+}
+
+s_ressource *ec_building_resrc_get_elec(s_building *b)
+{
+    return &b->elec;
+}

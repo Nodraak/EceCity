@@ -50,7 +50,10 @@ void ec_building_init(void);
 void ec_building_free(void);
 void ec_building_render(s_building *cur, int coord_x, int coord_y);
 s_building *ec_building_new(s_building *template, int y, int x);
+
 int ec_building_have_space(int board_y, int board_x, s_vector size);
 int ec_building_is_house(e_building type);
+s_ressource *ec_building_resrc_get_water(s_building *b);
+s_ressource *ec_building_resrc_get_elec(s_building *b);
 
 #endif
