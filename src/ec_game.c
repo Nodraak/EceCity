@@ -45,7 +45,7 @@ void ec_game_on_button_left(void)
     board_x = pxl_x/BOARD_SIZE;
     board_y = pxl_y/BOARD_SIZE;
 
-    if (ec_graphic_is_in_board(pxl_x, pxl_y)
+    if (ec_utils_pxl_is_in_board(pxl_x, pxl_y)
         && ec_building_have_space(board_y, board_x, building_data[game.building_selected].size)
         && game.building_selected != BUILDING_NONE
         && game.money >= building_data[game.building_selected].price)
@@ -133,7 +133,7 @@ void ec_game_render_board(BITMAP *s)
         int coord_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
         int coord_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
 
-        if (ec_graphic_is_in_board(coord_x, coord_y))
+        if (ec_utils_pxl_is_in_board(coord_x, coord_y))
         {
             coord_x = coord_x/BOARD_SIZE*BOARD_SIZE;
             coord_y = coord_y/BOARD_SIZE*BOARD_SIZE;

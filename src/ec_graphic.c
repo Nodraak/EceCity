@@ -70,8 +70,3 @@ void ec_graphic_stretch_sprite(BITMAP *dest, BITMAP *src, int x1, int y1)
 
     rotate_scaled_sprite(dest, src, x1_scaled, y1_scaled+vfix, angle, scale);
 }
-
-int ec_graphic_is_in_board(int x, int y)
-{
-    return (x >= 0 && x < BOARD_WIDTH && y >= 0 && y < BOARD_HEIGHT);
-}

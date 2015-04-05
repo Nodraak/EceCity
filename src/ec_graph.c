@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <ec_allegro.h> /* s_vector */
-#include <ec_building.h> /* s_building */
-#include <ec_game.h> /* game */
-#include <ec_list.h>
-#include <ec_graph.h>
+#include "ec_allegro.h" /* s_vector */
+#include "ec_building.h" /* s_building */
+#include "ec_graphic.h" /* ec_graphic_is_in_board */
+#include "ec_game.h" /* game */
+#include "ec_list.h"
+#include "ec_graph.h"
 
 
 void graph_list_add(s_list *list, int x, int y)
