@@ -116,7 +116,7 @@ void ec_building_render(s_building *cur, int coord_x, int coord_y)
 
 s_building *ec_building_new(s_building *template, int y, int x)
 {
-    s_building *ret = malloc(sizeof(s_building)); /* TODO check error */
+    s_building *ret = ec_utils_malloc(sizeof(s_building));
 
     memcpy(ret, template, sizeof(s_building));
     ret->pos.x = x;

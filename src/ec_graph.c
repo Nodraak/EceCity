@@ -12,7 +12,7 @@
 
 void graph_list_add(s_list *list, int x, int y)
 {
-    s_vector *payload = malloc(sizeof(s_vector));
+    s_vector *payload = ec_utils_malloc(sizeof(s_vector));
 
     payload->x = x,
     payload->y = y;
@@ -64,7 +64,6 @@ void ec_graph_supply_building(s_list *list, int *available, s_vector pos, s_ress
         return;
 
     get_resrc(b)->visited = 1;
-
 
     /* road, recurs */
     if (b->type == BUILDING_INFRA_ROAD)

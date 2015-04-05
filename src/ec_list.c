@@ -6,7 +6,7 @@
 
 s_list *list_new(void)
 {
-    s_list *ret = malloc(sizeof(s_list));
+    s_list *ret = ec_utils_malloc(sizeof(s_list));
     ret->head = NULL;
     ret->tail = NULL;
     return ret;
@@ -30,7 +30,7 @@ void list_free(s_list *list)
 
 void list_add(s_list *list, void *payload)
 {
-    s_node *new = malloc(sizeof(s_node));
+    s_node *new = ec_utils_malloc(sizeof(s_node));
 
     new->payload = payload;
     new->next = NULL;
