@@ -59,14 +59,14 @@ void ec_graphic_rectfill(BITMAP *s, int x1, int y1, int x2, int y2, int c)
     _scale_and_call(rectfill, s, ec_utils_vector_make(x1, y1), ec_utils_vector_make(x2, y2), c);
 }
 
-void ec_graphic_stretch_sprite(BITMAP *dest, BITMAP *src, int x1, int y1)
+void ec_graphic_stretch_sprite(BITMAP *dest, s_building *b, int x1, int y1)
 {
     fixed angle = ftofix(ANGLE*M_PI/180);
     fixed scale = ftofix(window.zoom/10);
-    double vfix = -(src->h/20/10)*(BOARD_SIZE/2*window.zoom);
+    double fix_pxl = -b->size.y*(BOARD_SIZE/2*window.zoom);
 
     int x1_scaled = ec_graphic_scale_x_coord_to_pxl(ec_utils_vector_make(x1, y1));
     int y1_scaled = ec_graphic_scale_y_coord_to_pxl(ec_utils_vector_make(x1, y1));
 
-    rotate_scaled_sprite(dest, src, x1_scaled, y1_scaled+vfix, angle, scale);
+    rotate_scaled_sprite(dest, b->sprite, x1_scaled, y1_scaled+fix_pxl, angle, scale);
 }

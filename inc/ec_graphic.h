@@ -13,6 +13,6 @@ double ec_graphic_scale_y_pxl_to_coord(s_vector c);
 
 void ec_graphic_line(BITMAP *s, double x1, double y1, double x2, double y2, int c);
 void ec_graphic_rectfill(BITMAP *s, int x1, int y1, int x2, int y2, int c);
-void ec_graphic_stretch_sprite(BITMAP *dest, BITMAP *src, int x1, int y1);
+void ec_graphic_stretch_sprite(BITMAP *dest, s_building *b, int x1, int y1);
 
 #endif
