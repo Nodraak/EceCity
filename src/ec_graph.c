@@ -21,87 +21,94 @@ void graph_list_add(s_list *list, int x, int y)
 }
 
 
-s_vector graph_list_ppaf(s_node *node)
+void graph_list_free_node(s_node *node)
 {
-    s_vector *payload = NULL;
-    s_vector ret;
-
     if (node == NULL || node->payload == NULL)
     {
         printf("Erreur node or payload ... %s %d\n", __FILE__, __LINE__);
         exit(EXIT_FAILURE);
     }
 
-    payload = node->payload;
+    free(node->payload);
     free(node);
-
-    ret.x = payload->x;
-    ret.y = payload->y;
-    free(payload);
-
-    return ret;
 }
 
 
-void ec_graph_supply_serve(int x, int y)
+s_vector graph_list_get_vector(s_node *node)
+{
+    if (node == NULL || node->payload == NULL)
+    {
+        printf("Erreur node or payload ... %s %d\n", __FILE__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+
+    return *(s_vector*)node->payload;
+}
+
+
+void graph_list_add_surrouding(s_list *list, s_vector v)
+{
+    list_add(list, ec_utils_vector_alloc(v.x+1, v.y));
+    list_add(list, ec_utils_vector_alloc(v.x-1, v.y));
+    list_add(list, ec_utils_vector_alloc(v.x, v.y+1));
+    list_add(list, ec_utils_vector_alloc(v.x, v.y-1));
+}
+
+
+void ec_graph_supply_building(s_list *list, int *available, s_vector pos, s_ressource*(*get_resrc)(s_building *b))
+{
+    s_building *b = game.board[(int)pos.y][(int)pos.x];
+
+    /* if null, return */
+    if (b == NULL || get_resrc(b)->visited)
+        return;
+
+    get_resrc(b)->visited = 1;
+
+
+    /* road, recurs */
+    if (b->type == BUILDING_INFRA_ROAD)
+    {
+        graph_list_add_surrouding(list, pos);
+    }
+    /* house, serve */
+    else if (ec_building_is_house(b->type))
+    {
+        int needed = get_resrc(b)->required - get_resrc(b)->used;
+
+        if (needed > 0)
+        {
+            int served = (needed < (*available) ? needed : (*available));
+
+            get_resrc(b)->used += served;
+            (*available) -= served;
+        }
+    }
+}
+
+
+void ec_graph_supply_board(s_building *b, s_vector pos, s_ressource*(*get_resrc)(s_building *b))
 {
     s_list *list = NULL;
     s_node *node = NULL;
     int available = 0;
-    s_building *b = NULL;
 
     /* init */
     list = list_new();
-    graph_list_add(list, 0, 0); /* TODO : centrale->x */
-    available = 42; /* TODO : centrale->capacity */
+    graph_list_add_surrouding(list, pos);
+    available = get_resrc(b)->produced;
 
     /* loop */
     while ((node = list_pop(list)) != NULL)
     {
-        s_building *b = game.board[y][x];
-        s_vector v = graph_list_ppaf(node);
+        s_vector cur_pos = graph_list_get_vector(node);
 
-        if (b->type == BUILDING_INFRA_ROAD)
-        {
-            /* TODO
-            for cell in surrounding
-                graph_list_add(list, cell);
-            */
-        }
-        else if (ec_building_is_house(b->type))
-        {
-            /* TODO
-            fill house, empty centrale
-            */
-        }
+        if (ec_utils_pxl_is_in_board(cur_pos.x*BOARD_SIZE, cur_pos.y*BOARD_SIZE))
+            ec_graph_supply_building(list, &available, cur_pos, get_resrc);
+
+        graph_list_free_node(node);
     }
 
     /* free */
     list_free(list);
-}
-
-
-int graph_exemple(void)
-{
-    s_list *list = NULL;
-    s_node *node = NULL;
-
-    /* init */
-    list = list_new();
-
-    /* push */
-    graph_list_add(list, 1, 0);
-
-    /* pop */
-    node = list_pop(list);
-    if (node != NULL)
-    {
-        int val = graph_list_ppaf(node).x;
-        printf("%d\n", val);
-    }
-
-    /* free */
-    list_free(list);
-
-    return 0;
 }

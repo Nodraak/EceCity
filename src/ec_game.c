@@ -81,6 +81,9 @@ void ec_game_on_building_new(void)
 
             if (b != NULL)
             {
+                b->elec.visited = 0;
+                b->water.visited = 0;
+
                 if (ec_building_is_house(b->type))
                 {
                     b->elec.used = 0;
@@ -100,10 +103,25 @@ void ec_game_on_building_new(void)
 
             if (b != NULL)
             {
-                if (b->type == BUILDING_SUPPLY_WATER || b->type == BUILDING_SUPPLY_ELEC)
-                {
-                    ec_graph_supply_serve(i, j);
-                }
+                if (b->type == BUILDING_SUPPLY_WATER)
+                    ec_graph_supply_board(b, ec_utils_vector_make(i, j), ec_building_resrc_get_water);
+                else if (b->type == BUILDING_SUPPLY_ELEC)
+                    ec_graph_supply_board(b, ec_utils_vector_make(i, j), ec_building_resrc_get_elec);
+            }
+        }
+    }
+
+    /* update is_working */
+    for (j = 0; j < BOARD_LINE; ++j)
+    {
+        for (i = 0; i < BOARD_COL; ++i)
+        {
+            s_building *b = game.board[j][i];
+
+            if (b != NULL && ec_building_is_house(b->type))
+            {
+                if (b->water.required == b->water.used && b->elec.required == b->elec.used)
+                    b->is_working = 1;
             }
         }
     }
