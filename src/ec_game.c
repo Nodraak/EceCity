@@ -60,6 +60,8 @@ void ec_game_on_button_left(void)
                 game.board[board_y+y][board_x+x] = new;
             }
         }
+
+        ec_game_on_building_new();
     }
 
     window.mouseButtonLeft = 0;
@@ -70,8 +72,6 @@ void ec_game_on_building_new(void)
 {
     int i, j;
 
-    printf("Update\n");
-
     /* reset */
     for (j = 0; j < BOARD_LINE; ++j)
     {
@@ -79,16 +79,19 @@ void ec_game_on_building_new(void)
         {
             s_building *b = game.board[j][i];
 
-            if (b != NULL && b->type != BUILDING_INFRA_ROAD)
+            if (b != NULL)
             {
-                b->is_working = 0;
-                b->elec.used = 0;
-                b->water.used = 0;
+                if (ec_building_is_house(b->type))
+                {
+                    b->elec.used = 0;
+                    b->water.used = 0;
+                    b->is_working = 0;
+                }
             }
         }
     }
 
-    /* update */
+    /* serve water + elec */
     for (j = 0; j < BOARD_LINE; ++j)
     {
         for (i = 0; i < BOARD_COL; ++i)
@@ -118,12 +121,17 @@ void ec_game_render_board(BITMAP *s)
         ec_graphic_line(s, i*BOARD_SIZE, 0, i*BOARD_SIZE, BOARD_HEIGHT, makecol(128, 128, 128));
 
     /* board (buildings) */
-    for (j = BOARD_LINE-1; j >= 0; --j)
+    for (i = -BOARD_LINE+1; i < BOARD_COL; ++i)
     {
-        for (i = 0; i < BOARD_COL; ++i)
+        for (j = 0; j < BOARD_LINE; ++j)
         {
-            if (game.board[j][i] != NULL && game.board[j][i]->pos.x == i && game.board[j][i]->pos.y == j)
-                ec_building_render(game.board[j][i], i*BOARD_SIZE, j*BOARD_SIZE);
+            int x = i+j;
+            int y = j;
+            if (ec_utils_cell_is_in_board(x, y)
+                && game.board[y][x] != NULL && game.board[y][x]->pos.x == x && game.board[y][x]->pos.y == y)
+            {
+                ec_building_render(game.board[y][x], x*BOARD_SIZE, y*BOARD_SIZE);
+            }
         }
     }
 

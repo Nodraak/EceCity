@@ -125,12 +125,8 @@ s_building *ec_building_new(s_building *template, int y, int x)
     game.money -= template->price;
     game.people += template->people;
 
-    if (template->type == BUILDING_INFRA_ROAD)
-    {
+    if (!ec_building_is_house(template->type))
         ret->is_working = 1;
-    }
-
-    ec_game_on_building_new();
 
     return ret;
 }
