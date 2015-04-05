@@ -2,6 +2,7 @@
 #define EC_ALLEGRO_H
 
 #include <allegro.h>
+#include "ec_utils.h"
 
 /*
     define
@@ -22,12 +23,6 @@
 /*
     struct
 */
-typedef struct  _s_vector
-{
-    double      x;
-    double      y;
-}               s_vector;
-
 typedef struct  _s_window
 {
     BITMAP      *screen;
@@ -47,7 +42,6 @@ typedef struct  _s_window
 
 extern s_window window;
 
-s_vector ec_allegro_make_vector(double x, double y);
 void ec_abort(char *error);
 void ec_allegro_init(void);
 void ec_allegro_update_event(void);

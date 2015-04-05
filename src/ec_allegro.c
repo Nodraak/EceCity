@@ -8,16 +8,6 @@
 
 s_window window;
 
-
-s_vector ec_allegro_make_vector(double x, double y)
-{
-    s_vector ret;
-    ret.x = x;
-    ret.y = y;
-    return ret;
-}
-
-
 void _ec_abort(char *error, char *file, int line)
 {
     char msg[1024];
