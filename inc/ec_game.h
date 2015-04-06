@@ -1,7 +1,7 @@
 #ifndef EC_GAME_H
 #define EC_GAME_H
 
-#define nb_Icon_toolbar 11
+#define nb_Icon_toolbar 12
 
 #include "ec_allegro.h"
 #include "ec_building.h"
@@ -26,7 +26,8 @@ typedef struct  _s_game
 typedef struct _s_toolbar
 {
     BITMAP      *sprite;
-    s_vector    pos;
+    int         posx;
+    int         posy;
 
 }               s_toolbar;
 

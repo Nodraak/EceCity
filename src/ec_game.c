@@ -166,21 +166,28 @@ void ec_game_render_board(BITMAP *s)
 
 void ec_game_render_menu(BITMAP *s)
 {
-    int i;
+    //int i;
 
     /* menu */
     rectfill(s, 0, 0, 150, WINDOW_HEIGHT-1, makecol(200, 200, 200));
 
-    textprintf_ex(s, font, 10, 20, makecol(0, 0, 0), -1, "timer : %d - %d", game.time, game.time/30);
-    textprintf_ex(s, font, 10, 40, makecol(0, 0, 0), -1, "%d EceFlouz", game.money);
+    draw_sprite(s, toolbar[10].sprite, (int)toolbar[10].posx, (int)toolbar[10].posy);
+    draw_sprite(s, toolbar[8].sprite, (int)toolbar[8].posx, (int)toolbar[8].posy);
+    draw_sprite(s, toolbar[11].sprite, (int)toolbar[11].posx, (int)toolbar[11].posy);
+    draw_sprite(s, toolbar[7].sprite, (int)toolbar[7].posx, (int)toolbar[7].posy);
+    draw_sprite(s, toolbar[9].sprite, (int)toolbar[9].posx, (int)toolbar[9].posy);
 
-    textprintf_ex(s, font, 10, 80, makecol(0, 0, 0), -1, "people : %d", game.people);
-    textprintf_ex(s, font, 10, 100, makecol(0, 0, 0), -1, "elec : %d/%d", game.elec_used, game.elec_capacity);
-    textprintf_ex(s, font, 10, 120, makecol(0, 0, 0), -1, "water : %d/%d", game.water_used, game.water_capacity);
+    textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds - %d", game.time, game.time/30);
+    textprintf_ex(s, font, 60, 64, makecol(0, 0, 0), -1, "%d", game.money);
+    textprintf_ex(s, font, 60, 74, makecol(0, 0, 0), -1, "EceFlouz");
 
-    for (i = 0; i < BUILDING_LAST; ++i)
+    textprintf_ex(s, font, 60, 119, makecol(0, 0, 0), -1, "%d", game.people);
+    textprintf_ex(s, font, 60, 167, makecol(0, 0, 0), -1, "%d/%d", game.elec_used, game.elec_capacity);     //Perso: A voir si besoin modif si grand chiffre
+    textprintf_ex(s, font, 60, 214, makecol(0, 0, 0), -1, "%d/%d", game.water_used, game.water_capacity);   //Perso: A voir si besoin modif si grand chiffre
+
+    /*for (i = 0; i < BUILDING_LAST; ++i)
         textprintf_ex(s, font, 30, 160+20*i, makecol(0, 0, 0), -1, "%s", building_enum_to_str[i]);
-    textprintf_ex(s, font, 10, 160+20*game.building_selected, makecol(0, 0, 0), -1, "->");
+    textprintf_ex(s, font, 10, 160+20*game.building_selected, makecol(0, 0, 0), -1, "->");*/
 }
 
 
@@ -214,7 +221,7 @@ void ec_game_load_toolbar(void)
     if (fic == NULL)
         ec_abort("fopen() toolbar_img.txt");
 
-    //Pas de else??? ec_abord quitte??
+
 
     /*Skip Info*/
     fgets(tmp, 1024-1, fic);
@@ -231,10 +238,10 @@ void ec_game_load_toolbar(void)
         tmp[strlen(tmp)-1] = '\0';
         nouv->sprite = _ec_game_load_sprite(tmp);
 
-        fscanf(fic, "%d %d", &nouv->pos.x, &nouv->pos.y);
+        fscanf(fic, "%d %d", &nouv->posx, &nouv->posy);
 
         fgets(tmp, 1024-1, fic);
-        fgets(tmp, 1024-1, fic);    //Pourquoi un 2eme fgets????
+        fgets(tmp, 1024-1, fic);
     }
 
     fclose(fic);
@@ -246,7 +253,7 @@ void ec_game_free_toolbar(void)
     int compt;
 
     for( compt = 0; compt < nb_Icon_toolbar; ++compt)
-        destroy_bitmap(toolbar[compt].sprite);  //Pourquoi . et pas ->? C'est quoi la diff concrètement???
+        destroy_bitmap(toolbar[compt].sprite);
 }
 
 

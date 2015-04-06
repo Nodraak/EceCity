@@ -1,8 +1,8 @@
-Nombre d'icon à charger: 11
+Nombre d'icon à charger: 12
 
 BOUTON CASERNE DE POMPIER
 button_firestation.bmp
-0 0
+1 1
 
 BOUTON MAISON
 button_house.bmp
@@ -30,16 +30,20 @@ button_water_supply.bmp
 
 ICON LVL ELECTRICITE
 icon_elec.bmp
-0 0
+5 145
 
 ICON MONEY
-icon_money.bmp
-0 0
+icon_money.bmp 
+5 50
 
 ICON LVL WATER
 icon_water.bmp
-0 0
+5 192 
 
 ICON TIMER
 icon_time.bmp
-0 0
+5 2
+
+ICON PEOPLE
+icon_people.bmp
+5 98
