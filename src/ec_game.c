@@ -166,16 +166,19 @@ void ec_game_render_board(BITMAP *s)
 
 void ec_game_render_menu(BITMAP *s)
 {
-    //int i;
+    int compt;
 
     /* menu */
     rectfill(s, 0, 0, 150, WINDOW_HEIGHT-1, makecol(200, 200, 200));
 
-    draw_sprite(s, toolbar[10].sprite, (int)toolbar[10].posx, (int)toolbar[10].posy);
+    for ( compt = 0; compt < nb_Icon_toolbar; compt++)
+        draw_sprite(s, toolbar[compt].sprite, toolbar[compt].posx, toolbar[compt].posy);
+
+    /*draw_sprite(s, toolbar[10].sprite, (int)toolbar[10].posx, (int)toolbar[10].posy);
     draw_sprite(s, toolbar[8].sprite, (int)toolbar[8].posx, (int)toolbar[8].posy);
     draw_sprite(s, toolbar[11].sprite, (int)toolbar[11].posx, (int)toolbar[11].posy);
     draw_sprite(s, toolbar[7].sprite, (int)toolbar[7].posx, (int)toolbar[7].posy);
-    draw_sprite(s, toolbar[9].sprite, (int)toolbar[9].posx, (int)toolbar[9].posy);
+    draw_sprite(s, toolbar[9].sprite, (int)toolbar[9].posx, (int)toolbar[9].posy);*/
 
     textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds - %d", game.time, game.time/30);
     textprintf_ex(s, font, 60, 64, makecol(0, 0, 0), -1, "%d", game.money);
@@ -184,6 +187,28 @@ void ec_game_render_menu(BITMAP *s)
     textprintf_ex(s, font, 60, 119, makecol(0, 0, 0), -1, "%d", game.people);
     textprintf_ex(s, font, 60, 167, makecol(0, 0, 0), -1, "%d/%d", game.elec_used, game.elec_capacity);     //Perso: A voir si besoin modif si grand chiffre
     textprintf_ex(s, font, 60, 214, makecol(0, 0, 0), -1, "%d/%d", game.water_used, game.water_capacity);   //Perso: A voir si besoin modif si grand chiffre
+
+    /*draw_sprite(s, toolbar[2].sprite, (int)toolbar[2].posx, (int)toolbar[2].posy);
+    draw_sprite(s, toolbar[5].sprite, (int)toolbar[5].posx, (int)toolbar[5].posy);*/
+
+    //NIVEAU 0
+    rectfill(s, 4, 320, 49, 365, makecol(0, 128, 0));
+    textprintf_ex(s, font, 26, 340, makecol(0, 0, 0), -1, "0");
+
+    //NIVEAU -1
+    rectfill(s, 52, 320, 97, 365, makecol(0, 0, 255));
+    textprintf_ex(s, font, 69, 340, makecol(0, 0, 0), -1, "-1");
+
+    //NIVEAU -2
+    rectfill(s, 100, 320, 145, 365, makecol(255, 255, 0));
+    textprintf_ex(s, font, 117, 340, makecol(0, 0, 0), -1, "-2");
+
+    /*draw_sprite(s, toolbar[3].sprite, (int)toolbar[3].posx, (int)toolbar[3].posy);
+    draw_sprite(s, toolbar[6].sprite, (int)toolbar[6].posx, (int)toolbar[6].posy);
+
+    draw_sprite(s, toolbar[1].sprite, (int)toolbar[1].posx, (int)toolbar[1].posy);
+    draw_sprite(s, toolbar[4].sprite, (int)toolbar[4].posx, (int)toolbar[4].posy);
+    draw_sprite(s, toolbar[0].sprite, (int)toolbar[0].posx, (int)toolbar[0].posy);*/
 
     /*for (i = 0; i < BUILDING_LAST; ++i)
         textprintf_ex(s, font, 30, 160+20*i, makecol(0, 0, 0), -1, "%s", building_enum_to_str[i]);

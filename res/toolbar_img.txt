@@ -2,31 +2,31 @@ Nombre d'icon à charger: 12
 
 BOUTON CASERNE DE POMPIER
 button_firestation.bmp
-1 1
+45 585
 
 BOUTON MAISON
 button_house.bmp
-0 0
+10 510
 
 BOUTON PAUSE
 button_pause.bmp
-0 0
+75 260
 
 BOUTON CENTRALE ELECTRIQUE
 button_powerplant.bmp
-0 0
+10 380
 
 BOUTON ROUTE
 button_road.bmp
-0 0
+80 510
 
 BOUTON SAUVEGARDE
 button_save.bmp
-0 0
+15 260
 
 BOUTON RESERVOIR EAU
 button_water_supply.bmp
-0 0
+80 380
 
 ICON LVL ELECTRICITE
 icon_elec.bmp
