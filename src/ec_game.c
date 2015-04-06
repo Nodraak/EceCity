@@ -4,12 +4,14 @@
 #include <stdio.h>
 #include <string.h>
 
+//#include "ec_allegro.h"
 #include "ec_game.h"
 #include "ec_graphic.h"
 #include "ec_building.h"
 #include "ec_graph.h"
 
 s_game game;
+s_toolbar toolbar[nb_Icon_toolbar];
 
 void ec_timer_time_callback(void)
 {
@@ -22,6 +24,10 @@ void ec_game_init(void)
     game.money = 500000;
 
     install_int(ec_timer_time_callback, 1000);
+
+    ///CHARGEMENT DE LA BARRE D'OUTILS
+
+    ec_game_load_toolbar();
 }
 
 char *building_enum_to_str[BUILDING_LAST] = {
@@ -176,4 +182,71 @@ void ec_game_render_menu(BITMAP *s)
         textprintf_ex(s, font, 30, 160+20*i, makecol(0, 0, 0), -1, "%s", building_enum_to_str[i]);
     textprintf_ex(s, font, 10, 160+20*game.building_selected, makecol(0, 0, 0), -1, "->");
 }
+
+
+/// PARTIE TOOLBAR
+
+BITMAP *_ec_game_load_sprite(char *file)
+{
+    BITMAP *nouv = NULL;
+    char tmp1[1024], tmp2[1024];
+
+    sprintf(tmp1, "res/%s", file);
+
+    nouv = load_bmp(tmp1, NULL);
+    if (nouv == NULL)
+    {
+        sprintf(tmp2, "load_bitmap() - %s", tmp1);
+        ec_abort(tmp2);
+    }
+
+    return nouv;
+}
+
+void ec_game_load_toolbar(void)
+{
+    int compt;
+    char tmp[1024];
+    s_toolbar *nouv = NULL;
+    FILE *fic = NULL;
+
+    fic = fopen("res/toolbar_img.txt", "r");
+    if (fic == NULL)
+        ec_abort("fopen() toolbar_img.txt");
+
+    //Pas de else??? ec_abord quitte??
+
+    /*Skip Info*/
+    fgets(tmp, 1024-1, fic);
+    fgets(tmp, 1024-1, fic);
+
+
+    for (compt = 0; compt < nb_Icon_toolbar; compt++)
+    {
+        nouv = &toolbar[compt];
+
+        fgets(tmp, 1024-1, fic);
+
+        fgets(tmp, 1024-1, fic);
+        tmp[strlen(tmp)-1] = '\0';
+        nouv->sprite = _ec_game_load_sprite(tmp);
+
+        fscanf(fic, "%d %d", &nouv->pos.x, &nouv->pos.y);
+
+        fgets(tmp, 1024-1, fic);
+        fgets(tmp, 1024-1, fic);    //Pourquoi un 2eme fgets????
+    }
+
+    fclose(fic);
+
+}
+
+void ec_game_free_toolbar(void)
+{
+    int compt;
+
+    for( compt = 0; compt < nb_Icon_toolbar; ++compt)
+        destroy_bitmap(toolbar[compt].sprite);  //Pourquoi . et pas ->? C'est quoi la diff concrètement???
+}
+
 

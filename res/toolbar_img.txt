@@ -1,1 +1,45 @@
-11
+Nombre d'icon à charger: 11
+
+BOUTON CASERNE DE POMPIER
+button_firestation.bmp
+0 0
+
+BOUTON MAISON
+button_house.bmp
+0 0
+
+BOUTON PAUSE
+button_pause.bmp
+0 0
+
+BOUTON CENTRALE ELECTRIQUE
+button_powerplant.bmp
+0 0
+
+BOUTON ROUTE
+button_road.bmp
+0 0
+
+BOUTON SAUVEGARDE
+button_save.bmp
+0 0
+
+BOUTON RESERVOIR EAU
+button_water_supply.bmp
+0 0
+
+ICON LVL ELECTRICITE
+icon_elec.bmp
+0 0
+
+ICON MONEY
+icon_money.bmp
+0 0
+
+ICON LVL WATER
+icon_water.bmp
+0 0
+
+ICON TIMER
+icon_time.bmp
+0 0

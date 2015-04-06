@@ -64,6 +64,7 @@ int main(void)
     }
 
     ec_building_free();
+    ec_game_free_toolbar();
     ec_allegro_free();
 
     return EXIT_SUCCESS;
