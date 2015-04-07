@@ -25,7 +25,6 @@ typedef enum        _e_building
 
 typedef struct      _s_ressource
 {
-    int             required;       /* does this building needs it for working */
     int             visited;        /* internal use, cf ec_graph.c */
     int             used;           /* units of ressource used : for houses */
     int             produced;       /* units of ressource produced : for building_supply_* */

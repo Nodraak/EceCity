@@ -68,15 +68,18 @@ void ec_building_init_all(void)
         tmp[strlen(tmp)-1] = '\0';
         cur->sprite = _ec_building_load_sprite(tmp);
 
-        fscanf(f, "%d %d", &cur->price, &cur->people);
-        fscanf(f, "%d %d %d", &cur->elec.required, &cur->elec.used, &cur->elec.produced);
-        fscanf(f, "%d %d %d", &cur->water.required, &cur->water.used, &cur->water.produced);
-        fscanf(f, "%d %d", &cur->size.x, &cur->size.y);
+        fgets(tmp, 1024-1, f);
+        sscanf(tmp, "%d %d", &cur->price, &cur->people);
+        fgets(tmp, 1024-1, f);
+        sscanf(tmp, "%d %d", &cur->elec.used, &cur->elec.produced);
+        fgets(tmp, 1024-1, f);
+        sscanf(tmp, "%d %d", &cur->water.used, &cur->water.produced);
+        fgets(tmp, 1024-1, f);
+        sscanf(tmp, "%d %d", &cur->size.x, &cur->size.y);
 
         cur->type = i;
         cur->is_working = 0;
 
-        fgets(tmp, 1024-1, f);
         fgets(tmp, 1024-1, f);
     }
 
@@ -125,6 +128,9 @@ s_building *ec_building_alloc(s_building *template, int y, int x)
 
     if (!ec_building_is_house(template->type))
         ret->is_working = 1;
+
+    game.elec_capacity += template->elec.produced;
+    game.water_capacity += template->water.produced;
 
     return ret;
 }

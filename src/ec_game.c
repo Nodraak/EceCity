@@ -81,18 +81,22 @@ void ec_game_on_building_new(void)
 
             if (b != NULL)
             {
-                b->elec.visited = 0;
-                b->water.visited = 0;
-
                 if (ec_building_is_house(b->type))
                 {
                     b->elec.used = 0;
                     b->water.used = 0;
-                    b->is_working = 0;
+                }
+                else /* if supply */
+                {
+                    b->elec.produced = building_data[b->type].elec.produced;
+                    b->water.produced = building_data[b->type].water.produced;
                 }
             }
         }
     }
+
+    game.water_used = 0;
+    game.elec_used = 0;
 
     /* serve water + elec */
     for (j = 0; j < BOARD_LINE; ++j)
@@ -104,9 +108,9 @@ void ec_game_on_building_new(void)
             if (b != NULL)
             {
                 if (b->type == BUILDING_SUPPLY_WATER)
-                    ec_graph_supply_board(b, ec_utils_vector2i_make(i, j), ec_building_resrc_get_water);
+                    game.water_used += ec_graph_supply_board(b, ec_utils_vector2i_make(i, j), ec_building_resrc_get_water);
                 else if (b->type == BUILDING_SUPPLY_ELEC)
-                    ec_graph_supply_board(b, ec_utils_vector2i_make(i, j), ec_building_resrc_get_elec);
+                    game.elec_used += ec_graph_supply_board(b, ec_utils_vector2i_make(i, j), ec_building_resrc_get_elec);
             }
         }
     }
@@ -120,8 +124,10 @@ void ec_game_on_building_new(void)
 
             if (b != NULL && ec_building_is_house(b->type))
             {
-                if (b->water.required == b->water.used && b->elec.required == b->elec.used)
+                if (b->water.used == building_data[b->type].water.used && b->elec.used == building_data[b->type].elec.used)
                     b->is_working = 1;
+                else
+                    b->is_working = 0;
             }
         }
     }

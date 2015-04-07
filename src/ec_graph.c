@@ -54,13 +54,14 @@ void graph_list_add_surrouding(s_list *list, s_vector2i v)
 }
 
 
-void ec_graph_supply_building(s_list *list, int *available, s_vector2i pos, s_ressource*(*get_resrc)(s_building *b))
+int ec_graph_supply_building(s_list *list, int *available, s_vector2i pos, s_ressource*(*get_resrc)(s_building *b))
 {
+    int served = 0;
     s_building *b = game.board[pos.y][pos.x];
 
     /* if null, return */
     if (b == NULL || get_resrc(b)->visited)
-        return;
+        return 0;
 
     get_resrc(b)->visited = 1;
 
@@ -72,26 +73,38 @@ void ec_graph_supply_building(s_list *list, int *available, s_vector2i pos, s_re
     /* house, serve */
     else if (ec_building_is_house(b->type))
     {
-        int needed = get_resrc(b)->required - get_resrc(b)->used;
+        int needed = get_resrc(&building_data[b->type])->used - get_resrc(b)->used;
 
         if (needed > 0)
         {
-            int served = (needed < (*available) ? needed : (*available));
-
+            served = (needed < (*available) ? needed : (*available));
             get_resrc(b)->used += served;
-            (*available) -= served;
+            *available -= served;
         }
     }
+
+    return served;
 }
 
 
-void ec_graph_supply_board(s_building *b, s_vector2i pos, s_ressource*(*get_resrc)(s_building *b))
+int ec_graph_supply_board(s_building *b, s_vector2i pos, s_ressource*(*get_resrc)(s_building *b))
 {
     s_list *list = NULL;
     s_node *node = NULL;
-    int available = 0;
+    int available = 0, served = 0, i, j;
 
     /* init */
+    for (j = 0; j < BOARD_LINE; ++j)
+    {
+        for (i = 0; i < BOARD_COL; ++i)
+        {
+            s_building *b = game.board[j][i];
+
+            if (b != NULL)
+                get_resrc(b)->visited = 0;
+        }
+    }
+
     list = list_new();
     graph_list_add_surrouding(list, pos);
     available = get_resrc(b)->produced;
@@ -102,11 +115,15 @@ void ec_graph_supply_board(s_building *b, s_vector2i pos, s_ressource*(*get_resr
         s_vector2i cur_pos = graph_list_get_vector2i(node);
 
         if (ec_utils_pxl_is_in_board(cur_pos.x*BOARD_SIZE, cur_pos.y*BOARD_SIZE))
-            ec_graph_supply_building(list, &available, cur_pos, get_resrc);
+            served += ec_graph_supply_building(list, &available, cur_pos, get_resrc);
 
         graph_list_free_node(node);
     }
 
+    get_resrc(b)->produced = available;
+
     /* free */
     list_free(list);
+
+    return served;
 }
