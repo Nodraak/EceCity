@@ -6,7 +6,9 @@
 
 #include <math.h>
 
-#define M_PI 3.1415926536
+#ifndef M_PI
+    #define M_PI 3.1415926536
+#endif
 #define ANGLE 30
 
 double ec_graphic_scale_x_coord_to_pxl(s_vector c)

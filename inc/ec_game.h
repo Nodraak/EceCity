@@ -1,7 +1,7 @@
 #ifndef EC_GAME_H
 #define EC_GAME_H
 
-#define nb_Icon_toolbar 12
+#define TOOLBAR_NB_ICON 12
 
 #include "ec_allegro.h"
 #include "ec_building.h"
@@ -33,7 +33,7 @@ typedef struct _s_toolbar
 
 extern s_game game;
 
-extern s_toolbar toolbar[nb_Icon_toolbar];
+extern s_toolbar toolbar[TOOLBAR_NB_ICON];
 
 void ec_game_init(void);
 void ec_game_on_button_left(void);
