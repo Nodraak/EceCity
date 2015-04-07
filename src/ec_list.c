@@ -70,31 +70,3 @@ void *list_pop(s_list *list)
         return poped;
     }
 }
-
-void list_print(s_list *list, char *id)
-{
-    printf("==> %s\n", id);
-
-    if (list->head == NULL && list->tail == NULL)
-    {
-        printf("\tnull null\n");
-    }
-    else if (list->head != NULL)
-    {
-        s_node *node_cur = NULL;
-
-        node_cur = list->head;
-        do
-        {
-            printf("\t%p\t%.0f\n", (void*)node_cur, ((s_vector*)node_cur->payload)->x);
-            node_cur = node_cur->next;
-        }
-        while (node_cur != NULL);
-        printf("\n");
-    }
-    else
-    {
-        printf("Erreur inattendue ... %s %d\n", __FILE__, __LINE__);
-        exit(EXIT_FAILURE);
-    }
-}

@@ -1,14 +1,22 @@
 #ifndef EC_UTILS_H
 #define EC_UTILS_H
 
-typedef struct  _s_vector /* TODO : vector2i vector2f */
+typedef struct  _s_vector2d
 {
     double      x;
     double      y;
-}               s_vector;
+}               s_vector2d;
 
-s_vector *ec_utils_vector_alloc(double x, double y);
-s_vector ec_utils_vector_make(double x, double y);
+typedef struct  _s_vector2i
+{
+    int         x;
+    int         y;
+}               s_vector2i;
+
+s_vector2d *ec_utils_vector2d_alloc(double x, double y);
+s_vector2d ec_utils_vector2d_make(double x, double y);
+s_vector2i *ec_utils_vector2i_alloc(int x, int y);
+s_vector2i ec_utils_vector2i_make(int x, int y);
 
 int ec_utils_pxl_is_in_board(int x, int y);
 int ec_utils_cell_is_in_board(int x, int y);

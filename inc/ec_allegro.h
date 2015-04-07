@@ -28,12 +28,12 @@ typedef struct  _s_window
     BITMAP      *screen;
     int         quit;
 
-    s_vector    mousePos;
+    s_vector2i  mousePos;
     int         mouseButtonLeft;
     int         key[KEY_MAX];
 
     double      zoom;
-    s_vector    offset;
+    s_vector2i  offset;
 }               s_window;
 
 /*

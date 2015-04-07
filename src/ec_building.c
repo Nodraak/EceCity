@@ -71,7 +71,7 @@ void ec_building_init_all(void)
         fscanf(f, "%d %d", &cur->price, &cur->people);
         fscanf(f, "%d %d %d", &cur->elec.required, &cur->elec.used, &cur->elec.produced);
         fscanf(f, "%d %d %d", &cur->water.required, &cur->water.used, &cur->water.produced);
-        fscanf(f, "%lf %lf", &cur->size.x, &cur->size.y);
+        fscanf(f, "%d %d", &cur->size.x, &cur->size.y);
 
         cur->type = i;
         cur->is_working = 0;
@@ -147,7 +147,7 @@ void ec_building_new(int board_y, int board_x)
     ec_game_on_building_new();
 }
 
-int ec_building_have_space(int board_y, int board_x, s_vector size)
+int ec_building_have_space(int board_y, int board_x, s_vector2i size)
 {
     int x, y;
 

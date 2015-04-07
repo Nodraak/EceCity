@@ -18,7 +18,7 @@
 #include "ec_graph.h"
 
 s_game game;
-s_toolbar toolbar[nb_Icon_toolbar];
+s_toolbar toolbar[TOOLBAR_NB_ICON];
 
 void ec_timer_time_callback(void)
 {
@@ -31,8 +31,6 @@ void ec_game_init(void)
     game.money = 500000;
 
     install_int(ec_timer_time_callback, 1000);
-
-    ///CHARGEMENT DE LA BARRE D'OUTILS
 
     ec_game_load_toolbar();
 }
@@ -106,9 +104,9 @@ void ec_game_on_building_new(void)
             if (b != NULL)
             {
                 if (b->type == BUILDING_SUPPLY_WATER)
-                    ec_graph_supply_board(b, ec_utils_vector_make(i, j), ec_building_resrc_get_water);
+                    ec_graph_supply_board(b, ec_utils_vector2i_make(i, j), ec_building_resrc_get_water);
                 else if (b->type == BUILDING_SUPPLY_ELEC)
-                    ec_graph_supply_board(b, ec_utils_vector_make(i, j), ec_building_resrc_get_elec);
+                    ec_graph_supply_board(b, ec_utils_vector2i_make(i, j), ec_building_resrc_get_elec);
             }
         }
     }
@@ -173,44 +171,37 @@ void ec_game_render_board(BITMAP *s)
 
 void ec_game_render_menu(BITMAP *s)
 {
-    int compt;
+    int i;
 
     /* menu */
     rectfill(s, 0, 0, 150, WINDOW_HEIGHT-1, makecol(200, 200, 200));
 
 
-    //Affichage de toutes les images de la barre d'outils
-    for ( compt = 0; compt < nb_Icon_toolbar; compt++)
-        draw_sprite(s, toolbar[compt].sprite, toolbar[compt].posx, toolbar[compt].posy);
+    for (i = 0; i < TOOLBAR_NB_ICON; i++)
+        draw_sprite(s, toolbar[i].sprite, toolbar[i].posx, toolbar[i].posy);
+
 
     textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds - %d", game.time, game.time/30);
     textprintf_ex(s, font, 60, 64, makecol(0, 0, 0), -1, "%d", game.money);
     textprintf_ex(s, font, 60, 74, makecol(0, 0, 0), -1, "EceFlouz");
 
     textprintf_ex(s, font, 60, 119, makecol(0, 0, 0), -1, "%d", game.people);
-    textprintf_ex(s, font, 60, 167, makecol(0, 0, 0), -1, "%d/%d", game.elec_used, game.elec_capacity);     //Perso: A voir si besoin modif si grand chiffre
-    textprintf_ex(s, font, 60, 214, makecol(0, 0, 0), -1, "%d/%d", game.water_used, game.water_capacity);   //Perso: A voir si besoin modif si grand chiffre
 
-    //NIVEAU 0
+    textprintf_ex(s, font, 60, 167, makecol(0, 0, 0), -1, "%d/%d", game.elec_used, game.elec_capacity);
+    textprintf_ex(s, font, 60, 214, makecol(0, 0, 0), -1, "%d/%d", game.water_used, game.water_capacity);
+
+    /* niveaux */
+
     rectfill(s, 4, 320, 49, 365, makecol(0, 128, 0));
     textprintf_ex(s, font, 26, 340, makecol(0, 0, 0), -1, "0");
 
-    //NIVEAU -1
     rectfill(s, 52, 320, 97, 365, makecol(0, 0, 255));
     textprintf_ex(s, font, 69, 340, makecol(0, 0, 0), -1, "-1");
 
-    //NIVEAU -2
     rectfill(s, 100, 320, 145, 365, makecol(255, 255, 0));
     textprintf_ex(s, font, 117, 340, makecol(0, 0, 0), -1, "-2");
-
-
-    /*for (i = 0; i < BUILDING_LAST; ++i)
-        textprintf_ex(s, font, 30, 160+20*i, makecol(0, 0, 0), -1, "%s", building_enum_to_str[i]);
-    textprintf_ex(s, font, 10, 160+20*game.building_selected, makecol(0, 0, 0), -1, "->");*/
 }
 
-
-/// PARTIE TOOLBAR
 
 BITMAP *_ec_game_load_sprite(char *file)
 {
@@ -231,7 +222,7 @@ BITMAP *_ec_game_load_sprite(char *file)
 
 void ec_game_load_toolbar(void)
 {
-    int compt;
+    int i;
     char tmp[1024];
     s_toolbar *nouv = NULL;
     FILE *fic = NULL;
@@ -240,16 +231,13 @@ void ec_game_load_toolbar(void)
     if (fic == NULL)
         ec_abort("fopen() toolbar_img.txt");
 
-
-
     /*Skip Info*/
     fgets(tmp, 1024-1, fic);
     fgets(tmp, 1024-1, fic);
 
-
-    for (compt = 0; compt < nb_Icon_toolbar; compt++)
+    for (i = 0; i < TOOLBAR_NB_ICON; i++)
     {
-        nouv = &toolbar[compt];
+        nouv = &toolbar[i];
 
         fgets(tmp, 1024-1, fic);
 
@@ -271,8 +259,6 @@ void ec_game_free_toolbar(void)
 {
     int compt;
 
-    for( compt = 0; compt < nb_Icon_toolbar; ++compt)
+    for( compt = 0; compt < TOOLBAR_NB_ICON; ++compt)
         destroy_bitmap(toolbar[compt].sprite);
 }
-
-

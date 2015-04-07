@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "ec_allegro.h" /* s_vector */
 #include "ec_building.h" /* s_building */
 #include "ec_graphic.h" /* ec_graphic_is_in_board */
 #include "ec_game.h" /* game */
@@ -12,7 +11,7 @@
 
 void graph_list_add(s_list *list, int x, int y)
 {
-    s_vector *payload = ec_utils_malloc(sizeof(s_vector));
+    s_vector2i *payload = ec_utils_malloc(sizeof(s_vector2i));
 
     payload->x = x,
     payload->y = y;
@@ -34,7 +33,7 @@ void graph_list_free_node(s_node *node)
 }
 
 
-s_vector graph_list_get_vector(s_node *node)
+s_vector2i graph_list_get_vector2i(s_node *node)
 {
     if (node == NULL || node->payload == NULL)
     {
@@ -42,22 +41,22 @@ s_vector graph_list_get_vector(s_node *node)
         exit(EXIT_FAILURE);
     }
 
-    return *(s_vector*)node->payload;
+    return *(s_vector2i*)node->payload;
 }
 
 
-void graph_list_add_surrouding(s_list *list, s_vector v)
+void graph_list_add_surrouding(s_list *list, s_vector2i v)
 {
-    list_add(list, ec_utils_vector_alloc(v.x+1, v.y));
-    list_add(list, ec_utils_vector_alloc(v.x-1, v.y));
-    list_add(list, ec_utils_vector_alloc(v.x, v.y+1));
-    list_add(list, ec_utils_vector_alloc(v.x, v.y-1));
+    list_add(list, ec_utils_vector2i_alloc(v.x+1, v.y));
+    list_add(list, ec_utils_vector2i_alloc(v.x-1, v.y));
+    list_add(list, ec_utils_vector2i_alloc(v.x, v.y+1));
+    list_add(list, ec_utils_vector2i_alloc(v.x, v.y-1));
 }
 
 
-void ec_graph_supply_building(s_list *list, int *available, s_vector pos, s_ressource*(*get_resrc)(s_building *b))
+void ec_graph_supply_building(s_list *list, int *available, s_vector2i pos, s_ressource*(*get_resrc)(s_building *b))
 {
-    s_building *b = game.board[(int)pos.y][(int)pos.x];
+    s_building *b = game.board[pos.y][pos.x];
 
     /* if null, return */
     if (b == NULL || get_resrc(b)->visited)
@@ -86,7 +85,7 @@ void ec_graph_supply_building(s_list *list, int *available, s_vector pos, s_ress
 }
 
 
-void ec_graph_supply_board(s_building *b, s_vector pos, s_ressource*(*get_resrc)(s_building *b))
+void ec_graph_supply_board(s_building *b, s_vector2i pos, s_ressource*(*get_resrc)(s_building *b))
 {
     s_list *list = NULL;
     s_node *node = NULL;
@@ -100,7 +99,7 @@ void ec_graph_supply_board(s_building *b, s_vector pos, s_ressource*(*get_resrc)
     /* loop */
     while ((node = list_pop(list)) != NULL)
     {
-        s_vector cur_pos = graph_list_get_vector(node);
+        s_vector2i cur_pos = graph_list_get_vector2i(node);
 
         if (ec_utils_pxl_is_in_board(cur_pos.x*BOARD_SIZE, cur_pos.y*BOARD_SIZE))
             ec_graph_supply_building(list, &available, cur_pos, get_resrc);

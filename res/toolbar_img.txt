@@ -33,12 +33,12 @@ icon_elec.bmp
 5 145
 
 ICON MONEY
-icon_money.bmp 
+icon_money.bmp
 5 50
 
 ICON LVL WATER
 icon_water.bmp
-5 192 
+5 192
 
 ICON TIMER
 icon_time.bmp
