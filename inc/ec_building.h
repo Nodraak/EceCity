@@ -3,6 +3,8 @@
 
 #include <allegro.h>
 
+#include "ec_utils.h"
+
 typedef enum        _e_building
 {
     BUILDING_NONE = 0,
@@ -34,8 +36,8 @@ typedef struct      _s_building
     e_building      type;
     BITMAP          *sprite;
 
-    s_vector        pos;
-    s_vector        size;
+    s_vector2i      pos;
+    s_vector2i      size;
     int             price;
     int             people;
 
@@ -53,7 +55,7 @@ void ec_building_render(s_building *cur, int coord_x, int coord_y);
 s_building *ec_building_alloc(s_building *template, int y, int x);
 void ec_building_new(int board_y, int board_x);
 
-int ec_building_have_space(int board_y, int board_x, s_vector size);
+int ec_building_have_space(int board_y, int board_x, s_vector2i size);
 int ec_building_is_house(e_building type);
 s_ressource *ec_building_resrc_get_water(s_building *b);
 s_ressource *ec_building_resrc_get_elec(s_building *b);

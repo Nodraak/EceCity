@@ -11,17 +11,17 @@
 #endif
 #define ANGLE 30
 
-double ec_graphic_scale_x_coord_to_pxl(s_vector c)
+int ec_graphic_scale_x_coord_to_pxl(s_vector2d c)
 {
     return (cos(ANGLE*M_PI/180)*(c.x+c.y) + window.offset.x) * window.zoom;
 }
 
-double ec_graphic_scale_y_coord_to_pxl(s_vector c)
+int ec_graphic_scale_y_coord_to_pxl(s_vector2d c)
 {
     return WINDOW_HEIGHT-((sin(ANGLE*M_PI/180)*(c.y-c.x) - window.offset.y) * window.zoom);
 }
 
-double ec_graphic_scale_x_pxl_to_coord(s_vector p)
+double ec_graphic_scale_x_pxl_to_coord(s_vector2i p)
 {
     p.y = WINDOW_HEIGHT-p.y;
 
@@ -31,7 +31,7 @@ double ec_graphic_scale_x_pxl_to_coord(s_vector p)
     return p.x/(2*cos(ANGLE*M_PI/180)) - p.y/(2*sin(ANGLE*M_PI/180));
 }
 
-double ec_graphic_scale_y_pxl_to_coord(s_vector p)
+double ec_graphic_scale_y_pxl_to_coord(s_vector2i p)
 {
     p.y = WINDOW_HEIGHT-p.y;
 
@@ -41,7 +41,7 @@ double ec_graphic_scale_y_pxl_to_coord(s_vector p)
     return p.x/(2*cos(ANGLE*M_PI/180)) + p.y/(2*sin(ANGLE*M_PI/180));
 }
 
-void _scale_and_call(void(*f)(BITMAP*, int, int, int, int, int), BITMAP* s, s_vector c1, s_vector c2, int c)
+void _scale_and_call(void(*f)(BITMAP*, int, int, int, int, int), BITMAP* s, s_vector2d c1, s_vector2d c2, int c)
 {
     int x1_scaled = ec_graphic_scale_x_coord_to_pxl(c1);
     int y1_scaled = ec_graphic_scale_y_coord_to_pxl(c1);
@@ -53,12 +53,12 @@ void _scale_and_call(void(*f)(BITMAP*, int, int, int, int, int), BITMAP* s, s_ve
 
 void ec_graphic_line(BITMAP *s, double x1, double y1, double x2, double y2, int c)
 {
-    _scale_and_call(line, s, ec_utils_vector_make(x1, y1), ec_utils_vector_make(x2, y2), c);
+    _scale_and_call(line, s, ec_utils_vector2d_make(x1, y1), ec_utils_vector2d_make(x2, y2), c);
 }
 
 void ec_graphic_rectfill(BITMAP *s, int x1, int y1, int x2, int y2, int c)
 {
-    _scale_and_call(rectfill, s, ec_utils_vector_make(x1, y1), ec_utils_vector_make(x2, y2), c);
+    _scale_and_call(rectfill, s, ec_utils_vector2d_make(x1, y1), ec_utils_vector2d_make(x2, y2), c);
 }
 
 void ec_graphic_stretch_sprite(BITMAP *dest, s_building *b, int x1, int y1)
@@ -67,8 +67,8 @@ void ec_graphic_stretch_sprite(BITMAP *dest, s_building *b, int x1, int y1)
     fixed scale = ftofix(window.zoom/10);
     double fix_pxl = -b->size.y*(BOARD_SIZE/2*window.zoom);
 
-    int x1_scaled = ec_graphic_scale_x_coord_to_pxl(ec_utils_vector_make(x1, y1));
-    int y1_scaled = ec_graphic_scale_y_coord_to_pxl(ec_utils_vector_make(x1, y1));
+    int x1_scaled = ec_graphic_scale_x_coord_to_pxl(ec_utils_vector2d_make(x1, y1));
+    int y1_scaled = ec_graphic_scale_y_coord_to_pxl(ec_utils_vector2d_make(x1, y1));
 
     rotate_scaled_sprite(dest, b->sprite, x1_scaled, y1_scaled+fix_pxl, angle, scale);
 }

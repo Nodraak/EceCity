@@ -96,9 +96,9 @@ void ec_game_on_building_new(void)
             if (b != NULL)
             {
                 if (b->type == BUILDING_SUPPLY_WATER)
-                    ec_graph_supply_board(b, ec_utils_vector_make(i, j), ec_building_resrc_get_water);
+                    ec_graph_supply_board(b, ec_utils_vector2i_make(i, j), ec_building_resrc_get_water);
                 else if (b->type == BUILDING_SUPPLY_ELEC)
-                    ec_graph_supply_board(b, ec_utils_vector_make(i, j), ec_building_resrc_get_elec);
+                    ec_graph_supply_board(b, ec_utils_vector2i_make(i, j), ec_building_resrc_get_elec);
             }
         }
     }
