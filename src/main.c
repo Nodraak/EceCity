@@ -8,6 +8,7 @@
 #include "ec_allegro.h"
 #include "ec_graphic.h"
 #include "ec_game.h"
+#include "ec_save.h"
 
 /*
 
@@ -15,6 +16,8 @@ KEY_ESC : exit
 ARROWS : move the board
 KEY_P / KEY_M : zoom
 KEY_N : next building
+KEY_S : save
+KEY_L : load
 
 img :
     rotate = 45
@@ -28,7 +31,22 @@ void ec_main_handle_event(void)
         window.quit = 1;
 
     if (window.key[KEY_N])
-        game.building_selected = (game.building_selected+1) % BUILDING_LAST, window.key[KEY_N] = 0;
+    {
+        game.building_selected = (game.building_selected+1) % BUILDING_LAST;
+        window.key[KEY_N] = 0;
+    }
+
+    if (window.key[KEY_S])
+    {
+        ec_save_save();
+        window.key[KEY_S] = 0;
+    }
+
+    if (window.key[KEY_L])
+    {
+        ec_save_load();
+        window.key[KEY_L] = 0;
+    }
 
     if (window.mouseButtonLeft)
         ec_game_on_button_left();

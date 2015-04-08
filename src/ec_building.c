@@ -123,7 +123,6 @@ s_building *ec_building_alloc(s_building *template, int y, int x)
     ret->pos.x = x;
     ret->pos.y = y;
 
-    game.money -= template->price;
     game.people += template->people;
 
     if (!ec_building_is_house(template->type))
@@ -141,6 +140,7 @@ void ec_building_new(int board_y, int board_x)
     s_building *new = NULL;
 
     new = ec_building_alloc(&building_data[game.building_selected], board_y, board_x);
+    game.money -= building_data[game.building_selected].price;
 
     for (j = 0; j < new->size.y; ++j)
     {
