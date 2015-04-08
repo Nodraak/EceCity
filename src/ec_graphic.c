@@ -11,14 +11,12 @@
 #endif
 #define ANGLE 30
 
-int ec_graphic_scale_x_coord_to_pxl(s_vector2d c)
+s_vector2i ec_graphic_scale_coord_to_pxl(s_vector2d c)
 {
-    return (cos(ANGLE*M_PI/180)*(c.x+c.y) + window.offset.x) * window.zoom;
-}
-
-int ec_graphic_scale_y_coord_to_pxl(s_vector2d c)
-{
-    return WINDOW_HEIGHT-((sin(ANGLE*M_PI/180)*(c.y-c.x) - window.offset.y) * window.zoom);
+    s_vector2i ret;
+    ret.x = (cos(ANGLE*M_PI/180)*(c.x+c.y) + window.offset.x) * window.zoom;
+    ret.y = WINDOW_HEIGHT-((sin(ANGLE*M_PI/180)*(c.y-c.x) - window.offset.y) * window.zoom);
+    return ret;
 }
 
 double ec_graphic_scale_x_pxl_to_coord(s_vector2i p)
@@ -43,13 +41,12 @@ double ec_graphic_scale_y_pxl_to_coord(s_vector2i p)
 
 void _scale_and_call(void(*f)(BITMAP*, int, int, int, int, int), BITMAP* s, s_vector2d c1, s_vector2d c2, int c)
 {
-    int x1_scaled = ec_graphic_scale_x_coord_to_pxl(c1);
-    int y1_scaled = ec_graphic_scale_y_coord_to_pxl(c1);
-    int x2_scaled = ec_graphic_scale_x_coord_to_pxl(c2);
-    int y2_scaled = ec_graphic_scale_y_coord_to_pxl(c2);
+    s_vector2i v1 = ec_graphic_scale_coord_to_pxl(c1);
+    s_vector2i v2 = ec_graphic_scale_coord_to_pxl(c2);
 
-    f(s, x1_scaled, y1_scaled, x2_scaled, y2_scaled, c);
+    f(s, v1.x, v1.y, v2.x, v2.y, c);
 }
+
 
 void ec_graphic_line(BITMAP *s, double x1, double y1, double x2, double y2, int c)
 {
@@ -67,8 +64,14 @@ void ec_graphic_stretch_sprite(BITMAP *dest, s_building *b, int x1, int y1)
     fixed scale = ftofix(window.zoom/10);
     double fix_pxl = -b->size.y*(BOARD_SIZE/2*window.zoom);
 
-    int x1_scaled = ec_graphic_scale_x_coord_to_pxl(ec_utils_vector2d_make(x1, y1));
-    int y1_scaled = ec_graphic_scale_y_coord_to_pxl(ec_utils_vector2d_make(x1, y1));
+    s_vector2i scaled = ec_graphic_scale_coord_to_pxl(ec_utils_vector2d_make(x1, y1));
 
-    rotate_scaled_sprite(dest, b->sprite, x1_scaled, y1_scaled+fix_pxl, angle, scale);
+    rotate_scaled_sprite(dest, b->sprite, scaled.x, scaled.y+fix_pxl, angle, scale);
+}
+
+void ec_graphic_putpixel(BITMAP *s, double x, double y, int c)
+{
+    s_vector2i scaled = ec_graphic_scale_coord_to_pxl(ec_utils_vector2d_make(x, y));
+
+    putpixel(s, scaled.x, scaled.y, c);
 }
