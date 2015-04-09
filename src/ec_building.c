@@ -70,7 +70,7 @@ void ec_building_init_all(void)
     fclose(f);
 }
 
-void ec_building_free(void)
+void ec_building_free_all(void)
 {
     int i;
 

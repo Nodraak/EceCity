@@ -84,8 +84,8 @@ int main(void)
         rest(1000/WINDOW_FPS);
     }
 
-    ec_building_free();
-    ec_game_free_toolbar();
+    ec_building_free_all();
+    ec_game_free();
     ec_allegro_free();
 
     return EXIT_SUCCESS;

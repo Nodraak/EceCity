@@ -51,7 +51,7 @@ typedef struct      _s_building
 extern s_building building_data[BUILDING_LAST];
 
 void ec_building_init_all(void);
-void ec_building_free(void);
+void ec_building_free_all(void);
 void ec_building_render(s_building *cur, int coord_x, int coord_y);
 s_building *ec_building_alloc(s_building *template, int y, int x);
 void ec_building_new(int board_y, int board_x);

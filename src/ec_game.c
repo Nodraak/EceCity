@@ -37,6 +37,29 @@ void ec_game_init(void)
     ec_game_load_toolbar();
 }
 
+void ec_game_free(void)
+{
+    int i, j;
+
+    /* board */
+    for (j = 0; j < BOARD_LINE; ++j)
+    {
+        for (i = 0; i < BOARD_COL; ++i)
+        {
+            s_building *b = game.board[j][i];
+
+            if (b != NULL)
+            {
+                if (b->pos.x == i && b->pos.y == j)
+                    free(b);
+            }
+        }
+    }
+
+    /* toolbar */
+    ec_game_free_toolbar();
+}
+
 int ec_game_is_on_sprite(int posx, int posy, int taillex, int tailley)
 {
     if (window.mousePos.x > posx && window.mousePos.x < posx+taillex
