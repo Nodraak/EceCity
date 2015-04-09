@@ -16,6 +16,7 @@
 #include "ec_graphic.h"
 #include "ec_building.h"
 #include "ec_graph.h"
+#include "ec_save.h"
 
 s_game game;
 s_toolbar toolbar[TOOLBAR_NB_ICON];
@@ -47,25 +48,98 @@ char *building_enum_to_str[BUILDING_LAST] = {
     "SUPPLY_WATER"
 };
 
+
+char ec_game_on_sprite(int posx, int posy, int taillex, int tailley)
+{
+    char in;
+
+    if( window.mousePos.x > posx && window.mousePos.x < posx+taillex )
+    {
+        if( window.mousePos.y > posy && window.mousePos.y < posy+tailley )
+            in = 1;
+    }
+    else
+        in = 0;
+
+    return in;
+}
+
 void ec_game_on_button_left(void)  /// ==> A MODIFIER POUR LA BARRE D'OUTILS
 {
-    int pxl_x, pxl_y, board_x, board_y;
+    int pxl_x, pxl_y, board_x, board_y, compt;
 
-    pxl_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
-    pxl_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
-    board_x = pxl_x/BOARD_SIZE;
-    board_y = pxl_y/BOARD_SIZE;
-
-    if (ec_utils_pxl_is_in_board(pxl_x, pxl_y)
-        && ec_building_have_space(board_y, board_x, building_data[game.building_selected].size)
-        && game.building_selected != BUILDING_NONE
-        && game.money >= building_data[game.building_selected].price)
+    if ( window.mousePos.x < 151 )
     {
-        ec_building_new(board_y, board_x);
+
+        for ( compt = 0; compt < TOOLBAR_NB_BUTTON; compt++)
+        {
+            //ec_game_on_sprite(s_toolbar[compt].posx, s_toolbar[compt].posy, s_toolbar[compt].sprite.w, s_toolbar[compt].sprite.h);
+            if( ec_game_on_sprite(toolbar[compt].posx, toolbar[compt].posy, toolbar[compt].sprite->w, toolbar[compt].sprite->h) )
+                break;
+        }
+
+
+        switch(compt)
+        {
+            case 0: // A FAIRE SELECTION CASERNE DE POMPIER
+                break;
+
+            case 1:
+                //Selection Maison
+                game.building_selected = 2;
+                break;
+
+            case 2:
+                // A FAIRE BOUTON PAUSE
+                break;
+
+            case 3:
+                //Selection Centrale Electrique
+                game.building_selected = 7;
+                break;
+
+            case 4:
+                //Selection Route
+                game.building_selected = 1;
+                break;
+
+            case 5:
+                //Sauvegarde
+                ec_save_save();
+                break;
+
+            case 6:
+                //Selection Réserve EAU
+                game.building_selected = 8;
+                break;
+
+            default:
+                //Déselection des batiments
+                game.building_selected = 0;
+                break;
+        }
+        window.mouseButtonLeft = 0;
     }
 
-    window.mouseButtonLeft = 0;
+    else
+    {
+        pxl_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
+        pxl_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
+        board_x = pxl_x/BOARD_SIZE;
+        board_y = pxl_y/BOARD_SIZE;
+
+        if (ec_utils_pxl_is_in_board(pxl_x, pxl_y)
+            && ec_building_have_space(board_y, board_x, building_data[game.building_selected].size)
+            && game.building_selected != BUILDING_NONE
+            && game.money >= building_data[game.building_selected].price)
+        {
+            ec_building_new(board_y, board_x);
+        }
+        window.mouseButtonLeft = 0;
+    }
+
 }
+
 
 
 void ec_game_on_building_new(void)
