@@ -31,10 +31,15 @@ void ec_save_save(void)
         {
             if (game.board[j][i] != NULL)
             {
-                fprintf(f, "%d %d %d %d %d %d\n", game.board[j][i]->type,
-                    game.board[j][i]->pos.y, game.board[j][i]->pos.x,
-                    game.board[j][i]->size.y, game.board[j][i]->size.x,
-                    game.board[j][i]->people);
+                if (game.board[j][i]->pos.y == j && game.board[j][i]->pos.x == i)
+                {
+                    fprintf(f, "BAT %d %d %d %d %d %d\n", game.board[j][i]->type,
+                        game.board[j][i]->pos.y, game.board[j][i]->pos.x,
+                        game.board[j][i]->size.y, game.board[j][i]->size.x,
+                        game.board[j][i]->people);
+                }
+                else
+                    fprintf(f, "PTR\n");
             }
             else
                 fprintf(f, "NULL\n");
@@ -48,7 +53,7 @@ void ec_save_save(void)
 void ec_save_load(void)
 {
     FILE *f = NULL;
-    int i, j;
+    int i, j, sx, sy;
     char tmp[1024];
 
     f = fopen("game.ec", "r");
@@ -77,23 +82,38 @@ void ec_save_load(void)
             if (fgets(tmp, 1023, f) == NULL)
                 ec_utils_abort("fgets building");
 
-            if (strncmp("NULL", tmp, 4) != 0)
+            if (strncmp("BAT", tmp, 3) == 0)
             {
                 int x, y, template;
+                s_building *new = NULL;
+
+                /* load data */
+                if (sscanf(tmp, "BAT %d %d %d", &template, &y, &x) != 3)
                     ec_utils_abort("fscanf building 1");
 
-                if (sscanf(tmp, "%d %d %d", &template, &y, &x) != 3)
+                new = ec_building_alloc(&building_data[template], y, x);
 
-                game.board[j][i] = ec_building_alloc(&building_data[template], y, x);
+                if (sscanf(tmp, "BAT %d %d %d %d %d %d\n", (int*)&new->type, &new->pos.y, &new->pos.x,
+                    &new->size.y, &new->size.x, &new->people) != 6)
                     ec_utils_abort("fscanf building 2");
 
-                if (sscanf(tmp, "%d %d %d %d %d %d\n", (int*)&game.board[j][i]->type,
-                    &game.board[j][i]->pos.y, &game.board[j][i]->pos.x,
-                    &game.board[j][i]->size.y, &game.board[j][i]->size.x,
-                    &game.board[j][i]->people) != 6)
+                /* save to board */
+                game.board[j][i] = new;
+
+                for (sy = 0; sy < new->size.y; ++sy)
+                {
+                    for (sx = 0; sx < new->size.x; ++sx)
+                        game.board[j+sy][i+sx] = new;
+                }
             }
-            else
+            else if (strncmp("PTR", tmp, 3) == 0)
+            {
+                /* nope */
+            }
+            else if (strncmp("NULL", tmp, 4) == 0)
                 game.board[j][i] = NULL;
+            else
+                ec_utils_abort("invalid data identifier");
         }
     }
 
