@@ -5,18 +5,9 @@
 #include <allegro.h>
 
 #include "ec_allegro.h"
+#include "ec_utils.h"
 
 s_window window;
-
-void _ec_abort(char *error, char *file, int line)
-{
-    char msg[1024];
-
-    sprintf(msg, "Error !\nLine %d in %s\n%s", line, &file[4], error);
-    allegro_message(msg);
-    allegro_exit();
-    exit(EXIT_FAILURE);
-}
 
 void _ec_allegro_close_button_callback(void)
 {
@@ -33,9 +24,9 @@ void ec_allegro_init(void)
     set_color_depth(desktop_color_depth());
     set_window_title("EceCity");
     if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0) != 0)
-        ec_abort("set_gfx_mode()");
+        ec_utils_abort("set_gfx_mode()");
     if (set_display_switch_mode(SWITCH_BACKGROUND) != 0)
-        ec_abort("set_display_switch_mode()");
+        ec_utils_abort("set_display_switch_mode()");
 
     install_keyboard();
     install_mouse();
@@ -45,7 +36,7 @@ void ec_allegro_init(void)
     /* struct */
     window.screen = create_bitmap(WINDOW_WIDTH, WINDOW_HEIGHT);
     if (!window.screen)
-        ec_abort("create_bitmap() for window.screen");
+        ec_utils_abort("create_bitmap() for window.screen");
     window.quit = 0;
 
     window.mousePos.x = 0;

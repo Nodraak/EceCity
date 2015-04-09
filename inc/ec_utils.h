@@ -23,7 +23,10 @@ int ec_utils_cell_is_in_board(int x, int y);
 
 void *_ec_utils_malloc(size_t size, char *file, int line);
 void *ec_utils_malloc(size_t size);
+void _ec_utils_abort(char *error, char *file, int line);
+void ec_utils_abort(char *error);
 
 #define ec_utils_malloc(size) _ec_utils_malloc(size, __FILE__, __LINE__)
+#define ec_utils_abort(error) _ec_utils_abort(error, __FILE__, __LINE__)
 
 #endif

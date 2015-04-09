@@ -12,6 +12,7 @@
 #include "ec_graphic.h"
 #include "ec_game.h"
 #include "ec_building.h"
+#include "ec_utils.h"
 
 #define BIG_NUM  (1000*1000*1000)
 
@@ -34,7 +35,7 @@ BITMAP *_ec_building_load_sprite(char *file)
     if (ret == NULL)
     {
         sprintf(tmp2, "load_bitmap() - %s", tmp1);
-        ec_abort(tmp2);
+        ec_utils_abort(tmp2);
     }
 
     return ret;
@@ -49,7 +50,7 @@ void ec_building_init_all(void)
 
     f = fopen("res/building_data.txt", "r");
     if (f == NULL)
-        ec_abort("fopen() building_data.txt");
+        ec_utils_abort("fopen() building_data.txt");
 
     /* skip help info */
     fgets(tmp, 1024-1, f);

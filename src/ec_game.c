@@ -16,6 +16,7 @@
 #include "ec_graphic.h"
 #include "ec_building.h"
 #include "ec_graph.h"
+#include "ec_utils.h"
 
 s_game game;
 s_toolbar toolbar[TOOLBAR_NB_ICON];
@@ -233,7 +234,7 @@ BITMAP *_ec_game_load_sprite(char *file)
     if (nouv == NULL)
     {
         sprintf(tmp2, "load_bitmap() - %s", tmp1);
-        ec_abort(tmp2);
+        ec_utils_abort(tmp2);
     }
 
     return nouv;
@@ -248,7 +249,7 @@ void ec_game_load_toolbar(void)
 
     fic = fopen("res/toolbar_img.txt", "r");
     if (fic == NULL)
-        ec_abort("fopen() toolbar_img.txt");
+        ec_utils_abort("fopen() toolbar_img.txt");
 
     /*Skip Info*/
     fgets(tmp, 1024-1, fic);

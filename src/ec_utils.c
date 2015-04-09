@@ -53,8 +53,20 @@ void *_ec_utils_malloc(size_t size, char *file, int line)
 
     if (ret == NULL)
     {
-        printf("Error malloc %d %s.\n", line, file);
+        char msg[1024];
+        sprintf(msg, "malloc %d %s.\n", line, file);
+        ec_utils_abort(msg);
     }
 
     return ret;
+}
+
+void _ec_utils_abort(char *error, char *file, int line)
+{
+    char msg[1024];
+
+    sprintf(msg, "Error !\nLine %d in %s\n%s", line, &file[4], error);
+    allegro_message(msg);
+    allegro_exit();
+    exit(EXIT_FAILURE);
 }
