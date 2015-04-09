@@ -27,9 +27,7 @@ typedef struct  _s_game
 typedef struct _s_toolbar
 {
     BITMAP      *sprite;
-    int         posx;
-    int         posy;
-
+    s_vector2i  pos;
 }               s_toolbar;
 
 extern s_game game;
@@ -38,7 +36,7 @@ extern s_toolbar toolbar[TOOLBAR_NB_ICON];
 
 void ec_game_init(void);
 
-char ec_game_on_sprite(int posx, int posy, int taillex, int tailley);
+int ec_game_is_on_sprite(int posx, int posy, int taillex, int tailley);
 void ec_game_on_button_left(void);
 
 void ec_game_on_building_new();
@@ -49,10 +47,6 @@ BITMAP *_ec_game_load_sprite(char *file);
 void ec_game_load_toolbar(void);
 void ec_game_free_toolbar(void);
 
-//<<<<<<< HEAD
-
-//=======
 void ec_game_evolve(void);
-//>>>>>>> 0fa9040ad63ccb5735901cbbdb06afc0b55de6ad
 
 #endif

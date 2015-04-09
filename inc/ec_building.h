@@ -5,7 +5,7 @@
 
 #include "ec_utils.h"
 
-#define BUILDING_EVOLVE_DELAY 15
+#define BUILDING_EVOLVE_DELAY 5
 
 typedef enum        _e_building
 {
@@ -55,6 +55,7 @@ void ec_building_free(void);
 void ec_building_render(s_building *cur, int coord_x, int coord_y);
 s_building *ec_building_alloc(s_building *template, int y, int x);
 void ec_building_new(int board_y, int board_x);
+char *ec_game_building_enum_to_str(e_building type);
 
 int ec_building_have_space(int board_y, int board_x, s_vector2i size);
 int ec_building_is_house(e_building type);

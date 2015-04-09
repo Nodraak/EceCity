@@ -16,11 +16,8 @@
 #include "ec_graphic.h"
 #include "ec_building.h"
 #include "ec_graph.h"
-//<<<<<<< HEAD
 #include "ec_save.h"
-//=======
 #include "ec_utils.h"
-//>>>>>>> 0fa9040ad63ccb5735901cbbdb06afc0b55de6ad
 
 s_game game;
 s_toolbar toolbar[TOOLBAR_NB_ICON];
@@ -40,91 +37,66 @@ void ec_game_init(void)
     ec_game_load_toolbar();
 }
 
-char *building_enum_to_str[BUILDING_LAST] = {
-    "NONE",
-    "INFRA_ROAD",
-    "HOUSE_NONE",
-    "HOUSE_SMALL",
-    "HOUSE_MEDIUM",
-    "HOUSE_LARGE",
-    "HOUSE_XL",
-    "SUPPLY_ELEC",
-    "SUPPLY_WATER"
-};
-
-
-char ec_game_on_sprite(int posx, int posy, int taillex, int tailley)
+int ec_game_is_on_sprite(int posx, int posy, int taillex, int tailley)
 {
-    char in;
-
-    if( window.mousePos.x > posx && window.mousePos.x < posx+taillex )
-    {
-        if( window.mousePos.y > posy && window.mousePos.y < posy+tailley )
-            in = 1;
-    }
+    if (window.mousePos.x > posx && window.mousePos.x < posx+taillex
+        && window.mousePos.y > posy && window.mousePos.y < posy+tailley )
+        return 1;
     else
-        in = 0;
-
-    return in;
+        return 0;
 }
 
-void ec_game_on_button_left(void)  /// ==> A MODIFIER POUR LA BARRE D'OUTILS
+void ec_game_on_button_left(void)  /* TODO ==> A MODIFIER POUR LA BARRE D'OUTILS */
 {
     int pxl_x, pxl_y, board_x, board_y, compt;
 
-    if ( window.mousePos.x < 151 )
+    if (window.mousePos.x < 151)
     {
-
-        for ( compt = 0; compt < TOOLBAR_NB_BUTTON; compt++)
+        for (compt = 0; compt < TOOLBAR_NB_BUTTON; compt++)
         {
-            //ec_game_on_sprite(s_toolbar[compt].posx, s_toolbar[compt].posy, s_toolbar[compt].sprite.w, s_toolbar[compt].sprite.h);
-            if( ec_game_on_sprite(toolbar[compt].posx, toolbar[compt].posy, toolbar[compt].sprite->w, toolbar[compt].sprite->h) )
+            s_toolbar *cur = &toolbar[compt];
+
+            if (ec_game_is_on_sprite(cur->pos.x, cur->pos.y, cur->sprite->w, cur->sprite->h))
                 break;
         }
 
-
         switch(compt)
         {
-            case 0: // A FAIRE SELECTION CASERNE DE POMPIER
+            case 0:
+                /* todo A FAIRE SELECTION CASERNE DE POMPIER */
                 break;
 
             case 1:
-                //Selection Maison
-                game.building_selected = 2;
+                game.building_selected = BUILDING_HOUSE_NONE;
                 break;
 
             case 2:
-                // A FAIRE BOUTON PAUSE
+                /* todo A FAIRE BOUTON PAUSE */
                 break;
 
             case 3:
-                //Selection Centrale Electrique
-                game.building_selected = 7;
+                game.building_selected = BUILDING_SUPPLY_ELEC;
                 break;
 
             case 4:
-                //Selection Route
-                game.building_selected = 1;
+                game.building_selected = BUILDING_INFRA_ROAD;
                 break;
 
             case 5:
-                //Sauvegarde
                 ec_save_save();
                 break;
 
             case 6:
-                //Selection Réserve EAU
-                game.building_selected = 8;
+                game.building_selected = BUILDING_SUPPLY_WATER;
                 break;
 
             default:
-                //Déselection des batiments
-                game.building_selected = 0;
+                game.building_selected = BUILDING_NONE;
                 break;
         }
+
         window.mouseButtonLeft = 0;
     }
-
     else
     {
         pxl_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
@@ -139,12 +111,11 @@ void ec_game_on_button_left(void)  /// ==> A MODIFIER POUR LA BARRE D'OUTILS
         {
             ec_building_new(board_y, board_x);
         }
+
         window.mouseButtonLeft = 0;
     }
 
 }
-
-
 
 void ec_game_on_building_new(void)
 {
@@ -277,7 +248,7 @@ void ec_game_render_menu(BITMAP *s)
     rectfill(s, 0, 0, 150, WINDOW_HEIGHT-1, makecol(200, 200, 200));
 
     for (i = 0; i < TOOLBAR_NB_ICON; i++)
-        draw_sprite(s, toolbar[i].sprite, toolbar[i].posx, toolbar[i].posy);
+        draw_sprite(s, toolbar[i].sprite, toolbar[i].pos.x, toolbar[i].pos.y);
 
     textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds - %d", game.time, game.time/30);
     textprintf_ex(s, font, 60, 64, makecol(0, 0, 0), -1, "%d", game.money);
@@ -324,7 +295,7 @@ void ec_game_load_toolbar(void)
         tmp[strlen(tmp)-1] = '\0';
         nouv->sprite = ec_utils_load_sprite(tmp);
 
-        fscanf(fic, "%d %d", &nouv->posx, &nouv->posy);
+        fscanf(fic, "%d %d", &nouv->pos.x, &nouv->pos.y);
 
         fgets(tmp, 1024-1, fic);
         fgets(tmp, 1024-1, fic);

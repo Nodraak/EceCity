@@ -107,11 +107,10 @@ s_building *ec_building_alloc(s_building *template, int y, int x)
     ret->pos.x = x;
     ret->pos.y = y;
 
-    game.people += template->people;
-
     if (!ec_building_is_house(template->type))
         ret->is_working = 1;
 
+    game.people += template->people;
     game.elec_capacity += template->elec.produced;
     game.water_capacity += template->water.produced;
 
@@ -136,6 +135,23 @@ void ec_building_new(int board_y, int board_x)
     }
 
     ec_game_on_building_new();
+}
+
+char *ec_game_building_enum_to_str(e_building type)
+{
+    char *data[BUILDING_LAST] = {
+        "NONE",
+        "INFRA_ROAD",
+        "HOUSE_NONE",
+        "HOUSE_SMALL",
+        "HOUSE_MEDIUM",
+        "HOUSE_LARGE",
+        "HOUSE_XL",
+        "SUPPLY_ELEC",
+        "SUPPLY_WATER"
+    };
+
+    return data[type];
 }
 
 int ec_building_have_space(int board_y, int board_x, s_vector2i size)
