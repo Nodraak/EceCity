@@ -45,11 +45,14 @@ void ec_main_handle_event(void)
     if (window.key[KEY_L])
     {
         ec_save_load();
+        ec_game_on_building_new();
         window.key[KEY_L] = 0;
     }
 
     if (window.mouseButtonLeft)
         ec_game_on_button_left();
+
+    ec_game_evolve();
 }
 
 void ec_main_render(void)

@@ -12,6 +12,7 @@
 #include "ec_graphic.h"
 #include "ec_game.h"
 #include "ec_building.h"
+#include "ec_utils.h"
 
 #define BIG_NUM  (1000*1000*1000)
 
@@ -23,23 +24,6 @@ s_building building_data[BUILDING_LAST];
         écoles d’ingénieurs, bibliothèques, des parcs, des stades, ...)
 */
 
-BITMAP *_ec_building_load_sprite(char *file)
-{
-    BITMAP *ret = NULL;
-    char tmp1[1024], tmp2[1024];
-
-    sprintf(tmp1, "res/%s", file);
-
-    ret = load_bmp(tmp1, NULL);
-    if (ret == NULL)
-    {
-        sprintf(tmp2, "load_bitmap() - %s", tmp1);
-        ec_abort(tmp2);
-    }
-
-    return ret;
-}
-
 void ec_building_init_all(void)
 {
     int i;
@@ -49,7 +33,7 @@ void ec_building_init_all(void)
 
     f = fopen("res/building_data.txt", "r");
     if (f == NULL)
-        ec_abort("fopen() building_data.txt");
+        ec_utils_abort("fopen() building_data.txt");
 
     /* skip help info */
     fgets(tmp, 1024-1, f);
@@ -62,11 +46,14 @@ void ec_building_init_all(void)
     {
         cur = &building_data[i];
 
+        memset(cur, 0, sizeof(s_building));
+        cur->type = i;
+
         fgets(tmp, 1024-1, f);
 
         fgets(tmp, 1024-1, f);
         tmp[strlen(tmp)-1] = '\0';
-        cur->sprite = _ec_building_load_sprite(tmp);
+        cur->sprite = ec_utils_load_sprite(tmp);
 
         fgets(tmp, 1024-1, f);
         sscanf(tmp, "%d %d", &cur->price, &cur->people);
@@ -76,9 +63,6 @@ void ec_building_init_all(void)
         sscanf(tmp, "%d %d", &cur->water.used, &cur->water.produced);
         fgets(tmp, 1024-1, f);
         sscanf(tmp, "%d %d", &cur->size.x, &cur->size.y);
-
-        cur->type = i;
-        cur->is_working = 0;
 
         fgets(tmp, 1024-1, f);
     }
@@ -140,14 +124,15 @@ void ec_building_new(int board_y, int board_x)
     s_building *new = NULL;
 
     new = ec_building_alloc(&building_data[game.building_selected], board_y, board_x);
+    new->evolved = game.time;
+
     game.money -= building_data[game.building_selected].price;
 
     for (j = 0; j < new->size.y; ++j)
     {
         for (i = 0; i < new->size.x; ++i)
-        {
             game.board[board_y+j][board_x+i] = new;
-        }
+
     }
 
     ec_game_on_building_new();

@@ -49,6 +49,10 @@ BITMAP *_ec_game_load_sprite(char *file);
 void ec_game_load_toolbar(void);
 void ec_game_free_toolbar(void);
 
+//<<<<<<< HEAD
 
+//=======
+void ec_game_evolve(void);
+//>>>>>>> 0fa9040ad63ccb5735901cbbdb06afc0b55de6ad
 
 #endif

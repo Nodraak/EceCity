@@ -5,6 +5,8 @@
 
 #include "ec_utils.h"
 
+#define BUILDING_EVOLVE_DELAY 15
+
 typedef enum        _e_building
 {
     BUILDING_NONE = 0,
@@ -39,6 +41,7 @@ typedef struct      _s_building
     s_vector2i      size;
     int             price;
     int             people;
+    int             evolved;        /* time of last evolve */
 
     s_ressource     elec;
     s_ressource     water;
@@ -47,7 +50,6 @@ typedef struct      _s_building
 
 extern s_building building_data[BUILDING_LAST];
 
-BITMAP *_ec_building_load_sprite(char *file);
 void ec_building_init_all(void);
 void ec_building_free(void);
 void ec_building_render(s_building *cur, int coord_x, int coord_y);

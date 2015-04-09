@@ -16,7 +16,11 @@
 #include "ec_graphic.h"
 #include "ec_building.h"
 #include "ec_graph.h"
+//<<<<<<< HEAD
 #include "ec_save.h"
+//=======
+#include "ec_utils.h"
+//>>>>>>> 0fa9040ad63ccb5735901cbbdb06afc0b55de6ad
 
 s_game game;
 s_toolbar toolbar[TOOLBAR_NB_ICON];
@@ -295,24 +299,6 @@ void ec_game_render_menu(BITMAP *s)
     textprintf_ex(s, font, 117, 340, makecol(0, 0, 0), -1, "-2");
 }
 
-
-BITMAP *_ec_game_load_sprite(char *file)
-{
-    BITMAP *nouv = NULL;
-    char tmp1[1024], tmp2[1024];
-
-    sprintf(tmp1, "res/%s", file);
-
-    nouv = load_bmp(tmp1, NULL);
-    if (nouv == NULL)
-    {
-        sprintf(tmp2, "load_bitmap() - %s", tmp1);
-        ec_abort(tmp2);
-    }
-
-    return nouv;
-}
-
 void ec_game_load_toolbar(void)
 {
     int i;
@@ -322,7 +308,7 @@ void ec_game_load_toolbar(void)
 
     fic = fopen("res/toolbar_img.txt", "r");
     if (fic == NULL)
-        ec_abort("fopen() toolbar_img.txt");
+        ec_utils_abort("fopen() toolbar_img.txt");
 
     /*Skip Info*/
     fgets(tmp, 1024-1, fic);
@@ -336,7 +322,7 @@ void ec_game_load_toolbar(void)
 
         fgets(tmp, 1024-1, fic);
         tmp[strlen(tmp)-1] = '\0';
-        nouv->sprite = _ec_game_load_sprite(tmp);
+        nouv->sprite = ec_utils_load_sprite(tmp);
 
         fscanf(fic, "%d %d", &nouv->posx, &nouv->posy);
 
@@ -354,4 +340,8 @@ void ec_game_free_toolbar(void)
 
     for( compt = 0; compt < TOOLBAR_NB_ICON; ++compt)
         destroy_bitmap(toolbar[compt].sprite);
+}
+
+void ec_game_evolve(void)
+{
 }

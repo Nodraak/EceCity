@@ -10,6 +10,7 @@
 #include "ec_allegro.h"
 #include "ec_game.h"
 #include "ec_building.h"
+#include "ec_utils.h"
 
 void ec_save_save(void)
 {
@@ -18,7 +19,7 @@ void ec_save_save(void)
 
     f = fopen("game.ec", "w");
     if (f == NULL)
-        ec_abort("fopen");
+        ec_utils_abort("fopen");
 
     fprintf(f, "%d %d\n", BOARD_LINE, BOARD_COL);
 
@@ -28,12 +29,17 @@ void ec_save_save(void)
     {
         for (i = 0; i < BOARD_COL; ++i)
         {
-            if (game.board[j][i] != NULL)
+            s_building *cur = game.board[j][i];
+
+            if (cur  != NULL)
             {
-                fprintf(f, "%d %d %d %d %d %d\n", game.board[j][i]->type,
-                    game.board[j][i]->pos.y, game.board[j][i]->pos.x,
-                    game.board[j][i]->size.y, game.board[j][i]->size.x,
-                    game.board[j][i]->people);
+                if (cur->pos.y == j && cur->pos.x == i)
+                {
+                    fprintf(f, "BAT %d %d %d %d %d %d %d\n", cur->type, cur->pos.y, cur->pos.x,
+                        cur->size.y, cur->size.x, cur->people, cur->evolved);
+                }
+                else
+                    fprintf(f, "PTR\n");
             }
             else
                 fprintf(f, "NULL\n");
@@ -47,24 +53,24 @@ void ec_save_save(void)
 void ec_save_load(void)
 {
     FILE *f = NULL;
-    int i, j;
+    int i, j, sx, sy;
     char tmp[1024];
 
     f = fopen("game.ec", "r");
     if (f == NULL)
-        ec_abort("fopen");
+        ec_utils_abort("fopen");
 
     if (fgets(tmp, 1023, f) == NULL)
-        ec_abort("fgets 1");
+        ec_utils_abort("fgets 1");
     if (sscanf(tmp, "%d %d\n", &j, &i) != 2)
-        ec_abort("scanf 1");
+        ec_utils_abort("scanf 1");
     if (i != BOARD_COL || j != BOARD_LINE)
-        ec_abort("board size not maching");
+        ec_utils_abort("board size not maching");
 
     if (fgets(tmp, 1023, f) == NULL)
-        ec_abort("fgets 2");
+        ec_utils_abort("fgets 2");
     if (sscanf(tmp, "%d %d\n", &game.time, &game.money) != 2)
-        ec_abort("scanf 2");
+        ec_utils_abort("scanf 2");
 
     game.elec_capacity = 0;
     game.water_capacity = 0;
@@ -74,26 +80,40 @@ void ec_save_load(void)
         for (i = 0; i < BOARD_COL; ++i)
         {
             if (fgets(tmp, 1023, f) == NULL)
-                ec_abort("fgets building");
+                ec_utils_abort("fgets building");
 
-            if (strncmp("NULL", tmp, 4) != 0)
+            if (strncmp("BAT", tmp, 3) == 0)
             {
                 int x, y, template;
+                s_building *new = NULL;
 
-                printf("%s\n", tmp);
-                if (sscanf(tmp, "%d %d %d", &template, &y, &x) != 3)
-                    ec_abort("fscanf building 1");
+                /* load data */
+                if (sscanf(tmp, "BAT %d %d %d", &template, &y, &x) != 3)
+                    ec_utils_abort("fscanf building 1");
 
-                game.board[j][i] = ec_building_alloc(&building_data[template], y, x);
+                new = ec_building_alloc(&building_data[template], y, x);
 
-                if (sscanf(tmp, "%d %d %d %d %d %d\n", (int*)&game.board[j][i]->type,
-                    &game.board[j][i]->pos.y, &game.board[j][i]->pos.x,
-                    &game.board[j][i]->size.y, &game.board[j][i]->size.x,
-                    &game.board[j][i]->people) != 6)
-                    ec_abort("fscanf building 2");
+                if (sscanf(tmp, "BAT %d %d %d %d %d %d %d\n", (int*)&new->type, &new->pos.y, &new->pos.x,
+                    &new->size.y, &new->size.x, &new->people, &new->evolved) != 7)
+                    ec_utils_abort("fscanf building 2");
+
+                /* save to board */
+                game.board[j][i] = new;
+
+                for (sy = 0; sy < new->size.y; ++sy)
+                {
+                    for (sx = 0; sx < new->size.x; ++sx)
+                        game.board[j+sy][i+sx] = new;
+                }
             }
-            else
+            else if (strncmp("PTR", tmp, 3) == 0)
+            {
+                /* nope */
+            }
+            else if (strncmp("NULL", tmp, 4) == 0)
                 game.board[j][i] = NULL;
+            else
+                ec_utils_abort("invalid data identifier");
         }
     }
 
