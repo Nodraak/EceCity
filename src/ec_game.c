@@ -264,3 +264,7 @@ void ec_game_free_toolbar(void)
     for( compt = 0; compt < TOOLBAR_NB_ICON; ++compt)
         destroy_bitmap(toolbar[compt].sprite);
 }
+
+void ec_game_evolve(void)
+{
+}

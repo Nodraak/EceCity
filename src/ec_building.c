@@ -46,6 +46,9 @@ void ec_building_init_all(void)
     {
         cur = &building_data[i];
 
+        memset(cur, 0, sizeof(s_building));
+        cur->type = i;
+
         fgets(tmp, 1024-1, f);
 
         fgets(tmp, 1024-1, f);
@@ -60,9 +63,6 @@ void ec_building_init_all(void)
         sscanf(tmp, "%d %d", &cur->water.used, &cur->water.produced);
         fgets(tmp, 1024-1, f);
         sscanf(tmp, "%d %d", &cur->size.x, &cur->size.y);
-
-        cur->type = i;
-        cur->is_working = 0;
 
         fgets(tmp, 1024-1, f);
     }
@@ -124,14 +124,15 @@ void ec_building_new(int board_y, int board_x)
     s_building *new = NULL;
 
     new = ec_building_alloc(&building_data[game.building_selected], board_y, board_x);
+    new->evolved = game.time;
+
     game.money -= building_data[game.building_selected].price;
 
     for (j = 0; j < new->size.y; ++j)
     {
         for (i = 0; i < new->size.x; ++i)
-        {
             game.board[board_y+j][board_x+i] = new;
-        }
+
     }
 
     ec_game_on_building_new();

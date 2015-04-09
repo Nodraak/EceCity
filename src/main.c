@@ -51,6 +51,8 @@ void ec_main_handle_event(void)
 
     if (window.mouseButtonLeft)
         ec_game_on_button_left();
+
+    ec_game_evolve();
 }
 
 void ec_main_render(void)

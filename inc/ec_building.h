@@ -5,6 +5,8 @@
 
 #include "ec_utils.h"
 
+#define BUILDING_EVOLVE_DELAY 15
+
 typedef enum        _e_building
 {
     BUILDING_NONE = 0,
@@ -39,6 +41,7 @@ typedef struct      _s_building
     s_vector2i      size;
     int             price;
     int             people;
+    int             evolved;        /* time of last evolve */
 
     s_ressource     elec;
     s_ressource     water;

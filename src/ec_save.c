@@ -29,14 +29,14 @@ void ec_save_save(void)
     {
         for (i = 0; i < BOARD_COL; ++i)
         {
-            if (game.board[j][i] != NULL)
+            s_building *cur = game.board[j][i];
+
+            if (cur  != NULL)
             {
-                if (game.board[j][i]->pos.y == j && game.board[j][i]->pos.x == i)
+                if (cur->pos.y == j && cur->pos.x == i)
                 {
-                    fprintf(f, "BAT %d %d %d %d %d %d\n", game.board[j][i]->type,
-                        game.board[j][i]->pos.y, game.board[j][i]->pos.x,
-                        game.board[j][i]->size.y, game.board[j][i]->size.x,
-                        game.board[j][i]->people);
+                    fprintf(f, "BAT %d %d %d %d %d %d %d\n", cur->type, cur->pos.y, cur->pos.x,
+                        cur->size.y, cur->size.x, cur->people, cur->evolved);
                 }
                 else
                     fprintf(f, "PTR\n");
@@ -93,8 +93,8 @@ void ec_save_load(void)
 
                 new = ec_building_alloc(&building_data[template], y, x);
 
-                if (sscanf(tmp, "BAT %d %d %d %d %d %d\n", (int*)&new->type, &new->pos.y, &new->pos.x,
-                    &new->size.y, &new->size.x, &new->people) != 6)
+                if (sscanf(tmp, "BAT %d %d %d %d %d %d %d\n", (int*)&new->type, &new->pos.y, &new->pos.x,
+                    &new->size.y, &new->size.x, &new->people, &new->evolved) != 7)
                     ec_utils_abort("fscanf building 2");
 
                 /* save to board */
