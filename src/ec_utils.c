@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <allegro.h>
+
 #include "ec_utils.h"
 #include "ec_allegro.h"
 
@@ -69,4 +71,21 @@ void _ec_utils_abort(char *error, char *file, int line)
     allegro_message(msg);
     allegro_exit();
     exit(EXIT_FAILURE);
+}
+
+BITMAP *ec_utils_load_sprite(char *file)
+{
+    BITMAP *ret = NULL;
+    char tmp1[1024], tmp2[1024];
+
+    sprintf(tmp1, "res/%s", file);
+
+    ret = load_bmp(tmp1, NULL);
+    if (ret == NULL)
+    {
+        sprintf(tmp2, "load_bitmap() - %s", tmp1);
+        ec_utils_abort(tmp2);
+    }
+
+    return ret;
 }

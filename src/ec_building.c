@@ -24,23 +24,6 @@ s_building building_data[BUILDING_LAST];
         écoles d’ingénieurs, bibliothèques, des parcs, des stades, ...)
 */
 
-BITMAP *_ec_building_load_sprite(char *file)
-{
-    BITMAP *ret = NULL;
-    char tmp1[1024], tmp2[1024];
-
-    sprintf(tmp1, "res/%s", file);
-
-    ret = load_bmp(tmp1, NULL);
-    if (ret == NULL)
-    {
-        sprintf(tmp2, "load_bitmap() - %s", tmp1);
-        ec_utils_abort(tmp2);
-    }
-
-    return ret;
-}
-
 void ec_building_init_all(void)
 {
     int i;
@@ -67,7 +50,7 @@ void ec_building_init_all(void)
 
         fgets(tmp, 1024-1, f);
         tmp[strlen(tmp)-1] = '\0';
-        cur->sprite = _ec_building_load_sprite(tmp);
+        cur->sprite = ec_utils_load_sprite(tmp);
 
         fgets(tmp, 1024-1, f);
         sscanf(tmp, "%d %d", &cur->price, &cur->people);

@@ -20,6 +20,7 @@ s_vector2i ec_utils_vector2i_make(int x, int y);
 
 int ec_utils_pxl_is_in_board(int x, int y);
 int ec_utils_cell_is_in_board(int x, int y);
+BITMAP *ec_utils_load_sprite(char *file);
 
 void *_ec_utils_malloc(size_t size, char *file, int line);
 void *ec_utils_malloc(size_t size);
