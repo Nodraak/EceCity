@@ -1,4 +1,4 @@
-===============================================================================
+﻿===============================================================================
 CDC RESUME
 ===============================================================================
 
@@ -92,3 +92,14 @@ TODO CODE
 * game (render)
 
 * button + menu ?
+
+
+#Edouard
+
+*PAUSE:
+==> Trouver un moyen d'indiquer que le jeu est en pause
+==> Rajouter une icon PLAY à la place de pause quand en PAUSE
+==> Quand PAUSE ==> Bloquer le fric // Time
+==> Mettre raccourci clavier P pour PAUSE ==> Bouger le +/- du zoom de P
+
+==> LOAD le jeu en PAUSE??

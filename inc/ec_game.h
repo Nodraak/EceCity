@@ -12,6 +12,7 @@ typedef struct  _s_game
 {
     int         time;
     int         money;
+    char        pause;
 
     int         people;
     int         elec_capacity;
