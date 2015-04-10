@@ -98,8 +98,16 @@ TODO CODE
 
 *PAUSE:
 ==> Trouver un moyen d'indiquer que le jeu est en pause
-==> Rajouter une icon PLAY à la place de pause quand en PAUSE
+==> Rajouter une icon PLAY à la place de pause quand en PAUSE ======== DONE
 ==> Quand PAUSE ==> Bloquer le fric // Time
 ==> Mettre raccourci clavier P pour PAUSE ==> Bouger le +/- du zoom de P
 
 ==> LOAD le jeu en PAUSE??
+
+
+*MVT de la carte
+==> A faire dans allegro.C????
+==> Quand souris en bord de maps ==> déplacement de la carte
+		++>FAIRE LE COTE GAUCHE !!!!
+
+==>BLOQUER LE DEPLACEMENT DE LA CARTE ==> BITMAP DE FOND???

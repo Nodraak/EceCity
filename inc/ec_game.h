@@ -1,7 +1,7 @@
 #ifndef EC_GAME_H
 #define EC_GAME_H
 
-#define TOOLBAR_NB_ICON 12
+#define TOOLBAR_NB_ICON 13
 #define TOOLBAR_NB_BUTTON 7
 
 #include "ec_allegro.h"

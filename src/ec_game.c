@@ -257,6 +257,10 @@ void ec_game_render_menu(BITMAP *s)
     for (i = 0; i < TOOLBAR_NB_ICON; i++)
         draw_sprite(s, toolbar[i].sprite, toolbar[i].pos.x, toolbar[i].pos.y);
 
+    // Si le jeu est n'est pas en PAUSE ==> On affiche le boutton PAUSE
+    if ( !game.pause )
+        draw_sprite(s, toolbar[2].sprite, toolbar[2].pos.x, toolbar[2].pos.y);
+
     textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds - %d", game.time, game.time/30);
     textprintf_ex(s, font, 60, 64, makecol(0, 0, 0), -1, "%d", game.money);
     textprintf_ex(s, font, 60, 74, makecol(0, 0, 0), -1, "EceFlouz");
