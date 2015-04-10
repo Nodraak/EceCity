@@ -20,7 +20,7 @@
 #include "ec_utils.h"
 
 s_game game;
-s_toolbar toolbar[TOOLBAR_NB_ICON];
+s_toolbar toolbar[TOOLBAR_LAST];
 
 void ec_timer_time_callback(void)
 {
@@ -60,70 +60,84 @@ void ec_game_free(void)
     ec_game_free_toolbar();
 }
 
-int ec_game_is_on_sprite(int posx, int posy, int taillex, int tailley)
+int ec_game_toolbar_get_hovered_button(void)
 {
-    if (window.mousePos.x > posx && window.mousePos.x < posx+taillex
-        && window.mousePos.y > posy && window.mousePos.y < posy+tailley )
-        return 1;
-    else
-        return 0;
+    int i;
+
+    for (i = 0; i < TOOLBAR_LAST; i++)
+    {
+        s_toolbar *cur = &toolbar[i];
+
+        if (window.mousePos.x > cur->pos.x && window.mousePos.x < cur->pos.x+cur->sprite->w
+            && window.mousePos.y > cur->pos.y && window.mousePos.y < cur->pos.y+cur->sprite->h )
+            return i;
+    }
+
+    return -1;
 }
 
-void ec_game_on_button_left(void)  /* TODO ==> A MODIFIER POUR LA BARRE D'OUTILS */
+void ec_game_toolbar_handle_clicked_button(int button)
 {
-    int pxl_x, pxl_y, board_x, board_y, compt;
-
-    if (window.mousePos.x < 151)
+    switch(button)
     {
-        for (compt = 0; compt < TOOLBAR_NB_BUTTON; compt++)
-        {
-            s_toolbar *cur = &toolbar[compt];
+        case TOOLBAR_SAVE:
+            ec_save_save();
+            break;
 
-            if (ec_game_is_on_sprite(cur->pos.x, cur->pos.y, cur->sprite->w, cur->sprite->h))
-                break;
-        }
+        case TOOLBAR_PAUSE:
+        case TOOLBAR_PLAY:
+            game.pause = !game.pause;
+            break;
 
-        /* todo TEST POUR BINDER LES NIVEAUX -> dafuq ?*/
+        case TOOLBAR_LEVEL_0:
+        case TOOLBAR_LEVEL_MINUS_1:
+        case TOOLBAR_LEVEL_MINUS_2:
+            game.layer = button - TOOLBAR_LEVEL_0;
+            break;
 
-        switch(compt)
-        {
-            case 0:
-                /* todo A FAIRE SELECTION CASERNE DE POMPIER */
-                break;
+        case TOOLBAR_BUILDING_ROAD:
+            game.building_selected = BUILDING_INFRA_ROAD;
+            break;
 
-            case 1:
-                game.building_selected = BUILDING_HOUSE_NONE;
-                break;
+        case TOOLBAR_BUILDING_HOUSE:
+            game.building_selected = BUILDING_HOUSE_NONE;
+            break;
 
-            case 2:
-                game.pause = !game.pause;
-                break;
+        case TOOLBAR_BUILDING_ELEC:
+            game.building_selected = BUILDING_SUPPLY_ELEC;
+            break;
 
-            case 3:
-                game.building_selected = BUILDING_SUPPLY_ELEC;
-                break;
+        case TOOLBAR_BUILDING_WATER:
+            game.building_selected = BUILDING_SUPPLY_WATER;
+            break;
 
-            case 4:
-                game.building_selected = BUILDING_INFRA_ROAD;
-                break;
+        case TOOLBAR_LAST:
+            printf("Error, case not handled.\n");
+            break;
 
-            case 5:
-                ec_save_save();
-                break;
+        default:
+            printf("default %d\n", button);
+            game.building_selected = BUILDING_NONE;
+            break;
+    }
+}
 
-            case 6:
-                game.building_selected = BUILDING_SUPPLY_WATER;
-                break;
+void ec_game_on_button_left(void)
+{
 
-            default:
-                game.building_selected = BUILDING_NONE;
-                break;
-        }
+    if (window.mousePos.x < TOOLBAR_WIDTH)
+    {
+        int button = -1;
+
+        button = ec_game_toolbar_get_hovered_button();
+        ec_game_toolbar_handle_clicked_button(button);
 
         window.mouseButtonLeft = 0;
     }
     else
     {
+        int pxl_x, pxl_y, board_x, board_y;
+
         pxl_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
         pxl_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
         board_x = pxl_x/BOARD_SIZE;
@@ -271,15 +285,18 @@ void ec_game_render_menu(BITMAP *s)
     int i;
 
     /* menu */
-    rectfill(s, 0, 0, 150, WINDOW_HEIGHT-1, makecol(200, 200, 200));
+    rectfill(s, 0, 0, TOOLBAR_WIDTH, WINDOW_HEIGHT, makecol(200, 200, 200));
 
-    for (i = 0; i < TOOLBAR_NB_ICON; i++)
+    for (i = 0; i < TOOLBAR_LAST; i++)
         draw_sprite(s, toolbar[i].sprite, toolbar[i].pos.x, toolbar[i].pos.y);
 
-    if (!game.pause)
-        draw_sprite(s, toolbar[2].sprite, toolbar[2].pos.x, toolbar[2].pos.y);
+    if (game.pause)
+        draw_sprite(s, toolbar[TOOLBAR_PLAY].sprite, toolbar[TOOLBAR_PLAY].pos.x, toolbar[TOOLBAR_PLAY].pos.y);
+    else
+        draw_sprite(s, toolbar[TOOLBAR_PAUSE].sprite, toolbar[TOOLBAR_PAUSE].pos.x, toolbar[TOOLBAR_PAUSE].pos.y);
 
-    textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds - %d", game.time, game.time/30);
+    /* text */
+    textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds", game.time);
     textprintf_ex(s, font, 60, 64, makecol(0, 0, 0), -1, "%d", game.money);
     textprintf_ex(s, font, 60, 74, makecol(0, 0, 0), -1, "EceFlouz");
 
@@ -288,22 +305,12 @@ void ec_game_render_menu(BITMAP *s)
     textprintf_ex(s, font, 60, 167, makecol(0, 0, 0), -1, "%d/%d", game.elec_used, game.elec_capacity);
     textprintf_ex(s, font, 60, 214, makecol(0, 0, 0), -1, "%d/%d", game.water_used, game.water_capacity);
 
-    /* niveaux */
-    rectfill(s, 4, 320, 49, 365, makecol(0, 128, 0));
-    textprintf_ex(s, font, 26, 340, makecol(0, 0, 0), -1, "0");
+    textprintf_ex(s, font, 25, 340, makecol(0, 0, 0), -1, "0");
+    textprintf_ex(s, font, 65, 340, makecol(0, 0, 0), -1, "-1");
+    textprintf_ex(s, font, 115, 340, makecol(0, 0, 0), -1, "-2");
 
-    rectfill(s, 52, 320, 97, 365, makecol(0, 0, 255));
-    textprintf_ex(s, font, 69, 340, makecol(0, 0, 0), -1, "-1");
-
-    rectfill(s, 100, 320, 145, 365, makecol(255, 255, 0));
-    textprintf_ex(s, font, 117, 340, makecol(0, 0, 0), -1, "-2");
-
-    /* PAUSE */
-
-    if ( game.pause )
+    if (game.pause)
         textprintf_ex(s, font, 512, 5, makecol(255, 0, 0), -1, "JEU EN PAUSE");
-
-
 }
 
 void ec_game_load_toolbar(void)
@@ -317,11 +324,11 @@ void ec_game_load_toolbar(void)
     if (fic == NULL)
         ec_utils_abort("fopen() toolbar_img.txt");
 
-    /*Skip Info*/
+    /* skip header */
     fgets(tmp, 1024-1, fic);
     fgets(tmp, 1024-1, fic);
 
-    for (i = 0; i < TOOLBAR_NB_ICON; i++)
+    for (i = 0; i < TOOLBAR_LAST; i++)
     {
         nouv = &toolbar[i];
 
@@ -329,23 +336,23 @@ void ec_game_load_toolbar(void)
 
         fgets(tmp, 1024-1, fic);
         tmp[strlen(tmp)-1] = '\0';
-        nouv->sprite = ec_utils_load_sprite(tmp);
-
-        fscanf(fic, "%d %d", &nouv->pos.x, &nouv->pos.y);
+        if (strlen(tmp) != 0)
+            nouv->sprite = ec_utils_load_sprite(tmp);
 
         fgets(tmp, 1024-1, fic);
+        sscanf(tmp, "%d %d", &nouv->pos.x, &nouv->pos.y);
+
         fgets(tmp, 1024-1, fic);
     }
 
     fclose(fic);
-
 }
 
 void ec_game_free_toolbar(void)
 {
     int compt;
 
-    for( compt = 0; compt < TOOLBAR_NB_ICON; ++compt)
+    for (compt = 0; compt < TOOLBAR_LAST; ++compt)
         destroy_bitmap(toolbar[compt].sprite);
 }
 

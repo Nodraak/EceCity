@@ -6,6 +6,7 @@
 
 #include "ec_allegro.h"
 #include "ec_utils.h"
+#include "ec_game.h"
 
 s_window window;
 
@@ -98,7 +99,7 @@ void ec_allegro_update_event(void)
 
     if (window.key[KEY_RIGHT] || window.mousePos.x > WINDOW_WIDTH - BOARD_MOVE_MOUSE_AREA)
         window.offset.x -= BOARD_MOVE_SPEED / window.zoom;
-    if (window.key[KEY_LEFT] || (window.mousePos.x > 150 && window.mousePos.x < 150 + BOARD_MOVE_MOUSE_AREA))
+    if (window.key[KEY_LEFT] || (window.mousePos.x > TOOLBAR_WIDTH && window.mousePos.x < TOOLBAR_WIDTH + BOARD_MOVE_MOUSE_AREA))
         window.offset.x += BOARD_MOVE_SPEED / window.zoom;
 }
 

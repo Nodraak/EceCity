@@ -1,53 +1,61 @@
-Nombre d'icon à charger: 12
+pos.x pos.y
 
-BOUTON CASERNE DE POMPIER
-button_firestation.bmp
-45 585
-
-BOUTON MAISON
-button_house.bmp
-10 510
-
-BOUTON PAUSE
-button_pause.bmp
-75 260
-
-BOUTON CENTRALE ELECTRIQUE
-button_powerplant.bmp
-10 380
-
-BOUTON ROUTE
-button_road.bmp
-80 510
-
-BOUTON SAUVEGARDE
-button_save.bmp
-15 260
-
-BOUTON RESERVOIR EAU
-button_water_supply.bmp
-80 380
-
-ICON LVL ELECTRICITE
-icon_elec.bmp
-5 145
-
-ICON MONEY
-icon_money.bmp
-5 50
-
-ICON LVL WATER
-icon_water.bmp
-5 192
-
-ICON TIMER
+TOOLBAR_INFO_TIME
 icon_time.bmp
 5 2
 
-ICON PEOPLE
+TOOLBAR_INFO_MONEY
+icon_money.bmp
+5 50
+
+TOOLBAR_INFO_PEOPLE
 icon_people.bmp
 5 98
 
-BOUTON PLAY
+TOOLBAR_INFO_ELEC
+icon_elec.bmp
+5 145
+
+TOOLBAR_INFO_WATER
+icon_water.bmp
+5 192
+
+TOOLBAR_SAVE
+button_save.bmp
+15 260
+
+TOOLBAR_PAUSE
+button_pause.bmp
+75 260
+
+TOOLBAR_PLAY
 button_play.bmp
 75 260
+
+TOOLBAR_LEVEL_0
+toolbar_level_0.bmp
+5 320
+
+TOOLBAR_LEVEL_MINUS_1
+toolbar_level_1.bmp
+52 320
+
+TOOLBAR_LEVEL_MINUS_2
+toolbar_level_2.bmp
+100 320
+
+TOOLBAR_BUILDING_ROAD
+button_road.bmp
+80 510
+
+TOOLBAR_BUILDING_HOUSE
+button_house.bmp
+10 510
+
+TOOLBAR_BUILDING_ELEC
+button_powerplant.bmp
+10 380
+
+TOOLBAR_BUILDING_WATER
+button_water_supply.bmp
+80 380

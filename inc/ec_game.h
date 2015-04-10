@@ -1,12 +1,33 @@
 #ifndef EC_GAME_H
 #define EC_GAME_H
 
-#define TOOLBAR_NB_ICON 13
-#define TOOLBAR_NB_BUTTON 7
+#define TOOLBAR_WIDTH       150
 
 #include "ec_allegro.h"
 #include "ec_building.h"
 
+typedef enum        _e_toolbar
+{
+    TOOLBAR_INFO_TIME = 0,
+    TOOLBAR_INFO_MONEY,
+    TOOLBAR_INFO_PEOPLE,
+    TOOLBAR_INFO_ELEC,
+    TOOLBAR_INFO_WATER,
+
+    TOOLBAR_SAVE,
+    TOOLBAR_PAUSE,
+    TOOLBAR_PLAY,
+    TOOLBAR_LEVEL_0,
+    TOOLBAR_LEVEL_MINUS_1,
+    TOOLBAR_LEVEL_MINUS_2,
+
+    TOOLBAR_BUILDING_ROAD,
+    TOOLBAR_BUILDING_HOUSE,
+    TOOLBAR_BUILDING_ELEC,
+    TOOLBAR_BUILDING_WATER,
+
+    TOOLBAR_LAST
+}                   e_toolbar;
 
 typedef struct  _s_game
 {
@@ -19,6 +40,7 @@ typedef struct  _s_game
     int         elec_used;
     int         water_capacity;
     int         water_used;
+    int         layer;
 
     e_building  building_selected;
 
@@ -33,7 +55,7 @@ typedef struct _s_toolbar
 
 extern s_game game;
 
-extern s_toolbar toolbar[TOOLBAR_NB_ICON];
+extern s_toolbar toolbar[TOOLBAR_LAST];
 
 void ec_game_init(void);
 void ec_game_free(void);
