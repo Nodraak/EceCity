@@ -31,7 +31,6 @@ void ec_game_init(void)
 {
     memset(&game, 0, sizeof(s_game));
     game.money = 500000;
-    game.pause = 0;
 
     install_int(ec_timer_time_callback, 1000);
 
@@ -84,7 +83,7 @@ void ec_game_on_button_left(void)  /* TODO ==> A MODIFIER POUR LA BARRE D'OUTILS
                 break;
         }
 
-        /// TEST POUR BINDER LES NIVEAUX
+        /* todo TEST POUR BINDER LES NIVEAUX -> dafuq ?*/
 
         switch(compt)
         {
@@ -97,11 +96,7 @@ void ec_game_on_button_left(void)  /* TODO ==> A MODIFIER POUR LA BARRE D'OUTILS
                 break;
 
             case 2:
-                ///MISE EN PAUSE OU REMISE EN ROUTE DU JEU
-                if ( !game.pause )
-                    game.pause = 1;
-                else
-                    game.pause = 0;
+                game.pause = !game.pause;
                 break;
 
             case 3:
@@ -246,8 +241,9 @@ void ec_game_render_board(BITMAP *s)
         {
             int x = i+j;
             int y = j;
-            if (ec_utils_cell_is_in_board(x, y)
-                && game.board[y][x] != NULL && game.board[y][x]->pos.x == x && game.board[y][x]->pos.y == y)
+
+            if (ec_utils_cell_is_in_board(x, y) && game.board[y][x] != NULL
+                && game.board[y][x]->pos.x == x && game.board[y][x]->pos.y == y)
             {
                 ec_building_render(game.board[y][x], x*BOARD_SIZE, y*BOARD_SIZE);
             }
@@ -280,8 +276,7 @@ void ec_game_render_menu(BITMAP *s)
     for (i = 0; i < TOOLBAR_NB_ICON; i++)
         draw_sprite(s, toolbar[i].sprite, toolbar[i].pos.x, toolbar[i].pos.y);
 
-    // Si le jeu est n'est pas en PAUSE ==> On affiche le boutton PAUSE
-    if ( !game.pause )
+    if (!game.pause)
         draw_sprite(s, toolbar[2].sprite, toolbar[2].pos.x, toolbar[2].pos.y);
 
     textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds - %d", game.time, game.time/30);

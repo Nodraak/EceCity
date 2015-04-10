@@ -91,15 +91,14 @@ void ec_allegro_update_event(void)
     }
 
     /* move */
-    if ( window.key[KEY_UP] || window.mousePos.y < MOVE_MOUSE_AREA )
+    if (window.key[KEY_UP] || window.mousePos.y < BOARD_MOVE_MOUSE_AREA)
         window.offset.y += BOARD_MOVE_SPEED / window.zoom;
-    if ( window.key[KEY_DOWN] || window.mousePos.y > WINDOW_HEIGHT - MOVE_MOUSE_AREA )
+    if (window.key[KEY_DOWN] || window.mousePos.y > WINDOW_HEIGHT - BOARD_MOVE_MOUSE_AREA)
         window.offset.y -= BOARD_MOVE_SPEED / window.zoom;
 
-
-    if ( window.key[KEY_RIGHT] || window.mousePos.x > WINDOW_WIDTH - MOVE_MOUSE_AREA )
+    if (window.key[KEY_RIGHT] || window.mousePos.x > WINDOW_WIDTH - BOARD_MOVE_MOUSE_AREA)
         window.offset.x -= BOARD_MOVE_SPEED / window.zoom;
-    if ( window.key[KEY_LEFT] ||  window.mousePos.x < MOVE_MOUSE_AREA - 30 )
+    if (window.key[KEY_LEFT] || (window.mousePos.x > 150 && window.mousePos.x < 150 + BOARD_MOVE_MOUSE_AREA))
         window.offset.x += BOARD_MOVE_SPEED / window.zoom;
 }
 
