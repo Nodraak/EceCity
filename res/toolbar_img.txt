@@ -47,3 +47,7 @@ icon_time.bmp
 ICON PEOPLE
 icon_people.bmp
 5 98
+
+BOUTON PLAY
+button_play.bmp
+75 260

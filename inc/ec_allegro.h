@@ -11,6 +11,8 @@
 #define WINDOW_HEIGHT   768
 #define WINDOW_FPS      50
 
+#define MOVE_MOUSE_AREA 50
+
 #define BOARD_COL       45 /* number of col */
 #define BOARD_LINE      35 /* number of line */
 #define BOARD_SIZE      20 /* size of one square cell */

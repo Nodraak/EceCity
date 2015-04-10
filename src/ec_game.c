@@ -31,6 +31,7 @@ void ec_game_init(void)
 {
     memset(&game, 0, sizeof(s_game));
     game.money = 500000;
+    game.pause = 0;
 
     install_int(ec_timer_time_callback, 1000);
 
@@ -83,6 +84,8 @@ void ec_game_on_button_left(void)  /* TODO ==> A MODIFIER POUR LA BARRE D'OUTILS
                 break;
         }
 
+        /// TEST POUR BINDER LES NIVEAUX
+
         switch(compt)
         {
             case 0:
@@ -94,7 +97,11 @@ void ec_game_on_button_left(void)  /* TODO ==> A MODIFIER POUR LA BARRE D'OUTILS
                 break;
 
             case 2:
-                /* todo A FAIRE BOUTON PAUSE */
+                ///MISE EN PAUSE OU REMISE EN ROUTE DU JEU
+                if ( !game.pause )
+                    game.pause = 1;
+                else
+                    game.pause = 0;
                 break;
 
             case 3:
@@ -273,6 +280,10 @@ void ec_game_render_menu(BITMAP *s)
     for (i = 0; i < TOOLBAR_NB_ICON; i++)
         draw_sprite(s, toolbar[i].sprite, toolbar[i].pos.x, toolbar[i].pos.y);
 
+    // Si le jeu est n'est pas en PAUSE ==> On affiche le boutton PAUSE
+    if ( !game.pause )
+        draw_sprite(s, toolbar[2].sprite, toolbar[2].pos.x, toolbar[2].pos.y);
+
     textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds - %d", game.time, game.time/30);
     textprintf_ex(s, font, 60, 64, makecol(0, 0, 0), -1, "%d", game.money);
     textprintf_ex(s, font, 60, 74, makecol(0, 0, 0), -1, "EceFlouz");
@@ -291,6 +302,13 @@ void ec_game_render_menu(BITMAP *s)
 
     rectfill(s, 100, 320, 145, 365, makecol(255, 255, 0));
     textprintf_ex(s, font, 117, 340, makecol(0, 0, 0), -1, "-2");
+
+    /* PAUSE */
+
+    if ( game.pause )
+        textprintf_ex(s, font, 512, 5, makecol(255, 0, 0), -1, "JEU EN PAUSE");
+
+
 }
 
 void ec_game_load_toolbar(void)
