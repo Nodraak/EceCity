@@ -99,7 +99,7 @@ void ec_allegro_update_event(void)
 
     if ( window.key[KEY_RIGHT] || window.mousePos.x > WINDOW_WIDTH - MOVE_MOUSE_AREA )
         window.offset.x -= BOARD_MOVE_SPEED / window.zoom;
-    if (window.key[KEY_LEFT])
+    if ( window.key[KEY_LEFT] ||  window.mousePos.x < MOVE_MOUSE_AREA - 30 )
         window.offset.x += BOARD_MOVE_SPEED / window.zoom;
 }
 
