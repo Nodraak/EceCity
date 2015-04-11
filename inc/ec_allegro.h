@@ -13,6 +13,12 @@
 
 #define BOARD_MOVE_MOUSE_AREA 50
 
+//Limite des OFFSET ==> Bloquer le déplacement sur la carte
+#define BOARD_LIMIT_OFFSET_UP  150
+#define BOARD_LIMIT_OFFSET_LEFT 400
+#define BOARD_LIMIT_OFFSET_DOWN -800
+#define BOARD_LIMIT_OFFSET_RIGHT    -800
+
 #define BOARD_COL       45 /* number of col */
 #define BOARD_LINE      35 /* number of line */
 #define BOARD_SIZE      20 /* size of one square cell */

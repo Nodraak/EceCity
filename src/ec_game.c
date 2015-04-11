@@ -24,7 +24,8 @@ s_toolbar toolbar[TOOLBAR_LAST];
 
 void ec_timer_time_callback(void)
 {
-    game.time += 1;
+    if (!game.pause)
+        game.time += 1;
 }
 
 void ec_game_init(void)
@@ -282,7 +283,11 @@ void ec_game_render_board(BITMAP *s)
 
 void ec_game_render_menu(BITMAP *s)
 {
-    int i;
+    int i, minu, sec;
+
+    /* time */
+    minu = game.time/60;
+    sec = game.time%60;
 
     /* menu */
     rectfill(s, 0, 0, TOOLBAR_WIDTH, WINDOW_HEIGHT, makecol(200, 200, 200));
@@ -296,7 +301,11 @@ void ec_game_render_menu(BITMAP *s)
         draw_sprite(s, toolbar[TOOLBAR_PAUSE].sprite, toolbar[TOOLBAR_PAUSE].pos.x, toolbar[TOOLBAR_PAUSE].pos.y);
 
     /* text */
-    textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds", game.time);
+    if (minu == 0)
+        textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%ds", sec);
+    else
+        textprintf_ex(s, font, 60, 24, makecol(0, 0, 0), -1, "%dmin %ds", minu, sec);
+
     textprintf_ex(s, font, 60, 64, makecol(0, 0, 0), -1, "%d", game.money);
     textprintf_ex(s, font, 60, 74, makecol(0, 0, 0), -1, "EceFlouz");
 

@@ -81,26 +81,43 @@ void ec_allegro_update_event(void)
     if (window.key[KEY_P])
     {
         window.zoom += window.zoom * BOARD_ZOOM_FACTOR;
-        window.offset.x -= BOARD_WIDTH / (100 * window.zoom);
-        window.offset.y -= BOARD_HEIGHT / (100 * window.zoom);
+        window.offset.x -= BOARD_WIDTH/2 / (100 * window.zoom);
+        window.offset.y += BOARD_HEIGHT/2  / (100 * window.zoom);
     }
     if (window.key[KEY_M])
     {
         window.zoom -= window.zoom * BOARD_ZOOM_FACTOR;
-        window.offset.x += BOARD_WIDTH / (100 * window.zoom);
-        window.offset.y += BOARD_HEIGHT / (100 * window.zoom);
+        window.offset.x += BOARD_WIDTH/2  / (100 * window.zoom);
+        window.offset.y -= BOARD_HEIGHT/2  / (100 * window.zoom);
     }
 
-    /* move */
+    /*
+        move
+        ==> Move with Arrows Key or with MOUSE
+        ==> Offfset limitation
+
+     */
     if (window.key[KEY_UP] || window.mousePos.y < BOARD_MOVE_MOUSE_AREA)
-        window.offset.y += BOARD_MOVE_SPEED / window.zoom;
+    {
+        if (window.offset.y < BOARD_LIMIT_OFFSET_UP)
+            window.offset.y += BOARD_MOVE_SPEED / window.zoom;
+    }
     if (window.key[KEY_DOWN] || window.mousePos.y > WINDOW_HEIGHT - BOARD_MOVE_MOUSE_AREA)
-        window.offset.y -= BOARD_MOVE_SPEED / window.zoom;
+    {
+        if (window.offset.y > BOARD_LIMIT_OFFSET_DOWN)
+            window.offset.y -= BOARD_MOVE_SPEED / window.zoom;
+    }
 
     if (window.key[KEY_RIGHT] || window.mousePos.x > WINDOW_WIDTH - BOARD_MOVE_MOUSE_AREA)
-        window.offset.x -= BOARD_MOVE_SPEED / window.zoom;
+    {
+        if (window.offset.x > BOARD_LIMIT_OFFSET_RIGHT)
+            window.offset.x -= BOARD_MOVE_SPEED / window.zoom;
+    }
     if (window.key[KEY_LEFT] || (window.mousePos.x > TOOLBAR_WIDTH && window.mousePos.x < TOOLBAR_WIDTH + BOARD_MOVE_MOUSE_AREA))
-        window.offset.x += BOARD_MOVE_SPEED / window.zoom;
+    {
+        if (window.offset.x < BOARD_LIMIT_OFFSET_LEFT)
+            window.offset.x += BOARD_MOVE_SPEED / window.zoom;
+    }
 }
 
 void ec_allegro_free(void)
