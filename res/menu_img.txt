@@ -1,0 +1,17 @@
+pos.x pos.y
+
+HOVER PLAY
+menu_play.bmp
+333 213
+
+HOVER LOAD
+menu_load.bmp
+333 330
+
+HOVER RULES
+menu_rules.bmp
+333 451
+
+HOVER QUIT
+menu_quit.bmp
+333 579

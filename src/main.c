@@ -9,6 +9,7 @@
 #include "ec_graphic.h"
 #include "ec_game.h"
 #include "ec_save.h"
+#include "ec_menu.h"
 
 /*
 
@@ -66,7 +67,8 @@ void ec_main_render(void)
 
     /* flip */
     show_mouse(window.screen);
-    draw_sprite(screen, window.screen, 0, 0);
+    //draw_sprite(screen, window.screen, 0, 0);
+    blit(window.screen, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H); //Changement pour passer au BLIT
 }
 
 int main(void)
@@ -74,6 +76,8 @@ int main(void)
     ec_allegro_init();
     ec_game_init();
     ec_building_init_all();
+
+    ec_menu_menu();
 
     while (!window.quit)
     {
