@@ -75,3 +75,24 @@ void ec_graphic_putpixel(BITMAP *s, double x, double y, int c)
 
     putpixel(s, scaled.x, scaled.y, c);
 }
+
+void ec_graphic_polygon(BITMAP *s, s_vector2d v1, s_vector2d v2, s_vector2d v3, s_vector2d v4, int c)
+{
+    int vertices[4*2];
+
+    s_vector2i v1_s = ec_graphic_scale_coord_to_pxl(v1);
+    s_vector2i v2_s = ec_graphic_scale_coord_to_pxl(v2);
+    s_vector2i v3_s = ec_graphic_scale_coord_to_pxl(v3);
+    s_vector2i v4_s = ec_graphic_scale_coord_to_pxl(v4);
+
+    vertices[0] = v1_s.x;
+    vertices[1] = v1_s.y;
+    vertices[2] = v2_s.x;
+    vertices[3] = v2_s.y;
+    vertices[4] = v3_s.x;
+    vertices[5] = v3_s.y;
+    vertices[6] = v4_s.x;
+    vertices[7] = v4_s.y;
+
+    polygon(s, 4, vertices, c);
+}

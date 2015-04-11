@@ -228,21 +228,12 @@ void ec_game_render_board(BITMAP *s)
 {
     int i, j;
 
-    int vertices[4*2];
-    s_vector2i v1 = ec_graphic_scale_coord_to_pxl(ec_utils_vector2d_make(0, 0));
-    s_vector2i v2 = ec_graphic_scale_coord_to_pxl(ec_utils_vector2d_make(0, BOARD_LINE*BOARD_SIZE));
-    s_vector2i v3 = ec_graphic_scale_coord_to_pxl(ec_utils_vector2d_make(BOARD_COL*BOARD_SIZE, BOARD_LINE*BOARD_SIZE));
-    s_vector2i v4 = ec_graphic_scale_coord_to_pxl(ec_utils_vector2d_make(BOARD_COL*BOARD_SIZE, 0));
-    vertices[0] = v1.x;
-    vertices[1] = v1.y;
-    vertices[2] = v2.x;
-    vertices[3] = v2.y;
-    vertices[4] = v3.x;
-    vertices[5] = v3.y;
-    vertices[6] = v4.x;
-    vertices[7] = v4.y;
+    s_vector2d v1 = ec_utils_vector2d_make(0, 0);
+    s_vector2d v2 = ec_utils_vector2d_make(0, BOARD_LINE*BOARD_SIZE);
+    s_vector2d v3 = ec_utils_vector2d_make(BOARD_COL*BOARD_SIZE, BOARD_LINE*BOARD_SIZE);
+    s_vector2d v4 = ec_utils_vector2d_make(BOARD_COL*BOARD_SIZE, 0);
 
-    polygon(s, 4, vertices, makecol(230, 230, 230));
+    ec_graphic_polygon(s, v1, v2, v3, v4, makecol(50, 160, 50));
 
     for (j = 0; j < BOARD_LINE+1; ++j)
     {
