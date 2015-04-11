@@ -34,6 +34,7 @@ typedef struct  _s_game
     int         time;
     int         money;
     int         pause;
+    int         quit;
 
     int         people;
     int         elec_capacity;

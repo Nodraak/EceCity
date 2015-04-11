@@ -29,7 +29,8 @@ img :
 void ec_main_handle_event(void)
 {
     if (window.key[KEY_ESC])
-        window.quit = 1;
+        //window.quit = 1;
+        game.quit = 1;
 
     if (window.key[KEY_N])
     {
@@ -71,21 +72,33 @@ void ec_main_render(void)
     blit(window.screen, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H); //Changement pour passer au BLIT
 }
 
-int main(void)
+void ec_main_gameLoop(void)
 {
-    ec_allegro_init();
-    ec_game_init();
-    ec_building_init_all();
-
-    ec_menu_menu();
-
-    while (!window.quit)
+    while(!game.quit)
     {
         ec_allegro_update_event();
         ec_main_handle_event();
         ec_main_render();
 
         rest(1000/WINDOW_FPS);
+    }
+
+}
+
+int main(void)
+{
+    ec_allegro_init();
+    ec_game_init();
+    ec_building_init_all();
+
+    while (!window.quit)
+    {
+        if (game.quit)
+            game.quit = 0;
+
+        ec_menu_menu();
+
+        ec_main_gameLoop();
     }
 
     ec_building_free_all();

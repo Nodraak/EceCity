@@ -4,8 +4,38 @@
 
 void ec_menu_handle_event(s_menu *menu)
 {
-    if (window.key[KEY_Q])
+    int choix;
+
+    if (window.key[KEY_ESC])
         menu->quit = 1;
+
+    if (window.mouseButtonLeft)
+    {
+        choix = ec_menu_item_get_hovered(menu, MENU_LAST);
+
+        switch(choix)
+        {
+            case MENU_MAIN_PLAY:
+                menu->quit = 1;
+                break;
+
+            case MENU_MAIN_LOAD:
+                break;
+
+            case MENU_MAIN_RULES:
+                break;
+
+            case MENU_MAIN_QUIT:
+                window.quit = 1;
+                game.quit = 1;
+                menu->quit = 1;
+                break;
+
+            default:
+                break;
+        }
+        window.mouseButtonLeft = 0;
+    }
 
 }
 
@@ -73,7 +103,6 @@ s_menu *ec_menu_load(void)
 
         fgets(tmp, 1024-1, fic);
         sscanf(tmp, "%d %d", &nouv->item[i]->pos.x, &nouv->item[i]->pos.y);
-        printf("%d %d\n", nouv->item[i]->pos.x, nouv->item[i]->pos.y);
 
         fgets(tmp, 1024-1, fic);
     }

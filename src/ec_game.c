@@ -33,6 +33,10 @@ void ec_game_init(void)
     memset(&game, 0, sizeof(s_game));
     game.money = 500000;
 
+    /* Initialisation des booléens de jeu */
+    game.pause = 0;
+    game.quit = 0;
+
     install_int(ec_timer_time_callback, 1000);
 
     ec_game_load_toolbar();
