@@ -52,7 +52,7 @@ extern s_building building_data[BUILDING_LAST];
 
 void ec_building_init_all(void);
 void ec_building_free_all(void);
-void ec_building_render(s_building *cur, int coord_x, int coord_y);
+void ec_building_render(BITMAP *s, s_building *cur, int coord_x, int coord_y, int x, int y);
 s_building *ec_building_alloc(s_building *template, int y, int x);
 void ec_building_new(int board_y, int board_x);
 char *ec_game_building_enum_to_str(e_building type);

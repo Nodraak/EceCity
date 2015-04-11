@@ -78,23 +78,93 @@ void ec_building_free_all(void)
         destroy_bitmap(building_data[i].sprite);
 }
 
-void ec_building_render(s_building *cur, int coord_x, int coord_y)
+void ec_building_render(BITMAP *s, s_building *cur, int coord_x, int coord_y, int x, int y)
 {
-    /* sprite */
-    ec_graphic_stretch_sprite(window.screen, cur, coord_x, coord_y);
-
-    /* if not connected to water or elec, show sign */
-    if (!cur->is_working)
+    if (game.layer == 0)
     {
-        double i;
+        /* sprite */
+        ec_graphic_stretch_sprite(s, cur, coord_x, coord_y);
 
-        for (i = 0; i < 3; i+=0.1)
+        /* if not connected to water or elec, show sign */
+        if (!cur->is_working)
         {
-            int coord_x2 = coord_x + cur->size.x*BOARD_SIZE;
-            int coord_y2 = coord_y + cur->size.y*BOARD_SIZE;
+            double i;
 
-            ec_graphic_line(window.screen, coord_x, coord_y+i, coord_x2, coord_y+i, makecol(128, 0, 0));
-            ec_graphic_line(window.screen, coord_x2-i, coord_y, coord_x2-i, coord_y2, makecol(128, 0, 0));
+            for (i = 0; i < 3; i+=0.1)
+            {
+                int coord_x2 = coord_x + cur->size.x*BOARD_SIZE;
+                int coord_y2 = coord_y + cur->size.y*BOARD_SIZE;
+
+                ec_graphic_line(s, coord_x, coord_y+i, coord_x2, coord_y+i, makecol(128, 0, 0));
+                ec_graphic_line(s, coord_x2-i, coord_y, coord_x2-i, coord_y2, makecol(128, 0, 0));
+            }
+        }
+    }
+    else
+    {
+        int w = game.board[y][x]->size.x;
+        int h = game.board[y][x]->size.y;
+        s_vector2d v1 = ec_utils_vector2d_make(x*BOARD_SIZE,                y*BOARD_SIZE);
+        s_vector2d v2 = ec_utils_vector2d_make(x*BOARD_SIZE,                y*BOARD_SIZE+h*BOARD_SIZE);
+        s_vector2d v3 = ec_utils_vector2d_make(x*BOARD_SIZE+w*BOARD_SIZE,   y*BOARD_SIZE+h*BOARD_SIZE);
+        s_vector2d v4 = ec_utils_vector2d_make(x*BOARD_SIZE+w*BOARD_SIZE,   y*BOARD_SIZE);
+
+        if (game.board[y][x]->type == BUILDING_INFRA_ROAD)
+        {
+            int c = 0;
+
+            if (game.layer == 1)
+                c = makecol(50, 50, 230);
+            else if (game.layer == 2)
+                c = makecol(230, 230, 50);
+
+            ec_graphic_polygon(s, v1, v2, v3, v4, c);
+        }
+        else
+        {
+            int actual = -1, max = -1;
+
+            /* gray building */
+            s_vector2i pos = ec_graphic_scale_coord_to_pxl(v1);
+            ec_graphic_polygon(s, v1, v2, v3, v4, makecol(190, 190, 190));
+
+            /* get resrc stat */
+            if (ec_building_is_house(game.board[y][x]->type))
+            {
+                s_ressource*(*get_resrc)(s_building *b) = NULL;
+
+                if (game.layer == 1)
+                    get_resrc = ec_building_resrc_get_water;
+                else if (game.layer == 2)
+                    get_resrc = ec_building_resrc_get_elec;
+
+                actual = get_resrc(game.board[y][x])->used;
+                max = get_resrc(&building_data[game.board[y][x]->type])->used;
+            }
+            else if (game.layer == 2 && game.board[y][x]->type == BUILDING_SUPPLY_ELEC)
+            {
+                actual = ec_building_resrc_get_elec(game.board[y][x])->produced;
+                max = ec_building_resrc_get_elec(&building_data[game.board[y][x]->type])->produced;
+            }
+            else if (game.layer == 1 && game.board[y][x]->type == BUILDING_SUPPLY_WATER)
+            {
+                actual = ec_building_resrc_get_water(game.board[y][x])->produced;
+                max = ec_building_resrc_get_water(&building_data[game.board[y][x]->type])->produced;
+            }
+
+            /* show colored stat */
+            if (actual != -1 && max != -1)
+            {
+                int c = 0;
+                if (actual == max)
+                    c = makecol(0, 128, 00);
+                else if (actual == 0)
+                    c = makecol(230, 50, 50);
+                else
+                    c = makecol(240, 120, 0);
+
+                textprintf_ex(s, font, pos.x+20, pos.y-4, c, -1, "%d/%d", actual, max);
+            }
         }
     }
 }

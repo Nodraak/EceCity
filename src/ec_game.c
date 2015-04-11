@@ -125,7 +125,6 @@ void ec_game_toolbar_handle_clicked_button(int button)
 
 void ec_game_on_button_left(void)
 {
-
     if (window.mousePos.x < TOOLBAR_WIDTH)
     {
         int button = -1;
@@ -137,24 +136,26 @@ void ec_game_on_button_left(void)
     }
     else
     {
-        int pxl_x, pxl_y, board_x, board_y;
-
-        pxl_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
-        pxl_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
-        board_x = pxl_x/BOARD_SIZE;
-        board_y = pxl_y/BOARD_SIZE;
-
-        if (ec_utils_pxl_is_in_board(pxl_x, pxl_y)
-            && ec_building_have_space(board_y, board_x, building_data[game.building_selected].size)
-            && game.building_selected != BUILDING_NONE
-            && game.money >= building_data[game.building_selected].price)
+        if (game.layer == 0)
         {
-            ec_building_new(board_y, board_x);
+            int pxl_x, pxl_y, board_x, board_y;
+
+            pxl_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
+            pxl_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
+            board_x = pxl_x/BOARD_SIZE;
+            board_y = pxl_y/BOARD_SIZE;
+
+            if (ec_utils_pxl_is_in_board(pxl_x, pxl_y)
+                && ec_building_have_space(board_y, board_x, building_data[game.building_selected].size)
+                && game.building_selected != BUILDING_NONE
+                && game.money >= building_data[game.building_selected].price)
+            {
+                ec_building_new(board_y, board_x);
+            }
+
+            window.mouseButtonLeft = 0;
         }
-
-        window.mouseButtonLeft = 0;
     }
-
 }
 
 void ec_game_on_building_new(void)
@@ -260,13 +261,13 @@ void ec_game_render_board(BITMAP *s)
             if (ec_utils_cell_is_in_board(x, y) && game.board[y][x] != NULL
                 && game.board[y][x]->pos.x == x && game.board[y][x]->pos.y == y)
             {
-                ec_building_render(game.board[y][x], x*BOARD_SIZE, y*BOARD_SIZE);
+                ec_building_render(window.screen, game.board[y][x], x*BOARD_SIZE, y*BOARD_SIZE, x, y);
             }
         }
     }
 
     /* hover */
-    if (game.building_selected != BUILDING_NONE)
+    if (game.layer == 0 && game.building_selected != BUILDING_NONE)
     {
         int coord_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
         int coord_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
