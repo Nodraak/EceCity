@@ -247,11 +247,11 @@ void ec_game_render_board(BITMAP *s)
 
     ec_graphic_polygon(s, v1, v2, v3, v4, makecol(50, 160, 50));
 
-    for (j = 0; j < BOARD_LINE+1; ++j)
-    {
-        for (i = 0; i < BOARD_COL+1; ++i)
-            ec_graphic_putpixel(s, i*BOARD_SIZE, j*BOARD_SIZE, makecol(64, 64, 64));
-    }
+    int c = makecol(128, 128, 128);
+    for (i = 0; i < BOARD_LINE+1; ++i)
+        ec_graphic_line(s, 0, i*BOARD_SIZE, BOARD_WIDTH, i*BOARD_SIZE, c);
+    for (i = 0; i < BOARD_COL+1; ++i)
+        ec_graphic_line(s, i*BOARD_SIZE, 0, i*BOARD_SIZE, BOARD_HEIGHT, c);
 
     /* board (buildings) */
     for (i = -BOARD_LINE+1; i < BOARD_COL; ++i)

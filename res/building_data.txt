@@ -3,7 +3,7 @@ elec.used elec.produced
 water.used water.produced
 size.x size.y
 blit_offset_straight.x blit_offset_straight.y blit_offset_iso.x blit_offset_iso.y
-zoom
+zoom_straight zoom_iso
 
 BUILDING_NONE
 building_straight_none.bmp
@@ -13,7 +13,7 @@ building_iso_none.bmp
 -1 -1
 -1 -1
 -1 -1 -1 -1
-0,1
+0,1 0,1
 
 BUILDING_INFRA_ROAD
 building_straight_infra_road.bmp
@@ -23,7 +23,7 @@ building_iso_infra_road.bmp
 0 0
 1 1
 0 20 0 10
-0,1
+0,1 0,1
 
 BUILDING_HOUSE_NONE
 building_straight_house_none.bmp
@@ -33,7 +33,7 @@ building_iso_house_none.bmp
 0 0
 3 3
 0 60 0 30
-0,1
+1,0 1,0
 
 BUILDING_HOUSE_SMALL
 building_straight_house_small.bmp
@@ -43,7 +43,7 @@ building_iso_house_small.bmp
 10 0
 3 3
 0 60 -15 50
-0,6
+0,2 0,6
 
 BUILDING_HOUSE_MEDIUM
 building_straight_house_medium.bmp
@@ -52,8 +52,8 @@ building_iso_house_medium.bmp
 50 0
 50 0
 3 3
-0 60 0 95
-0,6
+0 53 0 95
+0,17 0,6
 
 BUILDING_HOUSE_LARGE
 building_straight_house_large.bmp
@@ -62,8 +62,8 @@ building_iso_house_large.bmp
 100 0
 100 0
 3 3
-0 60 -7 172
-0,4
+-20 60 -7 172
+0,2 0,4
 
 BUILDING_HOUSE_XL
 building_straight_house_xl.bmp
@@ -72,8 +72,8 @@ building_iso_house_xl.bmp
 1000 0
 1000 0
 3 3
-0 60 12 310
-0,5
+-20 70 12 310
+0,08 0,5
 
 BUILDING_SUPPLY_ELEC
 building_straight_supply_elec.bmp
@@ -82,8 +82,8 @@ building_iso_supply_elec.bmp
 0 5000
 0 0
 6 4
-0 80 -25 70
-1,0
+-20 80 -25 70
+0,3 1,0
 
 BUILDING_SUPPLY_WATER
 building_straight_supply_water.bmp
@@ -92,5 +92,5 @@ building_iso_supply_water.bmp
 0 0
 0 5000
 6 4
-0 80 -23 130
-0,6
+-40 80 -23 130
+0,13 0,6

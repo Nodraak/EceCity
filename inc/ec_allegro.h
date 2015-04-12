@@ -47,6 +47,7 @@ typedef struct  _s_window
     s_vector2d  (*scale_pxl_to_coord)(s_vector2i c);
     BITMAP*     (*building_get_sprite)(s_building *b);
     s_vector2i  (*building_get_blit_offset)(s_building *b);
+    double      (*building_get_blit_zoom)(s_building *b);
     s_vector2i  (*building_get_stat_blit_offset)(s_building *b);
 }               s_window;
 

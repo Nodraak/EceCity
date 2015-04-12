@@ -39,7 +39,8 @@ typedef struct      _s_building
     BITMAP          *sprite_iso;
     s_vector2i      blit_offset_straight;
     s_vector2i      blit_offset_iso;
-    double          zoom;
+    double          zoom_straight;
+    double          zoom_iso;
 
     s_vector2i      pos;
     s_vector2i      size;
@@ -62,6 +63,8 @@ s_vector2i ec_building_get_blit_offset_straight(s_building *b);
 s_vector2i ec_building_get_blit_offset_iso(s_building *b);
 s_vector2i ec_building_get_stat_blit_offset_straight(s_building *b);
 s_vector2i ec_building_get_stat_blit_offset_iso(s_building *b);
+double ec_building_get_blit_zoom_straight(s_building *b);
+double ec_building_get_blit_zoom_iso(s_building *b);
 
 void ec_building_render(BITMAP *s, s_building *cur, int x, int y);
 s_building *ec_building_alloc(s_building *template, int y, int x);

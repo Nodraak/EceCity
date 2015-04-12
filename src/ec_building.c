@@ -72,7 +72,7 @@ void ec_building_init_all(void)
         sscanf(tmp, "%d %d %d %d", &cur->blit_offset_straight.x, &cur->blit_offset_straight.y,
             &cur->blit_offset_iso.x, &cur->blit_offset_iso.y);
         fgets(tmp, 1024-1, f);
-        sscanf(tmp, "%lf", &cur->zoom);
+        sscanf(tmp, "%lf %lf", &cur->zoom_straight, &cur->zoom_iso);
 
         fgets(tmp, 1024-1, f);
     }
@@ -121,6 +121,16 @@ s_vector2i ec_building_get_stat_blit_offset_iso(s_building *b)
 {
     (void)b;
     return ec_utils_vector2i_make(20, -4);
+}
+
+double ec_building_get_blit_zoom_straight(s_building *b)
+{
+    return b->zoom_straight;
+}
+
+double ec_building_get_blit_zoom_iso(s_building *b)
+{
+    return b->zoom_iso;
 }
 
 void ec_get_resrc(s_building *cur, int *actual, int *max)

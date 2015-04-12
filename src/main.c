@@ -62,6 +62,7 @@ void ec_main_handle_event(s_menu *menu)
         window.building_get_sprite = ec_building_get_sprite_iso;
         window.building_get_blit_offset = ec_building_get_blit_offset_iso;
         window.building_get_stat_blit_offset = ec_building_get_stat_blit_offset_iso;
+        window.building_get_blit_zoom = ec_building_get_blit_zoom_iso;
         window.key[KEY_I] = 0;
     }
     if (window.key[KEY_O])
@@ -71,6 +72,7 @@ void ec_main_handle_event(s_menu *menu)
         window.building_get_sprite = ec_building_get_sprite_straight;
         window.building_get_blit_offset = ec_building_get_blit_offset_straight;
         window.building_get_stat_blit_offset = ec_building_get_stat_blit_offset_straight;
+        window.building_get_blit_zoom = ec_building_get_blit_zoom_straight;
         window.key[KEY_O] = 0;
     }
 
