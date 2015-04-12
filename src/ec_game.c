@@ -261,25 +261,48 @@ void ec_game_render_board(BITMAP *s)
             int x = i+j;
             int y = j;
 
+            /* building */
             if (ec_utils_cell_is_in_board(x, y) && game.board[y][x] != NULL
                 && game.board[y][x]->pos.x == x && game.board[y][x]->pos.y == y)
             {
                 ec_building_render(window.screen, game.board[y][x], x, y);
             }
-        }
-    }
 
-    /* hover */
-    if (game.layer == 0 && game.building_selected != BUILDING_NONE)
-    {
-        s_vector2d coord = window.scale_pxl_to_coord(window.mousePos);
+            /* hover */
+            s_vector2d tmp = window.scale_pxl_to_coord(window.mousePos);
+            s_vector2i coord = ec_utils_vector2i_make(tmp.x, tmp.y);
+            coord.x = (coord.x/BOARD_SIZE)*BOARD_SIZE;
+            coord.y = (coord.y/BOARD_SIZE)*BOARD_SIZE;
 
-        if (ec_utils_pxl_is_in_board(coord.x, coord.y))
-        {
-            coord.x = ((int)coord.x/BOARD_SIZE)*BOARD_SIZE;
-            coord.y = ((int)coord.y/BOARD_SIZE)*BOARD_SIZE;
+            if (coord.x/BOARD_SIZE == x && coord.y/BOARD_SIZE == y)
+            {
+                if (game.layer == 0 && game.building_selected != BUILDING_NONE)
+                {
+                    if (ec_utils_pxl_is_in_board(coord.x, coord.y))
+                    {
+                        int c = 0;
+                        int w = building_data[game.building_selected].size.x*BOARD_SIZE;
+                        int h = building_data[game.building_selected].size.y*BOARD_SIZE;
+                        s_vector2d v1 = ec_utils_vector2d_make(coord.x,     coord.y);
+                        s_vector2d v2 = ec_utils_vector2d_make(coord.x,     coord.y+h);
+                        s_vector2d v3 = ec_utils_vector2d_make(coord.x+w,   coord.y+h);
+                        s_vector2d v4 = ec_utils_vector2d_make(coord.x+w,   coord.y);
 
-            ec_graphic_stretch_sprite(s, &building_data[game.building_selected], coord.x, coord.y);
+                        if (ec_building_have_space(coord.y/BOARD_SIZE, coord.x/BOARD_SIZE, building_data[game.building_selected].size))
+                        {
+                            c = makecol(150, 150, 150);
+                            ec_graphic_polygon(s, v1, v2, v3, v4, c);
+
+                            ec_graphic_stretch_sprite(s, &building_data[game.building_selected], coord.x, coord.y);
+                        }
+                        else
+                        {
+                            c = makecol(230, 50, 50);
+                            ec_graphic_polygon(s, v1, v2, v3, v4, c);
+                        }
+                    }
+                }
+            }
         }
     }
 }
