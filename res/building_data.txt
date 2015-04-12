@@ -26,8 +26,8 @@ BUILDING_HOUSE_NONE
 building_straight_house_none.bmp
 building_iso_house_none.bmp
 1000 0
-100 0
-100 0
+0 0
+0 0
 3 3
 0 60 0 30
 

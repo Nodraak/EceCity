@@ -63,8 +63,8 @@ void ec_game_free(void);
 
 int ec_game_is_on_sprite(int posx, int posy, int taillex, int tailley);
 void ec_game_on_button_left(void);
-
 void ec_game_on_building_new();
+
 void ec_game_render_board(BITMAP *s);
 void ec_game_render_menu(BITMAP *s);
 

@@ -47,12 +47,12 @@ une case du MENU ou de la PAUSE
 */
 typedef struct _s_menu
 {
-    char        quit;   /* Booléen pour quitter le MENU */
-    char        stop;   /* Booléen pour quitter la PAUSE */
+    char        quit;           /* Booléen pour quitter le MENU */
+    char        stop;           /* Booléen pour quitter la PAUSE */
 
     BITMAP      *background;    /* Arrière-plan du MENU */
     BITMAP      *pause;         /* Arrière-Plan de la PAUSE */
-    s_menu_item      **item;    /* Tableau de pointeur sur image ==> Les sprites Hovered */
+    s_menu_item **item;         /* Tableau de pointeur sur image ==> Les sprites Hovered */
 }       s_menu;
 
 

@@ -5,7 +5,7 @@
 
 #include "ec_utils.h"
 
-#define BUILDING_EVOLVE_DELAY 5
+#define BUILDING_EVOLVE_DELAY 15
 
 typedef enum        _e_building
 {

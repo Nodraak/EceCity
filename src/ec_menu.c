@@ -42,14 +42,9 @@ s_menu *ec_menu_load(void)
 {
     s_menu *nouv = NULL;
 
-    nouv = (s_menu*)malloc(sizeof(s_menu));
-
+    nouv = malloc(sizeof(s_menu));
     if (nouv == NULL)
-    {
-        printf("ERREUR ALLOCATION MENU"); // ==> Changer par ABORD
-        allegro_exit();
-        exit(EXIT_FAILURE);
-    }
+        ec_utils_abort("allocation menu");
 
     /* Initialisation des booléens du menu */
     nouv->quit = 0;
@@ -69,17 +64,10 @@ s_menu *ec_menu_load(void)
     if (fic == NULL)
         ec_utils_abort("fopen() menu_img.txt");
 
-
     /* Allocation du tableau de BITMAP du menu */
-    nouv->item = NULL;
-    nouv->item = (s_menu_item**)malloc(MENU_LAST*sizeof(s_menu_item*));
-
-    if (nouv == NULL)
-    {
-        printf("ERREUR ALLOCATION MENU"); // ==> Changer par ABORD
-        allegro_exit();
-        exit(EXIT_FAILURE);
-    }
+    nouv->item = malloc(MENU_LAST*sizeof(s_menu_item*));
+    if (nouv->item == NULL)
+        ec_utils_abort("allocation item*");
 
     /* skip header */
     fgets(tmp, 1024-1, fic);
@@ -87,13 +75,9 @@ s_menu *ec_menu_load(void)
 
     for (i = 0; i < MENU_LAST; i++)
     {
-        nouv->item[i] = (s_menu_item*)malloc(MENU_LAST*sizeof(s_menu_item));
-        if (nouv == NULL)
-        {
-            printf("ERREUR ALLOCATION MENU"); // ==> Changer par ABORD
-            allegro_exit();
-            exit(EXIT_FAILURE);
-        }
+        nouv->item[i] = malloc(MENU_LAST*sizeof(s_menu_item));
+        if (nouv->item[i] == NULL)
+            ec_utils_abort("allocation item");
 
         fgets(tmp, 1024-1, fic);
 
@@ -119,8 +103,10 @@ int ec_menu_item_get_hovered(s_menu *menu, int start, int nbItem)
 
     for (i = start; i < nbItem; i++)
     {
-        if (window.mousePos.x > menu->item[i]->pos.x && window.mousePos.x < menu->item[i]->pos.x+menu->item[i]->sprite->w
-            && window.mousePos.y > menu->item[i]->pos.y && window.mousePos.y < menu->item[i]->pos.y+menu->item[i]->sprite->h )
+        s_menu_item *cur = menu->item[i];
+
+        if (window.mousePos.x > cur->pos.x && window.mousePos.x < cur->pos.x+cur->sprite->w
+            && window.mousePos.y > cur->pos.y && window.mousePos.y < cur->pos.y+cur->sprite->h)
             return i;
     }
 
@@ -139,8 +125,7 @@ void ec_menu_render(s_menu *menu, BITMAP *fond, int start, int nbItem)
     //If item get hovered ==> Draw hovered sprite
     i = ec_menu_item_get_hovered(menu, start, nbItem);
     if (i != -1)
-            draw_sprite(window.screen, menu->item[i]->sprite, menu->item[i]->pos.x, menu->item[i]->pos.y);
-
+        draw_sprite(window.screen, menu->item[i]->sprite, menu->item[i]->pos.x, menu->item[i]->pos.y);
 
     /* flip */
     show_mouse(window.screen);
@@ -168,10 +153,8 @@ void ec_menu_free(s_menu *menu)
 }
 
 
-
 void ec_menu_menu(s_menu *menu)
 {
-
     while (!menu->quit)
     {
         ec_allegro_update_event();
@@ -236,7 +219,6 @@ void ec_menu_pause_event(s_menu *menu)
 
 void ec_menu_handle_pause(s_menu *menu)
 {
-
     while (!menu->stop)
     {
         ec_allegro_update_event();

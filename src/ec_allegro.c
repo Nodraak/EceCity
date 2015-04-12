@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <allegro.h>  //Inutile??? ==> Déjà dans le .h
+#include <allegro.h>
 
 #include "ec_allegro.h"
-#include "ec_utils.h"   //Inutile??? ==> Déjà dans le .h
+#include "ec_utils.h"
 #include "ec_game.h"
 #include "ec_graphic.h"
 

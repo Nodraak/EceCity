@@ -91,8 +91,7 @@ void ec_main_render(void)
 
     /* flip */
     show_mouse(window.screen);
-    //draw_sprite(screen, window.screen, 0, 0);
-    blit(window.screen, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H); //Changement pour passer au BLIT
+    blit(window.screen, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
 }
 
 void ec_main_gameLoop(s_menu *menu)
