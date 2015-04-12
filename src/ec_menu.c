@@ -1,17 +1,13 @@
 
 #include "ec_menu.h"
 
-
 void ec_menu_handle_event(s_menu *menu)
 {
     int choix;
 
-    if (window.key[KEY_ESC])
-        menu->quit = 1;
-
     if (window.mouseButtonLeft)
     {
-        choix = ec_menu_item_get_hovered(menu, MENU_LAST);
+        choix = ec_menu_item_get_hovered(menu, MENU_MAIN_PLAY, MENU_PAUSE_RESUME);
 
         switch(choix)
         {
@@ -54,9 +50,12 @@ s_menu *ec_menu_load(void)
 
     /* Initialisation des variables */
     nouv->quit = 0;
+    nouv->stop = 0;
 
     //Chargement du background du menu
     nouv->background = ec_utils_load_sprite("main_menu.bmp");
+    //Chargement du background de la PAUSE
+    nouv->pause = ec_utils_load_sprite("background_pause.bmp");
 
     //Chargement des images du menu
 
@@ -112,11 +111,11 @@ s_menu *ec_menu_load(void)
     return nouv;
 }
 
-int ec_menu_item_get_hovered(s_menu *menu, int nbItem)
+int ec_menu_item_get_hovered(s_menu *menu, int start, int nbItem)
 {
     int i;
 
-    for (i = 0; i < nbItem; i++)
+    for (i = start; i < nbItem; i++)
     {
         if (window.mousePos.x > menu->item[i]->pos.x && window.mousePos.x < menu->item[i]->pos.x+menu->item[i]->sprite->w
             && window.mousePos.y > menu->item[i]->pos.y && window.mousePos.y < menu->item[i]->pos.y+menu->item[i]->sprite->h )
@@ -126,7 +125,7 @@ int ec_menu_item_get_hovered(s_menu *menu, int nbItem)
     return -1;
 }
 
-void ec_menu_render(s_menu *menu)
+void ec_menu_render(s_menu *menu, BITMAP *fond, int start, int nbItem)
 {
     int i = -1;
 
@@ -134,9 +133,9 @@ void ec_menu_render(s_menu *menu)
     clear_to_color(window.screen, makecol(255, 255, 255));
 
     /* draw */
-    masked_blit(menu->background, window.screen, 0, 0, 0, 0, menu->background->w, menu->background->h);
+    masked_blit(fond, window.screen, 0, 0, 0, 0, fond->w, fond->h);
     //If item get hovered ==> Draw hovered sprite
-    i = ec_menu_item_get_hovered(menu, MENU_LAST);
+    i = ec_menu_item_get_hovered(menu, start, nbItem);
     if (i != -1)
             draw_sprite(window.screen, menu->item[i]->sprite, menu->item[i]->pos.x, menu->item[i]->pos.y);
 
@@ -160,25 +159,81 @@ void ec_menu_free(s_menu *menu)
 
     free(menu->item);
     destroy_bitmap(menu->background);
+    destroy_bitmap(menu->pause);
     free(menu);
 
 }
 
-void ec_menu_menu(void)
-{
-    s_menu *menu = NULL;
 
-    menu = ec_menu_load();
+
+void ec_menu_menu(s_menu *menu)
+{
 
     while (!menu->quit)
     {
         ec_allegro_update_event();
         ec_menu_handle_event(menu);
-        ec_menu_render(menu);
+        ec_menu_render(menu, menu->background, MENU_MAIN_PLAY, MENU_PAUSE_RESUME);
 
         rest(1000/WINDOW_FPS);
     }
-    ec_menu_free(menu);
+
+    menu->quit = 0;
+}
+
+void ec_menu_pause_event(s_menu *menu)
+{
+    int choix;
+
+    if (window.mouseButtonLeft)
+    {
+        choix = ec_menu_item_get_hovered(menu, MENU_PAUSE_RESUME, MENU_LAST);
+
+        switch(choix)
+        {
+            case MENU_PAUSE_RESUME:
+                menu->stop = 1;
+                break;
+
+            case MENU_PAUSE_LOAD:
+                break;
+
+            case MENU_PAUSE_SAVE:
+                break;
+
+            case MENU_PAUSE_MENU:
+                menu->stop = 1;
+                game.quit = 1;
+                break;
+
+            case MENU_PAUSE_QUIT:
+                menu->stop = 1;
+                game.quit = 1;
+                window.quit = 1;
+                break;
+
+            default:
+                break;
+        }
+        window.mouseButtonLeft = 0;
+    }
+
+}
+
+
+void ec_menu_handle_pause(s_menu *menu)
+{
+
+    while (!menu->stop)
+    {
+        ec_allegro_update_event();
+        ec_menu_pause_event(menu);
+        ec_menu_render(menu, menu->pause, MENU_PAUSE_RESUME, MENU_LAST);
+
+        rest(1000/WINDOW_FPS);
+    }
+
+    menu->stop = 0;
 }
 
 

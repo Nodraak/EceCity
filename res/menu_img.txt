@@ -1,17 +1,37 @@
 pos.x pos.y
 
-HOVER PLAY
+HOVER MENU PLAY
 menu_play.bmp
 333 213
 
-HOVER LOAD
+HOVER MENU LOAD
 menu_load.bmp
 333 330
 
-HOVER RULES
+HOVER MENU RULES
 menu_rules.bmp
 333 451
 
-HOVER QUIT
+HOVER MENU QUIT
 menu_quit.bmp
 333 579
+
+HOVER PAUSE RESUME
+pause_resume.bmp
+332 152
+
+HOVER PAUSE LOAD
+pause_load.bmp
+332 248
+
+HOVER PAUSE SAVE
+pause_save.bmp
+332 337
+
+HOVER PAUSE MENU
+pause_menu.bmp
+332 432
+
+HOVER PAUSE QUIT
+pause_quit.bmp
+332 642

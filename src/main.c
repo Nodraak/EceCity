@@ -26,11 +26,12 @@ img :
 
 */
 
-void ec_main_handle_event(void)
+void ec_main_handle_event(s_menu *menu)
 {
     if (window.key[KEY_ESC])
-        //window.quit = 1;
-        game.quit = 1;
+    {
+        ec_menu_handle_pause(menu);
+    }
 
     if (window.key[KEY_N])
     {
@@ -72,37 +73,39 @@ void ec_main_render(void)
     blit(window.screen, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H); //Changement pour passer au BLIT
 }
 
-void ec_main_gameLoop(void)
+void ec_main_gameLoop(s_menu *menu)
 {
     while(!game.quit)
     {
         ec_allegro_update_event();
-        ec_main_handle_event();
+        ec_main_handle_event(menu);
         ec_main_render();
 
         rest(1000/WINDOW_FPS);
     }
-
+    game.quit = 0;
 }
 
 int main(void)
 {
+    s_menu *menu = NULL;
+
     ec_allegro_init();
     ec_game_init();
     ec_building_init_all();
 
+    menu = ec_menu_load();
+
     while (!window.quit)
     {
-        if (game.quit)
-            game.quit = 0;
+        ec_menu_menu(menu);
 
-        ec_menu_menu();
-
-        ec_main_gameLoop();
+        ec_main_gameLoop(menu);
     }
 
     ec_building_free_all();
     ec_game_free();
+    ec_menu_free(menu);
     ec_allegro_free();
 
     return EXIT_SUCCESS;
