@@ -2,6 +2,7 @@
 #define EC_GAME_H
 
 #define TOOLBAR_WIDTH       150
+#define TAX_PER_INHABITANT  10
 
 #include "ec_allegro.h"
 #include "ec_building.h"
@@ -29,12 +30,20 @@ typedef enum        _e_toolbar
     TOOLBAR_LAST
 }                   e_toolbar;
 
+typedef enum        _e_game_mode
+{
+    GAME_MODE_CAPITALIST = 0,
+    GAME_MODE_COMMUNIST,
+    GAME_MODE_LAST
+}                   e_game_mode;
+
 typedef struct  _s_game
 {
     int         time;
     int         money;
     int         pause;
     int         quit;
+    e_game_mode mode;
 
     int         people;
     int         elec_capacity;

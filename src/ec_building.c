@@ -234,19 +234,18 @@ s_building *ec_building_alloc(s_building *template, int y, int x)
     ret->pos.x = x;
     ret->pos.y = y;
 
-    game.people += template->people;
     game.elec_capacity += template->elec.produced;
     game.water_capacity += template->water.produced;
 
     return ret;
 }
 
-void ec_building_new(int board_y, int board_x)
+void ec_building_new(int board_y, int board_x, e_building type)
 {
     int i, j;
     s_building *new = NULL;
 
-    new = ec_building_alloc(&building_data[game.building_selected], board_y, board_x);
+    new = ec_building_alloc(&building_data[type], board_y, board_x);
     new->evolved = game.time;
 
     game.money -= building_data[game.building_selected].price;
@@ -255,10 +254,7 @@ void ec_building_new(int board_y, int board_x)
     {
         for (i = 0; i < new->size.x; ++i)
             game.board[board_y+j][board_x+i] = new;
-
     }
-
-    ec_game_on_building_new();
 }
 
 char *ec_game_building_enum_to_str(e_building type)

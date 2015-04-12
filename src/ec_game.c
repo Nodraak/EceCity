@@ -154,7 +154,8 @@ void ec_game_on_button_left(void)
                 && game.building_selected != BUILDING_NONE
                 && game.money >= building_data[game.building_selected].price)
             {
-                ec_building_new(board.y, board.x);
+                ec_building_new(board.y, board.x, game.building_selected);
+                ec_game_on_building_new();
             }
 
             window.mouseButtonLeft = 0;
@@ -201,10 +202,12 @@ void ec_game_on_building_new(void)
 
             if (b != NULL)
             {
+                s_vector2i pos = ec_utils_vector2i_make(i, j);
+
                 if (b->type == BUILDING_SUPPLY_WATER)
-                    game.water_used += ec_graph_supply_board(b, ec_utils_vector2i_make(i, j), ec_building_resrc_get_water);
+                    game.water_used += ec_graph_supply_board(b, pos, ec_building_resrc_get_water);
                 else if (b->type == BUILDING_SUPPLY_ELEC)
-                    game.elec_used += ec_graph_supply_board(b, ec_utils_vector2i_make(i, j), ec_building_resrc_get_elec);
+                    game.elec_used += ec_graph_supply_board(b, pos, ec_building_resrc_get_elec);
             }
         }
     }
@@ -225,6 +228,8 @@ void ec_game_on_building_new(void)
                 {
                     game.people += b->water.used;
                 }
+                else
+                    b->elec.used = 0;
             }
         }
     }
@@ -363,6 +368,64 @@ void ec_game_free_toolbar(void)
         destroy_bitmap(toolbar[compt].sprite);
 }
 
+
+int foo(s_building *old, int dir)
+{
+    int new_type;
+
+    if ((dir == -1 && old->type == BUILDING_HOUSE_NONE) || (dir == 1 && old->type == BUILDING_HOUSE_XL))
+        return 0;
+
+    new_type = old->type + dir;
+    ec_building_new(old->pos.y, old->pos.x, new_type);
+
+    game.water_capacity -= old->water.produced;
+    game.elec_capacity -= old->elec.produced;
+    game.money += building_data[new_type].price;
+
+    free(old);
+    return 1;
+}
+
+
 void ec_game_evolve(void)
 {
+    int i, j, evolved = 0;
+
+    for (j = 0; j < BOARD_LINE; ++j)
+    {
+        for (i = 0; i < BOARD_COL; ++i)
+        {
+            s_building *cur = game.board[j][i];
+
+            if (cur != NULL && ec_building_is_house(cur->type) && cur->evolved + BUILDING_EVOLVE_DELAY < game.time)
+            {
+                game.money += game.people * TAX_PER_INHABITANT;
+
+                if (cur->water.used != building_data[cur->type].water.used || cur->elec.used != building_data[cur->type].elec.used)
+                {
+                    evolved += foo(cur, -1);
+                }
+                else
+                {
+                    if (game.mode == GAME_MODE_CAPITALIST)
+                    {
+                        evolved += foo(cur, 1);
+                    }
+                    else if (game.mode == GAME_MODE_COMMUNIST)
+                    {
+                        if (1) //resrc
+                        {
+                            evolved += foo(cur, 1);
+                        }
+                    }
+                }
+
+                cur->evolved = game.time;
+            }
+        }
+    }
+
+    if (evolved)
+        ec_game_on_building_new();
 }
