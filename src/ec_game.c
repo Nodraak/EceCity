@@ -208,6 +208,26 @@ void ec_game_on_building_new(void)
             }
         }
     }
+
+    /* update nb_people */
+    game.people = 0;
+
+    for (j = 0; j < BOARD_LINE; ++j)
+    {
+        for (i = 0; i < BOARD_COL; ++i)
+        {
+            s_building *b = game.board[j][i];
+
+            if (b != NULL && ec_building_is_house(b->type)
+                && game.board[j][i]->pos.x == i && game.board[j][i]->pos.y == j)
+            {
+                if (b->elec.used == building_data[b->type].elec.used)
+                {
+                    game.people += b->water.used;
+                }
+            }
+        }
+    }
 }
 
 
