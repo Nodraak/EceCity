@@ -22,6 +22,8 @@ typedef enum        _e_building
     BUILDING_SUPPLY_ELEC,
     BUILDING_SUPPLY_WATER,
 
+    BUILDING_FIRE,
+
     BUILDING_LAST
 }                   e_building;
 
