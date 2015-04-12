@@ -208,23 +208,6 @@ void ec_game_on_building_new(void)
             }
         }
     }
-
-    /* update is_working */
-    for (j = 0; j < BOARD_LINE; ++j)
-    {
-        for (i = 0; i < BOARD_COL; ++i)
-        {
-            s_building *b = game.board[j][i];
-
-            if (b != NULL && ec_building_is_house(b->type))
-            {
-                if (b->water.used == building_data[b->type].water.used && b->elec.used == building_data[b->type].elec.used)
-                    b->is_working = 1;
-                else
-                    b->is_working = 0;
-            }
-        }
-    }
 }
 
 
@@ -256,7 +239,7 @@ void ec_game_render_board(BITMAP *s)
             if (ec_utils_cell_is_in_board(x, y) && game.board[y][x] != NULL
                 && game.board[y][x]->pos.x == x && game.board[y][x]->pos.y == y)
             {
-                ec_building_render(window.screen, game.board[y][x], x*BOARD_SIZE, y*BOARD_SIZE, x, y);
+                ec_building_render(window.screen, game.board[y][x], x, y);
             }
         }
     }

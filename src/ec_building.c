@@ -108,92 +108,119 @@ s_vector2i ec_building_get_blit_offset_iso(s_building *b)
     return b->blit_offset_iso;
 }
 
-void ec_building_render(BITMAP *s, s_building *cur, int coord_x, int coord_y, int x, int y)
+s_vector2i ec_building_get_stat_blit_offset_straight(s_building *b)
 {
-    if (game.layer == 0)
+    (void)b;
+    return ec_utils_vector2i_make(0, -20);
+}
+
+s_vector2i ec_building_get_stat_blit_offset_iso(s_building *b)
+{
+    (void)b;
+    return ec_utils_vector2i_make(20, -4);
+}
+
+void ec_get_resrc(s_building *cur, int *actual, int *max)
+{
+    if (ec_building_is_house(cur->type))
     {
-        /* sprite */
-        ec_graphic_stretch_sprite(s, cur, coord_x, coord_y);
+        s_ressource*(*get_resrc)(s_building *b) = NULL;
 
-        /* if not connected to water or elec, show sign */
-        if (!cur->is_working)
-        {
-            double i;
+        if (game.layer == 1)
+            get_resrc = ec_building_resrc_get_water;
+        else if (game.layer == 2)
+            get_resrc = ec_building_resrc_get_elec;
 
-            for (i = 0; i < 3; i+=0.1)
-            {
-                int coord_x2 = coord_x + cur->size.x*BOARD_SIZE;
-                int coord_y2 = coord_y + cur->size.y*BOARD_SIZE;
+        *actual = get_resrc(cur)->used;
+        *max = get_resrc(&building_data[cur->type])->used;
+    }
+    else if (game.layer == 2 && cur->type == BUILDING_SUPPLY_ELEC)
+    {
+        *max = ec_building_resrc_get_elec(&building_data[cur->type])->produced;
+        *actual = *max - ec_building_resrc_get_elec(cur)->produced;
+    }
+    else if (game.layer == 1 && cur->type == BUILDING_SUPPLY_WATER)
+    {
+        *max = ec_building_resrc_get_water(&building_data[cur->type])->produced;
+        *actual = *max - ec_building_resrc_get_water(cur)->produced;
+    }
 
-                ec_graphic_line(s, coord_x, coord_y+i, coord_x2, coord_y+i, makecol(128, 0, 0));
-                ec_graphic_line(s, coord_x2-i, coord_y, coord_x2-i, coord_y2, makecol(128, 0, 0));
-            }
-        }
+}
+
+int ec_get_color(int actual, int max, e_building type)
+{
+    int c = 0;
+
+    if (ec_building_is_house(type))
+    {
+        if (actual == max)
+            c = makecol(0, 128, 00);
+        else if (actual == 0)
+            c = makecol(230, 50, 50);
+        else
+            c = makecol(240, 120, 0);
     }
     else
     {
-        int w = game.board[y][x]->size.x;
-        int h = game.board[y][x]->size.y;
-        s_vector2d v1 = ec_utils_vector2d_make(x*BOARD_SIZE,                y*BOARD_SIZE);
-        s_vector2d v2 = ec_utils_vector2d_make(x*BOARD_SIZE,                y*BOARD_SIZE+h*BOARD_SIZE);
-        s_vector2d v3 = ec_utils_vector2d_make(x*BOARD_SIZE+w*BOARD_SIZE,   y*BOARD_SIZE+h*BOARD_SIZE);
-        s_vector2d v4 = ec_utils_vector2d_make(x*BOARD_SIZE+w*BOARD_SIZE,   y*BOARD_SIZE);
+        if (actual == 0)
+            c = makecol(0, 128, 00);
+        else if (actual == max)
+            c = makecol(230, 50, 50);
+        else
+            c = makecol(240, 120, 0);
+    }
 
-        if (game.board[y][x]->type == BUILDING_INFRA_ROAD)
+    return c;
+}
+
+void ec_building_render(BITMAP *s, s_building *cur, int x, int y)
+{
+    s_vector2i coord = ec_utils_vector2i_make(x*BOARD_SIZE, y*BOARD_SIZE);
+
+    if (game.layer == 0)
+    {
+        ec_graphic_stretch_sprite(s, cur, coord.x, coord.y);
+    }
+    else
+    {
+        /* building polygon */
+        int c = 0;
+        int w = cur->size.x*BOARD_SIZE;
+        int h = cur->size.y*BOARD_SIZE;
+        s_vector2d v1 = ec_utils_vector2d_make(coord.x,     coord.y);
+        s_vector2d v2 = ec_utils_vector2d_make(coord.x,     coord.y+h);
+        s_vector2d v3 = ec_utils_vector2d_make(coord.x+w,   coord.y+h);
+        s_vector2d v4 = ec_utils_vector2d_make(coord.x+w,   coord.y);
+
+        if (cur->type != BUILDING_INFRA_ROAD)
         {
-            int c = 0;
-
+            c = makecol(190, 190, 190);
+        }
+        else
+        {
             if (game.layer == 1)
                 c = makecol(50, 50, 230);
             else if (game.layer == 2)
                 c = makecol(230, 230, 50);
-
-            ec_graphic_polygon(s, v1, v2, v3, v4, c);
         }
-        else
+
+        ec_graphic_polygon(s, v1, v2, v3, v4, c);
+
+        /* building stat */
+        if (cur->type != BUILDING_INFRA_ROAD)
         {
-            int actual = -1, max = -1;
-
-            /* gray building */
-            s_vector2i pos = window.scale_coord_to_pxl(v1);
-            ec_graphic_polygon(s, v1, v2, v3, v4, makecol(190, 190, 190));
-
             /* get resrc stat */
-            if (ec_building_is_house(game.board[y][x]->type))
-            {
-                s_ressource*(*get_resrc)(s_building *b) = NULL;
-
-                if (game.layer == 1)
-                    get_resrc = ec_building_resrc_get_water;
-                else if (game.layer == 2)
-                    get_resrc = ec_building_resrc_get_elec;
-
-                actual = get_resrc(game.board[y][x])->used;
-                max = get_resrc(&building_data[game.board[y][x]->type])->used;
-            }
-            else if (game.layer == 2 && game.board[y][x]->type == BUILDING_SUPPLY_ELEC)
-            {
-                actual = ec_building_resrc_get_elec(game.board[y][x])->produced;
-                max = ec_building_resrc_get_elec(&building_data[game.board[y][x]->type])->produced;
-            }
-            else if (game.layer == 1 && game.board[y][x]->type == BUILDING_SUPPLY_WATER)
-            {
-                actual = ec_building_resrc_get_water(game.board[y][x])->produced;
-                max = ec_building_resrc_get_water(&building_data[game.board[y][x]->type])->produced;
-            }
+            int actual = -1, max = -1;
+            ec_get_resrc(cur, &actual, &max);
 
             /* show colored stat */
             if (actual != -1 && max != -1)
             {
-                int c = 0;
-                if (actual == max)
-                    c = makecol(0, 128, 00);
-                else if (actual == 0)
-                    c = makecol(230, 50, 50);
-                else
-                    c = makecol(240, 120, 0);
+                s_vector2i pos = window.scale_coord_to_pxl(ec_utils_vector2d_make(coord.x, coord.y));
+                s_vector2i offset = window.building_get_stat_blit_offset(cur);
+                int c = ec_get_color(actual, max, cur->type);
 
-                textprintf_ex(s, font, pos.x+20, pos.y-4, c, -1, "%d/%d", actual, max);
+                textprintf_ex(s, font, pos.x+offset.x, pos.y+offset.y, c, -1, "%d/%d", actual, max);
             }
         }
     }
@@ -206,9 +233,6 @@ s_building *ec_building_alloc(s_building *template, int y, int x)
     memcpy(ret, template, sizeof(s_building));
     ret->pos.x = x;
     ret->pos.y = y;
-
-    if (!ec_building_is_house(template->type))
-        ret->is_working = 1;
 
     game.people += template->people;
     game.elec_capacity += template->elec.produced;

@@ -55,6 +55,7 @@ void ec_allegro_init(void)
     window.scale_pxl_to_coord = ec_graphic_scale_pxl_to_coord_straight;
     window.building_get_sprite = ec_building_get_sprite_straight;
     window.building_get_blit_offset = ec_building_get_blit_offset_straight;
+    window.building_get_stat_blit_offset = ec_building_get_stat_blit_offset_straight;
 }
 
 void ec_allegro_update_event(void)
