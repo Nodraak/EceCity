@@ -7,6 +7,7 @@ void ec_menu_handle_event(s_menu *menu)
 
     if (window.mouseButtonLeft)
     {
+        //Vérification du clic souris sur une image
         choix = ec_menu_item_get_hovered(menu, MENU_MAIN_PLAY, MENU_PAUSE_RESUME);
 
         switch(choix)
@@ -16,6 +17,8 @@ void ec_menu_handle_event(s_menu *menu)
                 break;
 
             case MENU_MAIN_LOAD:
+                ec_save_load();
+                menu->quit = 1;
                 break;
 
             case MENU_MAIN_RULES:
@@ -48,7 +51,7 @@ s_menu *ec_menu_load(void)
         exit(EXIT_FAILURE);
     }
 
-    /* Initialisation des variables */
+    /* Initialisation des booléens du menu */
     nouv->quit = 0;
     nouv->stop = 0;
 
@@ -58,7 +61,6 @@ s_menu *ec_menu_load(void)
     nouv->pause = ec_utils_load_sprite("background_pause.bmp");
 
     //Chargement des images du menu
-
     int i;
     char tmp[1024];
     FILE *fic = NULL;
@@ -142,7 +144,6 @@ void ec_menu_render(s_menu *menu, BITMAP *fond, int start, int nbItem)
 
     /* flip */
     show_mouse(window.screen);
-    //draw_sprite(screen, window.screen, 0, 0);
     blit(window.screen, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H); //Changement pour passer au BLIT
 
 }
@@ -151,12 +152,14 @@ void ec_menu_free(s_menu *menu)
 {
     int compt;
 
+    /* Libération des images hovered du MENU et de la PAUSE*/
     for (compt = 0; compt < MENU_LAST; ++compt)
     {
         destroy_bitmap(menu->item[compt]->sprite);
         free(menu->item[compt]);
     }
 
+    /* Libération de la strcuture du MENU et des images d'arrière plan */
     free(menu->item);
     destroy_bitmap(menu->background);
     destroy_bitmap(menu->pause);
@@ -187,6 +190,7 @@ void ec_menu_pause_event(s_menu *menu)
 
     if (window.mouseButtonLeft)
     {
+        //Vérification du clic souris sur une image
         choix = ec_menu_item_get_hovered(menu, MENU_PAUSE_RESUME, MENU_LAST);
 
         switch(choix)
@@ -196,9 +200,12 @@ void ec_menu_pause_event(s_menu *menu)
                 break;
 
             case MENU_PAUSE_LOAD:
+                ec_save_load();
+                menu->stop = 1;
                 break;
 
             case MENU_PAUSE_SAVE:
+                ec_save_save();
                 break;
 
             case MENU_PAUSE_MENU:
@@ -218,6 +225,12 @@ void ec_menu_pause_event(s_menu *menu)
         window.mouseButtonLeft = 0;
     }
 
+    //PROBLEME: ==> RENDRE DEDANS IMMEDIATEMENT APRES LE 1ER ECHAP
+    /*if (window.key[KEY_ESC])
+    {
+        menu->stop = 1;
+    }*/
+
 }
 
 
@@ -235,24 +248,3 @@ void ec_menu_handle_pause(s_menu *menu)
 
     menu->stop = 0;
 }
-
-
-/*
-
-    todo
-
-    welcome menu + in game menu (maybe split in two files)
-
-    welcome
-        new game
-        load game
-        rules ?
-        save current game ?
-        delete save
-
-    in game
-        resume
-        save
-        exit
-
-*/

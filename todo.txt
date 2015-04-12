@@ -107,9 +107,10 @@ TODO CODE
 
 
 *MENU
-
-*PAUSE INTERNE (échap)
+==> JOUER ==> START A NEW GAME
 
 *SAVE
 ==> Autosave???
 ==> Multi-save (saving slot)
+==> METTRE UN MESSAGE QUAND SAVE COMPLETE
+==> Demander de save avant de quitter?

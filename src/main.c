@@ -90,19 +90,23 @@ int main(void)
 {
     s_menu *menu = NULL;
 
+    /* Chargement des éléments du JEU */
     ec_allegro_init();
     ec_game_init();
     ec_building_init_all();
-
     menu = ec_menu_load();
 
+    /* Boucle du Programme */
     while (!window.quit)
     {
+        /* Menu */
         ec_menu_menu(menu);
 
+        /* Boncle de Jeu */
         ec_main_gameLoop(menu);
     }
 
+    /* Libération de la mémoire et fermeture du programme */
     ec_building_free_all();
     ec_game_free();
     ec_menu_free(menu);
