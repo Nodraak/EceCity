@@ -7,9 +7,11 @@
 /*
     global struct + func
 */
-s_vector2i ec_graphic_scale_coord_to_pxl(s_vector2d c);
-double ec_graphic_scale_x_pxl_to_coord(s_vector2i c);
-double ec_graphic_scale_y_pxl_to_coord(s_vector2i c);
+
+s_vector2i ec_graphic_scale_coord_to_pxl_iso(s_vector2d c);
+s_vector2d ec_graphic_scale_pxl_to_coord_iso(s_vector2i p);
+s_vector2i ec_graphic_scale_coord_to_pxl_straight(s_vector2d c);
+s_vector2d ec_graphic_scale_pxl_to_coord_straight(s_vector2i p);
 
 void ec_graphic_line(BITMAP *s, double x1, double y1, double x2, double y2, int c);
 void ec_graphic_rectfill(BITMAP *s, int x1, int y1, int x2, int y2, int c);

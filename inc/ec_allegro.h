@@ -42,6 +42,9 @@ typedef struct  _s_window
 
     double      zoom;
     s_vector2i  offset;
+
+    s_vector2i  (*scale_coord_to_pxl)(s_vector2d c);
+    s_vector2d  (*scale_pxl_to_coord)(s_vector2i c);
 }               s_window;
 
 /*

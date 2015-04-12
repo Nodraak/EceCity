@@ -125,7 +125,7 @@ void ec_building_render(BITMAP *s, s_building *cur, int coord_x, int coord_y, in
             int actual = -1, max = -1;
 
             /* gray building */
-            s_vector2i pos = ec_graphic_scale_coord_to_pxl(v1);
+            s_vector2i pos = window.scale_coord_to_pxl(v1);
             ec_graphic_polygon(s, v1, v2, v3, v4, makecol(190, 190, 190));
 
             /* get resrc stat */

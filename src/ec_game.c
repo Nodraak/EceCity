@@ -142,19 +142,19 @@ void ec_game_on_button_left(void)
     {
         if (game.layer == 0)
         {
-            int pxl_x, pxl_y, board_x, board_y;
+            s_vector2d pxl;
+            s_vector2i board;
 
-            pxl_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
-            pxl_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
-            board_x = pxl_x/BOARD_SIZE;
-            board_y = pxl_y/BOARD_SIZE;
+            pxl = window.scale_pxl_to_coord(window.mousePos);
+            board.x = pxl.x/BOARD_SIZE;
+            board.y = pxl.y/BOARD_SIZE;
 
-            if (ec_utils_pxl_is_in_board(pxl_x, pxl_y)
-                && ec_building_have_space(board_y, board_x, building_data[game.building_selected].size)
+            if (ec_utils_pxl_is_in_board(pxl.x, pxl.y)
+                && ec_building_have_space(board.y, board.x, building_data[game.building_selected].size)
                 && game.building_selected != BUILDING_NONE
                 && game.money >= building_data[game.building_selected].price)
             {
-                ec_building_new(board_y, board_x);
+                ec_building_new(board.y, board.x);
             }
 
             window.mouseButtonLeft = 0;
@@ -264,15 +264,14 @@ void ec_game_render_board(BITMAP *s)
     /* hover */
     if (game.layer == 0 && game.building_selected != BUILDING_NONE)
     {
-        int coord_x = ec_graphic_scale_x_pxl_to_coord(window.mousePos);
-        int coord_y = ec_graphic_scale_y_pxl_to_coord(window.mousePos);
+        s_vector2d coord = window.scale_pxl_to_coord(window.mousePos);
 
-        if (ec_utils_pxl_is_in_board(coord_x, coord_y))
+        if (ec_utils_pxl_is_in_board(coord.x, coord.y))
         {
-            coord_x = coord_x/BOARD_SIZE*BOARD_SIZE;
-            coord_y = coord_y/BOARD_SIZE*BOARD_SIZE;
+            coord.x = ((int)coord.x/BOARD_SIZE)*BOARD_SIZE;
+            coord.y = ((int)coord.y/BOARD_SIZE)*BOARD_SIZE;
 
-            ec_graphic_stretch_sprite(s, &building_data[game.building_selected], coord_x, coord_y);
+            ec_graphic_stretch_sprite(s, &building_data[game.building_selected], coord.x, coord.y);
         }
     }
 }

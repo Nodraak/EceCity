@@ -7,6 +7,7 @@
 #include "ec_allegro.h"
 #include "ec_utils.h"   //Inutile??? ==> Déjà dans le .h
 #include "ec_game.h"
+#include "ec_graphic.h"
 
 s_window window;
 
@@ -49,6 +50,9 @@ void ec_allegro_init(void)
     window.zoom = 1;
     window.offset.x = 100;
     window.offset.y = -400;
+
+    window.scale_coord_to_pxl = ec_graphic_scale_coord_to_pxl_iso;
+    window.scale_pxl_to_coord = ec_graphic_scale_pxl_to_coord_iso;
 }
 
 void ec_allegro_update_event(void)

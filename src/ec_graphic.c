@@ -11,38 +11,60 @@
 #endif
 #define ANGLE 30
 
-s_vector2i ec_graphic_scale_coord_to_pxl(s_vector2d c)
+/* iso */
+
+s_vector2i ec_graphic_scale_coord_to_pxl_iso(s_vector2d c)
 {
     s_vector2i ret;
     ret.x = (cos(ANGLE*M_PI/180)*(c.x+c.y) + window.offset.x) * window.zoom;
-    ret.y = WINDOW_HEIGHT-((sin(ANGLE*M_PI/180)*(c.y-c.x) - window.offset.y) * window.zoom);
+    ret.y = (sin(ANGLE*M_PI/180)*(c.y-c.x) - window.offset.y) * window.zoom;
+    ret.y = WINDOW_HEIGHT-ret.y;
     return ret;
 }
 
-double ec_graphic_scale_x_pxl_to_coord(s_vector2i p)
+s_vector2d ec_graphic_scale_pxl_to_coord_iso(s_vector2i p)
 {
+    s_vector2d ret, tmp;
+
     p.y = WINDOW_HEIGHT-p.y;
 
-    p.x = p.x/window.zoom - window.offset.x;
-    p.y = p.y/window.zoom + window.offset.y;
+    tmp.x = p.x/window.zoom - window.offset.x;
+    tmp.y = p.y/window.zoom + window.offset.y;
+    ret.x = tmp.x/(2*cos(ANGLE*M_PI/180)) - tmp.y/(2*sin(ANGLE*M_PI/180));
 
-    return p.x/(2*cos(ANGLE*M_PI/180)) - p.y/(2*sin(ANGLE*M_PI/180));
+    tmp.x = p.x/window.zoom - window.offset.x;
+    tmp.y = p.y/window.zoom + window.offset.y;
+    ret.y = tmp.x/(2*cos(ANGLE*M_PI/180)) + tmp.y/(2*sin(ANGLE*M_PI/180));
+
+    return ret;
 }
 
-double ec_graphic_scale_y_pxl_to_coord(s_vector2i p)
+/* straight */
+
+s_vector2i ec_graphic_scale_coord_to_pxl_straight(s_vector2d c)
 {
-    p.y = WINDOW_HEIGHT-p.y;
-
-    p.x = p.x/window.zoom - window.offset.x;
-    p.y = p.y/window.zoom + window.offset.y;
-
-    return p.x/(2*cos(ANGLE*M_PI/180)) + p.y/(2*sin(ANGLE*M_PI/180));
+    s_vector2i ret;
+    ret.x = (c.x + window.offset.x) * window.zoom;
+    ret.y = (c.y - window.offset.y) * window.zoom;
+    ret.y = WINDOW_HEIGHT-ret.y;
+    return ret;
 }
+
+s_vector2d ec_graphic_scale_pxl_to_coord_straight(s_vector2i p)
+{
+    s_vector2d ret;
+    p.y = WINDOW_HEIGHT-p.y;
+    ret.x = (p.x / window.zoom) - window.offset.x;
+    ret.y = (p.y / window.zoom) + window.offset.y;
+    return ret;
+}
+
+/* graphics */
 
 void _scale_and_call(void(*f)(BITMAP*, int, int, int, int, int), BITMAP* s, s_vector2d c1, s_vector2d c2, int c)
 {
-    s_vector2i v1 = ec_graphic_scale_coord_to_pxl(c1);
-    s_vector2i v2 = ec_graphic_scale_coord_to_pxl(c2);
+    s_vector2i v1 = window.scale_coord_to_pxl(c1);
+    s_vector2i v2 = window.scale_coord_to_pxl(c2);
 
     f(s, v1.x, v1.y, v2.x, v2.y, c);
 }
@@ -64,14 +86,14 @@ void ec_graphic_stretch_sprite(BITMAP *dest, s_building *b, int x1, int y1)
     fixed scale = ftofix(window.zoom/10);
     double fix_pxl = -b->size.y*(BOARD_SIZE/2*window.zoom);
 
-    s_vector2i scaled = ec_graphic_scale_coord_to_pxl(ec_utils_vector2d_make(x1, y1));
+    s_vector2i scaled = window.scale_coord_to_pxl (ec_utils_vector2d_make(x1, y1));
 
     rotate_scaled_sprite(dest, b->sprite, scaled.x, scaled.y+fix_pxl, angle, scale);
 }
 
 void ec_graphic_putpixel(BITMAP *s, double x, double y, int c)
 {
-    s_vector2i scaled = ec_graphic_scale_coord_to_pxl(ec_utils_vector2d_make(x, y));
+    s_vector2i scaled = window.scale_coord_to_pxl (ec_utils_vector2d_make(x, y));
 
     putpixel(s, scaled.x, scaled.y, c);
 }
@@ -80,10 +102,10 @@ void ec_graphic_polygon(BITMAP *s, s_vector2d v1, s_vector2d v2, s_vector2d v3, 
 {
     int vertices[4*2];
 
-    s_vector2i v1_s = ec_graphic_scale_coord_to_pxl(v1);
-    s_vector2i v2_s = ec_graphic_scale_coord_to_pxl(v2);
-    s_vector2i v3_s = ec_graphic_scale_coord_to_pxl(v3);
-    s_vector2i v4_s = ec_graphic_scale_coord_to_pxl(v4);
+    s_vector2i v1_s = window.scale_coord_to_pxl (v1);
+    s_vector2i v2_s = window.scale_coord_to_pxl (v2);
+    s_vector2i v3_s = window.scale_coord_to_pxl (v3);
+    s_vector2i v4_s = window.scale_coord_to_pxl (v4);
 
     vertices[0] = v1_s.x;
     vertices[1] = v1_s.y;

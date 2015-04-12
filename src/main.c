@@ -17,8 +17,12 @@ KEY_ESC : exit
 ARROWS : move the board
 KEY_P / KEY_M : zoom
 KEY_N : next building
+
 KEY_S : save
 KEY_L : load
+
+KEY_I : iso
+KEY_O : straight
 
 img :
     rotate = 45
@@ -50,6 +54,19 @@ void ec_main_handle_event(s_menu *menu)
         ec_save_load();
         ec_game_on_building_new();
         window.key[KEY_L] = 0;
+    }
+
+    if (window.key[KEY_I])
+    {
+        window.scale_coord_to_pxl = ec_graphic_scale_coord_to_pxl_iso;
+        window.scale_pxl_to_coord = ec_graphic_scale_pxl_to_coord_iso;
+        window.key[KEY_I] = 0;
+    }
+    if (window.key[KEY_O])
+    {
+        window.scale_coord_to_pxl = ec_graphic_scale_coord_to_pxl_straight;
+        window.scale_pxl_to_coord = ec_graphic_scale_pxl_to_coord_straight;
+        window.key[KEY_O] = 0;
     }
 
     if (window.mouseButtonLeft)
