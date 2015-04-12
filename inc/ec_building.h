@@ -65,6 +65,8 @@ s_vector2i ec_building_get_stat_blit_offset_iso(s_building *b);
 void ec_building_render(BITMAP *s, s_building *cur, int x, int y);
 s_building *ec_building_alloc(s_building *template, int y, int x);
 void ec_building_new(int board_y, int board_x, e_building type);
+int ec_building_evolve(s_building *old, int dir);
+
 char *ec_game_building_enum_to_str(e_building type);
 
 int ec_building_have_space(int board_y, int board_x, s_vector2i size);

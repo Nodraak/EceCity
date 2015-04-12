@@ -257,6 +257,27 @@ void ec_building_new(int board_y, int board_x, e_building type)
     }
 }
 
+int ec_building_evolve(s_building *old, int dir)
+{
+    int new_type;
+
+    if ((dir == -1 && old->type == BUILDING_HOUSE_NONE) || (dir == 1 && old->type == BUILDING_HOUSE_XL))
+    {
+        old->evolved = game.time;
+        return 0;
+    }
+
+    new_type = old->type + dir;
+    ec_building_new(old->pos.y, old->pos.x, new_type);
+
+    game.water_capacity -= old->water.produced;
+    game.elec_capacity -= old->elec.produced;
+    game.money += building_data[new_type].price;
+
+    free(old);
+    return 1;
+}
+
 char *ec_game_building_enum_to_str(e_building type)
 {
     char *data[BUILDING_LAST] = {

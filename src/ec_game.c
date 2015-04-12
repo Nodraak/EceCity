@@ -369,24 +369,27 @@ void ec_game_free_toolbar(void)
 }
 
 
-int foo(s_building *old, int dir)
+int count_missing_resrc(void)
 {
-    int new_type;
+    int i, j;
+    int missing_resrc = 0;
 
-    if ((dir == -1 && old->type == BUILDING_HOUSE_NONE) || (dir == 1 && old->type == BUILDING_HOUSE_XL))
-        return 0;
+    for (j = 0; j < BOARD_LINE; ++j)
+    {
+        for (i = 0; i < BOARD_COL; ++i)
+        {
+            s_building *cur = game.board[j][i];
 
-    new_type = old->type + dir;
-    ec_building_new(old->pos.y, old->pos.x, new_type);
+            if (cur != NULL && ec_building_is_house(cur->type))
+            {
+                if (cur->water.used != building_data[cur->type].water.used || cur->elec.used != building_data[cur->type].elec.used)
+                    missing_resrc += building_data[cur->type].water.used - cur->water.used;
+            }
+        }
+    }
 
-    game.water_capacity -= old->water.produced;
-    game.elec_capacity -= old->elec.produced;
-    game.money += building_data[new_type].price;
-
-    free(old);
-    return 1;
+    return missing_resrc;
 }
-
 
 void ec_game_evolve(void)
 {
@@ -404,20 +407,20 @@ void ec_game_evolve(void)
 
                 if (cur->water.used != building_data[cur->type].water.used || cur->elec.used != building_data[cur->type].elec.used)
                 {
-                    evolved += foo(cur, -1);
+                    evolved += ec_building_evolve(cur, -1);
                 }
                 else
                 {
                     if (game.mode == GAME_MODE_CAPITALIST)
                     {
-                        evolved += foo(cur, 1);
+                        evolved += ec_building_evolve(cur, 1);
                     }
                     else if (game.mode == GAME_MODE_COMMUNIST)
                     {
-                        if (1) //resrc
-                        {
-                            evolved += foo(cur, 1);
-                        }
+                        evolved += ec_building_evolve(cur, 1);
+
+                        if (count_missing_resrc() > 0)
+                            evolved -= ec_building_evolve(cur, -1);
                     }
                 }
 
