@@ -42,6 +42,7 @@ void ec_building_init_all(void)
     fgets(tmp, 1024-1, f);
     fgets(tmp, 1024-1, f);
     fgets(tmp, 1024-1, f);
+    fgets(tmp, 1024-1, f);
 
     for (i = 0; i < BUILDING_LAST; ++i)
     {
@@ -70,6 +71,8 @@ void ec_building_init_all(void)
         fgets(tmp, 1024-1, f);
         sscanf(tmp, "%d %d %d %d", &cur->blit_offset_straight.x, &cur->blit_offset_straight.y,
             &cur->blit_offset_iso.x, &cur->blit_offset_iso.y);
+        fgets(tmp, 1024-1, f);
+        sscanf(tmp, "%lf", &cur->zoom);
 
         fgets(tmp, 1024-1, f);
     }
@@ -177,21 +180,24 @@ void ec_building_render(BITMAP *s, s_building *cur, int x, int y)
 {
     s_vector2i coord = ec_utils_vector2i_make(x*BOARD_SIZE, y*BOARD_SIZE);
 
+    int c = 0;
+    int w = cur->size.x*BOARD_SIZE;
+    int h = cur->size.y*BOARD_SIZE;
+    s_vector2d v1 = ec_utils_vector2d_make(coord.x,     coord.y);
+    s_vector2d v2 = ec_utils_vector2d_make(coord.x,     coord.y+h);
+    s_vector2d v3 = ec_utils_vector2d_make(coord.x+w,   coord.y+h);
+    s_vector2d v4 = ec_utils_vector2d_make(coord.x+w,   coord.y);
+
     if (game.layer == 0)
     {
+        c = makecol(150, 150, 150);
+        ec_graphic_polygon(s, v1, v2, v3, v4, c);
+
         ec_graphic_stretch_sprite(s, cur, coord.x, coord.y);
     }
     else
     {
         /* building polygon */
-        int c = 0;
-        int w = cur->size.x*BOARD_SIZE;
-        int h = cur->size.y*BOARD_SIZE;
-        s_vector2d v1 = ec_utils_vector2d_make(coord.x,     coord.y);
-        s_vector2d v2 = ec_utils_vector2d_make(coord.x,     coord.y+h);
-        s_vector2d v3 = ec_utils_vector2d_make(coord.x+w,   coord.y+h);
-        s_vector2d v4 = ec_utils_vector2d_make(coord.x+w,   coord.y);
-
         if (cur->type != BUILDING_INFRA_ROAD)
         {
             c = makecol(190, 190, 190);
@@ -248,7 +254,7 @@ void ec_building_new(int board_y, int board_x, e_building type)
     new = ec_building_alloc(&building_data[type], board_y, board_x);
     new->evolved = game.time;
 
-    game.money -= building_data[game.building_selected].price;
+    game.money -= building_data[type].price;
 
     for (j = 0; j < new->size.y; ++j)
     {

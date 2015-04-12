@@ -83,15 +83,12 @@ void ec_graphic_rectfill(BITMAP *s, int x1, int y1, int x2, int y2, int c)
 void ec_graphic_stretch_sprite(BITMAP *dest, s_building *b, int x1, int y1)
 {
     BITMAP *src = window.building_get_sprite(b);
-
-    fixed angle = ftofix(0);//ANGLE*M_PI/180);
-    fixed scale = ftofix(window.zoom/10);
-
-    double fix_pxl = -window.building_get_blit_offset(b).y;
-
+    fixed scale = ftofix(b->zoom*window.zoom);
+    double fix_x = -window.building_get_blit_offset(b).x * window.zoom;
+    double fix_y = -window.building_get_blit_offset(b).y * window.zoom;
     s_vector2i pos = window.scale_coord_to_pxl(ec_utils_vector2d_make(x1, y1));
 
-    rotate_scaled_sprite(dest, src, pos.x, pos.y+fix_pxl, angle, scale);
+    rotate_scaled_sprite(dest, src, pos.x+fix_x, pos.y+fix_y, ftofix(0), scale);
 }
 
 void ec_graphic_putpixel(BITMAP *s, double x, double y, int c)

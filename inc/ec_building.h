@@ -39,6 +39,7 @@ typedef struct      _s_building
     BITMAP          *sprite_iso;
     s_vector2i      blit_offset_straight;
     s_vector2i      blit_offset_iso;
+    double          zoom;
 
     s_vector2i      pos;
     s_vector2i      size;
