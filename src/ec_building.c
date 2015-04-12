@@ -41,6 +41,7 @@ void ec_building_init_all(void)
     fgets(tmp, 1024-1, f);
     fgets(tmp, 1024-1, f);
     fgets(tmp, 1024-1, f);
+    fgets(tmp, 1024-1, f);
 
     for (i = 0; i < BUILDING_LAST; ++i)
     {
@@ -53,7 +54,10 @@ void ec_building_init_all(void)
 
         fgets(tmp, 1024-1, f);
         tmp[strlen(tmp)-1] = '\0';
-        cur->sprite = ec_utils_load_sprite(tmp);
+        cur->sprite_straight = ec_utils_load_sprite(tmp);
+        fgets(tmp, 1024-1, f);
+        tmp[strlen(tmp)-1] = '\0';
+        cur->sprite_iso = ec_utils_load_sprite(tmp);
 
         fgets(tmp, 1024-1, f);
         sscanf(tmp, "%d %d", &cur->price, &cur->people);
@@ -63,6 +67,9 @@ void ec_building_init_all(void)
         sscanf(tmp, "%d %d", &cur->water.used, &cur->water.produced);
         fgets(tmp, 1024-1, f);
         sscanf(tmp, "%d %d", &cur->size.x, &cur->size.y);
+        fgets(tmp, 1024-1, f);
+        sscanf(tmp, "%d %d %d %d", &cur->blit_offset_straight.x, &cur->blit_offset_straight.y,
+            &cur->blit_offset_iso.x, &cur->blit_offset_iso.y);
 
         fgets(tmp, 1024-1, f);
     }
@@ -75,7 +82,30 @@ void ec_building_free_all(void)
     int i;
 
     for (i = 0; i < BUILDING_LAST; ++i)
-        destroy_bitmap(building_data[i].sprite);
+    {
+        destroy_bitmap(building_data[i].sprite_straight);
+        destroy_bitmap(building_data[i].sprite_iso);
+    }
+}
+
+BITMAP *ec_building_get_sprite_straight(s_building *b)
+{
+    return b->sprite_straight;
+}
+
+BITMAP *ec_building_get_sprite_iso(s_building *b)
+{
+    return b->sprite_iso;
+}
+
+s_vector2i ec_building_get_blit_offset_straight(s_building *b)
+{
+    return b->blit_offset_straight;
+}
+
+s_vector2i ec_building_get_blit_offset_iso(s_building *b)
+{
+    return b->blit_offset_iso;
 }
 
 void ec_building_render(BITMAP *s, s_building *cur, int coord_x, int coord_y, int x, int y)

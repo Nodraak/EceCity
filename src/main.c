@@ -52,7 +52,6 @@ void ec_main_handle_event(s_menu *menu)
     if (window.key[KEY_L])
     {
         ec_save_load();
-        ec_game_on_building_new();
         window.key[KEY_L] = 0;
     }
 
@@ -60,12 +59,16 @@ void ec_main_handle_event(s_menu *menu)
     {
         window.scale_coord_to_pxl = ec_graphic_scale_coord_to_pxl_iso;
         window.scale_pxl_to_coord = ec_graphic_scale_pxl_to_coord_iso;
+        window.building_get_sprite = ec_building_get_sprite_iso;
+        window.building_get_blit_offset = ec_building_get_blit_offset_iso;
         window.key[KEY_I] = 0;
     }
     if (window.key[KEY_O])
     {
         window.scale_coord_to_pxl = ec_graphic_scale_coord_to_pxl_straight;
         window.scale_pxl_to_coord = ec_graphic_scale_pxl_to_coord_straight;
+        window.building_get_sprite = ec_building_get_sprite_straight;
+        window.building_get_blit_offset = ec_building_get_blit_offset_straight;
         window.key[KEY_O] = 0;
     }
 

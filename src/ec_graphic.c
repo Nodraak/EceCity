@@ -82,18 +82,21 @@ void ec_graphic_rectfill(BITMAP *s, int x1, int y1, int x2, int y2, int c)
 
 void ec_graphic_stretch_sprite(BITMAP *dest, s_building *b, int x1, int y1)
 {
-    fixed angle = ftofix(ANGLE*M_PI/180);
+    BITMAP *src = window.building_get_sprite(b);
+
+    fixed angle = ftofix(0);//ANGLE*M_PI/180);
     fixed scale = ftofix(window.zoom/10);
-    double fix_pxl = -b->size.y*(BOARD_SIZE/2*window.zoom);
 
-    s_vector2i scaled = window.scale_coord_to_pxl (ec_utils_vector2d_make(x1, y1));
+    double fix_pxl = -window.building_get_blit_offset(b).y;
 
-    rotate_scaled_sprite(dest, b->sprite, scaled.x, scaled.y+fix_pxl, angle, scale);
+    s_vector2i pos = window.scale_coord_to_pxl(ec_utils_vector2d_make(x1, y1));
+
+    rotate_scaled_sprite(dest, src, pos.x, pos.y+fix_pxl, angle, scale);
 }
 
 void ec_graphic_putpixel(BITMAP *s, double x, double y, int c)
 {
-    s_vector2i scaled = window.scale_coord_to_pxl (ec_utils_vector2d_make(x, y));
+    s_vector2i scaled = window.scale_coord_to_pxl(ec_utils_vector2d_make(x, y));
 
     putpixel(s, scaled.x, scaled.y, c);
 }
@@ -102,10 +105,10 @@ void ec_graphic_polygon(BITMAP *s, s_vector2d v1, s_vector2d v2, s_vector2d v3, 
 {
     int vertices[4*2];
 
-    s_vector2i v1_s = window.scale_coord_to_pxl (v1);
-    s_vector2i v2_s = window.scale_coord_to_pxl (v2);
-    s_vector2i v3_s = window.scale_coord_to_pxl (v3);
-    s_vector2i v4_s = window.scale_coord_to_pxl (v4);
+    s_vector2i v1_s = window.scale_coord_to_pxl(v1);
+    s_vector2i v2_s = window.scale_coord_to_pxl(v2);
+    s_vector2i v3_s = window.scale_coord_to_pxl(v3);
+    s_vector2i v4_s = window.scale_coord_to_pxl(v4);
 
     vertices[0] = v1_s.x;
     vertices[1] = v1_s.y;

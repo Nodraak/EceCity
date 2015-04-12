@@ -51,8 +51,10 @@ void ec_allegro_init(void)
     window.offset.x = 100;
     window.offset.y = -400;
 
-    window.scale_coord_to_pxl = ec_graphic_scale_coord_to_pxl_iso;
-    window.scale_pxl_to_coord = ec_graphic_scale_pxl_to_coord_iso;
+    window.scale_coord_to_pxl = ec_graphic_scale_coord_to_pxl_straight;
+    window.scale_pxl_to_coord = ec_graphic_scale_pxl_to_coord_straight;
+    window.building_get_sprite = ec_building_get_sprite_straight;
+    window.building_get_blit_offset = ec_building_get_blit_offset_straight;
 }
 
 void ec_allegro_update_event(void)

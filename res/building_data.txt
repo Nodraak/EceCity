@@ -2,66 +2,85 @@ price people
 elec.used elec.produced
 water.used water.produced
 size.x size.y
+blit_offset_straight.x blit_offset_straight.y blit_offset_iso.x blit_offset_iso.y
 
 BUILDING_NONE
-none.bmp
+building_straight_none.bmp
+building_iso_none.bmp
 -1 -1
 -1 -1
 -1 -1
 -1 -1
+-1 -1 -1 -1
 
 BUILDING_INFRA_ROAD
-infra_road.bmp
+building_straight_infra_road.bmp
+building_iso_infra_road.bmp
 10 0
 0 0
 0 0
 1 1
+0 20 0 10
 
 BUILDING_HOUSE_NONE
-house_none.bmp
+building_straight_house_none.bmp
+building_iso_house_none.bmp
 1000 0
 100 0
 100 0
 3 3
+0 60 0 30
 
 BUILDING_HOUSE_SMALL
-house_small.bmp
+building_straight_house_small.bmp
+building_iso_house_small.bmp
 1000 10
 10 0
 10 0
 3 3
+0 60 0 30
 
 BUILDING_HOUSE_MEDIUM
-house_medium.bmp
+building_straight_house_medium.bmp
+building_iso_house_medium.bmp
 1000 50
 50 0
 50 0
 3 3
+0 60 0 30
 
 BUILDING_HOUSE_LARGE
-house_large.bmp
+building_straight_house_large.bmp
+building_iso_house_large.bmp
 1000 100
 100 0
 100 0
 3 3
+0 60 0 30
 
 BUILDING_HOUSE_XL
-house_xl.bmp
+building_straight_house_xl.bmp
+building_iso_house_xl.bmp
 1000 1000
 1000 0
 1000 0
 3 3
+0 60 0 30
 
 BUILDING_SUPPLY_ELEC
-supply_elec.bmp
+building_straight_supply_elec.bmp
+building_iso_supply_elec.bmp
 100000 0
 0 5000
 0 0
 4 6
+0 120 0 60
 
 BUILDING_SUPPLY_WATER
-supply_water.bmp
+building_straight_supply_water.bmp
+building_iso_supply_water.bmp
 100000 0
 0 0
 0 5000
 4 6
+0 120 0 60

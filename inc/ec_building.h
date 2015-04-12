@@ -35,7 +35,10 @@ typedef struct      _s_ressource
 typedef struct      _s_building
 {
     e_building      type;
-    BITMAP          *sprite;
+    BITMAP          *sprite_straight;
+    BITMAP          *sprite_iso;
+    s_vector2i      blit_offset_straight;
+    s_vector2i      blit_offset_iso;
 
     s_vector2i      pos;
     s_vector2i      size;
@@ -52,6 +55,11 @@ extern s_building building_data[BUILDING_LAST];
 
 void ec_building_init_all(void);
 void ec_building_free_all(void);
+BITMAP *ec_building_get_sprite_straight(s_building *b);
+BITMAP *ec_building_get_sprite_iso(s_building *b);
+s_vector2i ec_building_get_blit_offset_straight(s_building *b);
+s_vector2i ec_building_get_blit_offset_iso(s_building *b);
+
 void ec_building_render(BITMAP *s, s_building *cur, int coord_x, int coord_y, int x, int y);
 s_building *ec_building_alloc(s_building *template, int y, int x);
 void ec_building_new(int board_y, int board_x);

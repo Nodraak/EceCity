@@ -118,4 +118,6 @@ void ec_save_load(void)
     }
 
     fclose(f);
+
+    ec_game_on_building_new();
 }
