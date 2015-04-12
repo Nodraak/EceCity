@@ -181,7 +181,7 @@ void ec_game_on_building_new(void)
                     b->elec.used = 0;
                     b->water.used = 0;
                 }
-                else /* if supply */
+                else
                 {
                     b->elec.produced = building_data[b->type].elec.produced;
                     b->water.produced = building_data[b->type].water.produced;
@@ -250,7 +250,7 @@ void ec_game_render_board(BITMAP *s)
     for (j = 0; j < BOARD_LINE+1; ++j)
     {
         for (i = 0; i < BOARD_COL+1; ++i)
-            ec_graphic_putpixel(s, i*BOARD_SIZE, j*BOARD_SIZE, makecol(128, 128, 128));
+            ec_graphic_putpixel(s, i*BOARD_SIZE, j*BOARD_SIZE, makecol(64, 64, 64));
     }
 
     /* board (buildings) */
@@ -403,28 +403,30 @@ void ec_game_evolve(void)
 
             if (cur != NULL && ec_building_is_house(cur->type) && cur->evolved + BUILDING_EVOLVE_DELAY < game.time)
             {
-                game.money += game.people * TAX_PER_INHABITANT;
-
                 if (cur->water.used != building_data[cur->type].water.used || cur->elec.used != building_data[cur->type].elec.used)
                 {
+                    game.money += cur->water.used * TAX_PER_INHABITANT;
                     evolved += ec_building_evolve(cur, -1);
                 }
                 else
                 {
                     if (game.mode == GAME_MODE_CAPITALIST)
                     {
+                        game.money += cur->water.used * TAX_PER_INHABITANT;
                         evolved += ec_building_evolve(cur, 1);
                     }
                     else if (game.mode == GAME_MODE_COMMUNIST)
                     {
+                        int tax = cur->water.used * TAX_PER_INHABITANT;
+
                         evolved += ec_building_evolve(cur, 1);
 
-                        if (count_missing_resrc() > 0)
+                        if (count_missing_resrc() > 0)      /* revert */
                             evolved -= ec_building_evolve(cur, -1);
+                        else                                /* commit */
+                            game.money += tax;
                     }
                 }
-
-                cur->evolved = game.time;
             }
         }
     }
