@@ -35,6 +35,7 @@ void ec_main_handle_event(s_menu *menu)
     if (window.key[KEY_ESC])
     {
         ec_menu_handle_pause(menu);
+        window.key[KEY_N] = 0;
     }
 
     if (window.key[KEY_N])

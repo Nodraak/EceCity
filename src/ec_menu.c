@@ -23,6 +23,7 @@ void ec_menu_handle_event(s_menu *menu)
                 break;
 
             case MENU_MAIN_RULES:
+                allegro_message("\t   RULES\n\n\nBienvenue a vous maire de ECE-city\nMission: Faire prosperer votre ville\nchoississez votre mode de jeu..... a completer");
                 break;
 
             case MENU_MAIN_QUIT:
