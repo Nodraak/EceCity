@@ -458,6 +458,8 @@ void ec_game_evolve(void)
                     game.board[j][i]->is_burning = game.time;
                 cest_le_jeu_ma_pauvre_lucette(i, j);
 
+                if (cur != NULL)
+                {
                 /* downgrade */
                 if (cur->water.used != building_data[cur->type].water.used || cur->elec.used != building_data[cur->type].elec.used)
                 {
@@ -483,6 +485,7 @@ void ec_game_evolve(void)
                         else                                /* commit */
                             game.money += tax;
                     }
+                }
                 }
             }
         }
