@@ -13,6 +13,7 @@ void ec_menu_handle_event(s_menu *menu)
         switch(choix)
         {
             case MENU_MAIN_PLAY:
+                ec_game_init();
                 menu->quit = 1;
                 break;
 

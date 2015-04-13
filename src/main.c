@@ -114,6 +114,7 @@ int main(void)
     s_menu *menu = NULL;
 
     /* Chargement des éléments du JEU */
+    srand(42);
     ec_allegro_init();
     ec_game_init();
     ec_building_init_all();

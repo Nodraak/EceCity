@@ -49,6 +49,7 @@ typedef struct      _s_building
     int             price;
     int             people;
     int             evolved;        /* time of last evolve */
+    int             is_burning;
 
     s_ressource     elec;
     s_ressource     water;

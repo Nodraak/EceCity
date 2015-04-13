@@ -414,6 +414,33 @@ int count_missing_resrc(void)
     return missing_resrc;
 }
 
+int peut_etre_pas_de_bol(void)
+{
+    return (rand() % 40) == 0;
+}
+
+void cest_le_jeu_ma_pauvre_lucette(int i, int j)
+{
+    int x, y;
+    s_building *cur = game.board[j][i];
+
+    if (cur->is_burning)
+    {
+        if (game.time - cur->is_burning > 30)
+        {
+            for (x = 0; x < cur->size.x; ++x)
+            {
+                for (y = 0; y < cur->size.y; ++y)
+                {
+                    game.board[j+y][i+x] = NULL;
+                }
+            }
+        }
+
+        free(cur);
+    }
+}
+
 void ec_game_evolve(void)
 {
     int i, j, evolved = 0;
@@ -426,11 +453,18 @@ void ec_game_evolve(void)
 
             if (cur != NULL && ec_building_is_house(cur->type) && cur->evolved + BUILDING_EVOLVE_DELAY < game.time)
             {
+                /* fire */
+                if (peut_etre_pas_de_bol() && !game.board[j][i]->is_burning)
+                    game.board[j][i]->is_burning = game.time;
+                cest_le_jeu_ma_pauvre_lucette(i, j);
+
+                /* downgrade */
                 if (cur->water.used != building_data[cur->type].water.used || cur->elec.used != building_data[cur->type].elec.used)
                 {
                     game.money += cur->water.used * TAX_PER_INHABITANT;
                     evolved += ec_building_evolve(cur, -1);
                 }
+                /* upgrade */
                 else
                 {
                     if (game.mode == GAME_MODE_CAPITALIST)

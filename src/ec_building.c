@@ -200,7 +200,10 @@ void ec_building_render(BITMAP *s, s_building *cur, int x, int y)
 
     if (game.layer == 0)
     {
-        c = makecol(150, 150, 150);
+        if (cur->is_burning)
+            c = makecol(230, 50, 50);
+        else
+            c = makecol(150, 150, 150);
         ec_graphic_polygon(s, v1, v2, v3, v4, c);
 
         ec_graphic_stretch_sprite(s, cur, coord.x, coord.y);

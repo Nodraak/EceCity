@@ -56,6 +56,8 @@ void ec_save_load(void)
     int i, j, sx, sy;
     char tmp[1024];
 
+    ec_game_init();
+
     f = fopen("game.ec", "r");
     if (f == NULL)
         ec_utils_abort("fopen");
