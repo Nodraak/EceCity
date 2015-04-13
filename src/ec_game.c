@@ -346,6 +346,11 @@ void ec_game_render_menu(BITMAP *s)
 
     if (game.pause)
         textprintf_ex(s, font, 512, 5, makecol(255, 0, 0), -1, "JEU EN PAUSE");
+
+    if (game.mode == GAME_MODE_CAPITALIST)
+        textprintf_ex(s, font, 15, 600, makecol(0, 0, 0), -1, "Mode capitaliste");
+    else
+        textprintf_ex(s, font, 15, 600, makecol(0, 0, 0), -1, "Mode communiste");
 }
 
 void ec_game_load_toolbar(void)
@@ -414,11 +419,6 @@ int count_missing_resrc(void)
     return missing_resrc;
 }
 
-int peut_etre_pas_de_bol(void)
-{
-    return (rand() % 40) == 0;
-}
-
 void cest_le_jeu_ma_pauvre_lucette(int i, int j)
 {
     int x, y;
@@ -435,9 +435,9 @@ void cest_le_jeu_ma_pauvre_lucette(int i, int j)
                     game.board[j+y][i+x] = NULL;
                 }
             }
-        }
 
-        free(cur);
+            free(cur);
+        }
     }
 }
 
@@ -454,9 +454,10 @@ void ec_game_evolve(void)
             if (cur != NULL && ec_building_is_house(cur->type) && cur->evolved + BUILDING_EVOLVE_DELAY < game.time)
             {
                 /* fire */
-                if (peut_etre_pas_de_bol() && !game.board[j][i]->is_burning)
+                if ((rand() % 40) == 0 && !game.board[j][i]->is_burning)
                     game.board[j][i]->is_burning = game.time;
                 cest_le_jeu_ma_pauvre_lucette(i, j);
+                cur = game.board[j][i];
 
                 if (cur != NULL)
                 {
@@ -479,6 +480,9 @@ void ec_game_evolve(void)
                         int tax = cur->water.used * TAX_PER_INHABITANT;
 
                         evolved += ec_building_evolve(cur, 1);
+                        cur = game.board[j][i];
+
+                        ec_game_on_building_new();
 
                         if (count_missing_resrc() > 0)      /* revert */
                             evolved -= ec_building_evolve(cur, -1);
