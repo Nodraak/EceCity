@@ -426,7 +426,7 @@ void cest_le_jeu_ma_pauvre_lucette(int i, int j)
 
     if (cur->is_burning)
     {
-        if (game.time - cur->is_burning > 30)
+        if (game.time - cur->is_burning > 15)
         {
             for (x = 0; x < cur->size.x; ++x)
             {
@@ -454,7 +454,7 @@ void ec_game_evolve(void)
             if (cur != NULL && ec_building_is_house(cur->type) && cur->evolved + BUILDING_EVOLVE_DELAY < game.time)
             {
                 /* fire */
-                if ((rand() % 40) == 0 && !game.board[j][i]->is_burning)
+                if ((rand() % 70) == 0 && !game.board[j][i]->is_burning)
                     game.board[j][i]->is_burning = game.time;
                 cest_le_jeu_ma_pauvre_lucette(i, j);
                 cur = game.board[j][i];
