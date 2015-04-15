@@ -24,6 +24,12 @@ KEY_L : load
 KEY_I : iso
 KEY_O : straight
 
+D : stats
+
+A : capitalist
+Z : communiste
+
+
 img :
     rotate = 45
     x*y = 346*200
@@ -75,6 +81,17 @@ void ec_main_handle_event(s_menu *menu)
         window.building_get_stat_blit_offset = ec_building_get_stat_blit_offset_straight;
         window.building_get_blit_zoom = ec_building_get_blit_zoom_straight;
         window.key[KEY_O] = 0;
+    }
+
+    if (window.key[KEY_A])
+    {
+        game.mode = GAME_MODE_CAPITALIST;
+        window.key[KEY_A] = 0;
+    }
+    if (window.key[KEY_Z])
+    {
+        game.mode = GAME_MODE_COMMUNIST;
+        window.key[KEY_Z] = 0;
     }
 
     if (window.mouseButtonLeft)
