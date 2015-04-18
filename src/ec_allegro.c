@@ -25,8 +25,16 @@ void ec_allegro_init(void)
 
     set_color_depth(desktop_color_depth());
     set_window_title("EceCity");
-    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0) != 0)
-        ec_utils_abort("set_gfx_mode()");
+    if (FULL_SCREEN)
+    {
+        if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0) != 0)
+            ec_utils_abort("set_gfx_mode()");
+    }
+    else
+    {
+        if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0) != 0)
+            ec_utils_abort("set_gfx_mode()");
+    }
     if (set_display_switch_mode(SWITCH_BACKGROUND) != 0)
         ec_utils_abort("set_display_switch_mode()");
 

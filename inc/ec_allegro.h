@@ -10,6 +10,7 @@
 */
 #define WINDOW_WIDTH    1024
 #define WINDOW_HEIGHT   768
+#define FULL_SCREEN     1
 #define WINDOW_FPS      50
 
 #define BOARD_MOVE_MOUSE_AREA 50

@@ -30,7 +30,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall -Wextra" />
-			<Add directory="C:/Users/Edouard/Documents/GitHub/EceCity/inc" />
+			<Add directory="inc" />
 		</Compiler>
 		<Linker>
 			<Add library="alleg" />
